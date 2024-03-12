@@ -3,3 +3,6 @@ FrameLabelingApplication (FLA): An application for labeling images and videos fo
 - Segmentation
 - Object Detection
 - Keypoint Detection
+- Image Classification
+- Point Tracking
+- etc. ...
