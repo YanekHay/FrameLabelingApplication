@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="1001.0" styleClass="root" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.imageController">
+   <children>
+      <HBox prefHeight="555.0" prefWidth="1001.0">
+         <children>
+            <StackPane prefHeight="555.0" prefWidth="820.0">
+               <children>
+                  <ScrollPane fx:id="scrollPane">
+                     <content>
+                        <AnchorPane fx:id="scrollPaneBody" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="imageView" fitHeight="615.0" fitWidth="1119.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/narrow_street.jpg" />
+                                 </image>
+                              </ImageView>
+                              <AnchorPane fx:id="scrollPaneFace" onScroll="#zoom" prefHeight="615.2" prefWidth="1093.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </StackPane>
+            <StackPane alignment="BASELINE_RIGHT" prefHeight="555.0" prefWidth="186.0">
+               <children>
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" text="Layers">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -1,0 +1,14 @@
+.vbox{
+    -fx-background-color: #f7fce37c;
+    -fx-border-color: #a7aa94;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+.root{
+    -fx-background-color: #d7d4d4;
+}
+.vbox:hover{
+    -fx-background-color: #a1a9828c
+}
