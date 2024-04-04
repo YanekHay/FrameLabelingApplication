@@ -166,7 +166,7 @@ public class MainController {
             
             // Set the image to the ImageView
             imageView.setImage(image);
-            imageView.autosize();
+            this.reset(imageView, image.getWidth(), image.getHeight());
         } else {
             System.out.println("No file selected.");
         }
