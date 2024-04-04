@@ -1,61 +1,152 @@
 package controllers;
-import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 
-public class imageController {
+import static utils.CalculationUtil.clamp;
+import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
+
+public class ImageController {
+
     @FXML
     private ImageView imageView;
     @FXML
-    private ScrollPane scrollPane;
+    private AnchorPane frameFront;
     @FXML
-    private AnchorPane scrollPaneBody;
+    private StackPane frameBack;
     @FXML
-    private AnchorPane scrollPaneFace;
+    private Button btnResetView;
+
+    private static final int MIN_PIXELS = 10;
+    
+    ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
     @FXML
-    void zoom(ScrollEvent event) {
-        if (!event.isControlDown()){
+    void initialize() {
+        imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
+        imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
+        imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
+    }
+
+
+
+    @FXML
+    void frameFront_onScroll(ScrollEvent event) {
+        if (!event.isControlDown()) {
             return;
         }
+        double width = imageView.getImage().getWidth();
+        double height = imageView.getImage().getHeight();
 
-        double scaleFactor = 1.1; // Define a scale factor for zooming
-        double pivotX = event.getX(); // Get the x coordinate of the mouse cursor
-        double pivotY = event.getY(); // Get the y coordinate of the mouse cursor
+        double delta = -event.getDeltaY();
+        Rectangle2D viewport = imageView.getViewport();
 
-        // Get the bounds of the imageView in the local space
-        Bounds boundsInLocal = imageView.getBoundsInLocal();
+        double scale = clamp(Math.pow(1.01, delta),
+            Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+            Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+        );
 
-        // Calculate the center of the image
-        double centerX = boundsInLocal.getWidth() / 2;
-        double centerY = boundsInLocal.getHeight() / 2;
+        Point2D mouse = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
 
-        // Determine the direction of zooming based on the mouse position
-        double newScale = imageView.getScaleX();
-        if (event.getDeltaY() > 0) {
-            newScale *= scaleFactor;
-            // Zoom in towards the cursor
-            imageView.setTranslateX(imageView.getTranslateX() - (pivotX - centerX) * (scaleFactor - 1));
-            imageView.setTranslateY(imageView.getTranslateY() - (pivotY - centerY) * (scaleFactor - 1));
-        } else {
-            newScale /= scaleFactor;
-            // Zoom out from the cursor
-            imageView.setTranslateX(imageView.getTranslateX() + (pivotX - centerX) * (1 - 1 / scaleFactor));
-            imageView.setTranslateY(imageView.getTranslateY() + (pivotY - centerY) * (1 - 1 / scaleFactor));
-        }
+        double newWidth = viewport.getWidth() * scale;
+        double newHeight = viewport.getHeight() * scale;
 
-        // Set the new scale to the imageView
-        imageView.setScaleX(newScale);
-        imageView.setScaleY(newScale);
-        // TODO: Make the ScrollPane zone bigger according to the image
-        // TODO: Maybe take ImageView Outside of the scrollPane
-        // System.out.println("Zooming: " + newScale + " at (" + pivotX + ", " + pivotY + ")");
+        // To keep the visual point under the mouse from moving, we need
+        // (x - newViewportMinX) / (x - currentViewportMinX) = scale
+        // where x is the mouse X coordinate in the image
+
+        // solving this for newViewportMinX gives
+
+        // newViewportMinX = x - (x - currentViewportMinX) * scale 
+
+        // we then clamp this value so the image never scrolls out
+        // of the imageview:
+        double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
+                0, width - newWidth);
+        double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
+                0, height - newHeight);
+
+        imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
     }
- 
+
+    @FXML
+    void frameFront_onMousePressed(MouseEvent event){
+        Point2D mousePress = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
+        mouseDown.set(mousePress);
+    }
+
+    @FXML
+    void frameFront_onMouseDragged(MouseEvent event){
+        if (!event.isMiddleButtonDown())
+            return;
+            Point2D dragPoint = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
+            shift(imageView, dragPoint.subtract(mouseDown.get()));
+            mouseDown.set(imageViewToImage(imageView, new Point2D(event.getX(), event.getY())));
+    }
+    
+    @FXML
+    void btnResetView_onMouseClicked(MouseEvent event){
+        System.out.println("Reset View");
+        reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+    }
+    // reset to the top left:
+    private void reset(ImageView imageView, double width, double height) {
+        imageView.setViewport(new Rectangle2D(0, 0, width, height));
+    }
+
+    @FXML
+    void frameFront_onKeyPressed(KeyEvent event) {
+        KeyCode key = event.getCode();
+        if (key==KeyCode.NUMPAD0 && event.isControlDown()) {
+            reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+        }
+    }
+
+    // shift the viewport of the imageView by the specified delta, clamping so
+    // the viewport does not move off the actual image:
+    private void shift(ImageView imageView, Point2D delta) {
+        Rectangle2D viewport = imageView.getViewport();
+
+        double width = imageView.getImage().getWidth() ;
+        double height = imageView.getImage().getHeight() ;
+
+        double maxX = width - viewport.getWidth();
+        double maxY = height - viewport.getHeight();
+        
+        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+        imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+    }
+
+
+    // convert mouse coordinates in the imageView to coordinates in the actual image:
+    private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
+        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
+        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+
+        Rectangle2D viewport = imageView.getViewport();
+        return new Point2D(
+                viewport.getMinX() + xProportion * viewport.getWidth(), 
+                viewport.getMinY() + yProportion * viewport.getHeight());
+    }
+
+    @FXML
+    public void openImageFileDialog(){
+        System.out.println("Open Image File Dialog");
+    }
 }
 
 

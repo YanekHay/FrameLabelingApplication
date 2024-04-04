@@ -6,16 +6,19 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "Main",
+            "projectName": "FrameLabelingApplication_bd2e6581",
+            "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
-            "name": "Launch App",
+            "name": "ZoomPan",
             "request": "launch",
-            "mainClass": "myapp.Main",
-            "vmArgs": "--module-path C:\\Program Files\\Java\\javafx-sdk-22\\lib --add-modules javafx.controls,javafx.fxml",     
+            "mainClass": "ZoomPan",
+            "projectName": "FrameLabelingApplication_bd2e6581",
+            "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
