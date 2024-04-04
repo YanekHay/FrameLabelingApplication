@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class ImageController {
+public class MainController {
 
     @FXML
     private AnchorPane root;
@@ -35,8 +35,7 @@ public class ImageController {
     private Button btnResetView;
 
     private static final int MIN_PIXELS = 10;
-    
-    ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
     @FXML
     void initialize() {
@@ -44,8 +43,6 @@ public class ImageController {
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
     }
-
-
 
     @FXML
     void frameFront_onScroll(ScrollEvent event) {
@@ -136,7 +133,6 @@ public class ImageController {
         imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
     }
 
-
     // convert mouse coordinates in the imageView to coordinates in the actual image:
     private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
         double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
@@ -150,7 +146,7 @@ public class ImageController {
     
     @FXML
     public void openImageFileDialog(){
-      FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Image File");
 
         // Add filters (optional)
