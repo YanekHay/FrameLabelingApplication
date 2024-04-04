@@ -1,15 +1,21 @@
 package controllers;
 
 import static utils.CalculationUtil.clamp;
+
+import java.io.File;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
@@ -17,6 +23,8 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class ImageController {
 
+    @FXML
+    private AnchorPane root;
     @FXML
     private ImageView imageView;
     @FXML
@@ -142,7 +150,30 @@ public class ImageController {
     
     @FXML
     public void openImageFileDialog(){
-        System.out.println("Open Image File Dialog");
+      FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image File");
+
+        // Add filters (optional)
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
+
+            // Load the image into an Image object
+            Image image = new Image(selectedFile.toURI().toString());
+            
+            // Set the image to the ImageView
+            imageView.setImage(image);
+            imageView.autosize();
+        } else {
+            System.out.println("No file selected.");
+        }
     }
 }
 

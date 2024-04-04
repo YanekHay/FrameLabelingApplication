@@ -8,7 +8,7 @@ public class FLAAnnotation2D{
     public FLAAnnotation2D() {
         this.id = UUID.randomUUID();
     }
-    
+
     public FLAAnnotation2D(int label, String labelName) {
         this.label = label;
         this.id = UUID.randomUUID();
