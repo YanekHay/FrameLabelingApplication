@@ -2,7 +2,6 @@ package controllers;
 
 import static utils.CalculationUtil.clamp;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -12,11 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 
 public class ImageController {
 
@@ -142,7 +139,7 @@ public class ImageController {
                 viewport.getMinX() + xProportion * viewport.getWidth(), 
                 viewport.getMinY() + yProportion * viewport.getHeight());
     }
-
+    
     @FXML
     public void openImageFileDialog(){
         System.out.println("Open Image File Dialog");
