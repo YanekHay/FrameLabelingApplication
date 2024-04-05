@@ -32,7 +32,7 @@ public class FileLoader {
             if (isImageFile(filePath)) {
                 Image image = new Image(new File(filePath).toURI().toString());
                 ImageView imageView = new ImageView(image);
-                // Add the imageView to your UI or perform any other desired operations
+                
                 System.out.println("Loading image: " + filePath);
             } else if (isVideoFile(filePath)) {
                 Media media = new Media(new File(filePath).toURI().toString());
