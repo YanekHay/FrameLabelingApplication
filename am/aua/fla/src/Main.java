@@ -1,14 +1,8 @@
 import java.nio.file.Path;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import utils.Configs;
 
