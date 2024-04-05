@@ -46,6 +46,4 @@ public class VideoLoader extends FileLoader {
             width = (int) video.getWidth();
             height = (int) video.getHeight();
         }
-    
-
 }
