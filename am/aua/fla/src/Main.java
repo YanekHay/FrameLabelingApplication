@@ -1,7 +1,11 @@
 import java.nio.file.Path;
+
+import core.FLAPoint2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import utils.Configs;
@@ -23,6 +27,9 @@ public class Main extends Application {
         primaryStage.setTitle("Image Coordinate App");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        FLAPoint2D point = new FLAPoint2D(100, 100, Color.ROYALBLUE, configs.POINT_RADIUS);
+        point.drawOnNode(root);
     }
 
 }
