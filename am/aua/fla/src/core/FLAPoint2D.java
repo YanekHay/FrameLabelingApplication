@@ -12,14 +12,26 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     private double x;
     private double y;
 
-    public FLAPoint2D(double x, double y, Color color, double radius) {
+    public FLAPoint2D(double x, double y, Color color, double radius, Pane container) {
         super();
         this.pointImage = new Circle(x, y, radius);
         this.setX(x);
         this.setY(y);
         this.pointImage.setFill(color);
+        this.pointImage.setCursor(Cursor.MOVE);
         this.pointImage.setOnMouseDragged(this::onMouseDragged);
         this.pointImage.setOnMouseEntered(this::onMouseEntered);
+        if (container!=null)
+            this.drawOnNode(container);
+    }
+
+    public FLAPoint2D(double x, double y, Color color, double radius) {
+        this(x, y, color, radius, null);
+    }
+
+    public FLAPoint2D(Point2D point, Color color, double radius, Pane container) {
+        this(point.getX(), point.getY(), color, radius);
+        this.drawOnNode(container);
     }
 
     public FLAPoint2D(Point2D point, Color color, double radius) {
@@ -77,12 +89,16 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
 
     @Override
     public void onMouseDragged(MouseEvent e) {
-        this.setX(e.getX()+this.pointImage.getRadius()/2);
-        this.setY(e.getY()+this.pointImage.getRadius()/2);
+        this.setX(e.getX());
+        this.setY(e.getY());
     }
 
     @Override
     public void onMouseEntered(MouseEvent e) {
-        this.pointImage.setCursor(Cursor.MOVE);
+    }
+
+    @Override
+    public String toString(){
+        return String.format("FLAPoint2D(%.2f, %.2f)", this.x, this.y);
     }
 }

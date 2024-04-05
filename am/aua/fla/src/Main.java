@@ -18,7 +18,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Configs configs = new Configs(Path.of("am/aua/fla/configs/MainConfig.xml"));
         AnchorPane root = FXMLLoader.load(getClass().getResource("UI/root/Main.fxml"));
         // StackPane to hold the image and text
         Scene scene = new Scene(root);
@@ -28,8 +27,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        FLAPoint2D point = new FLAPoint2D(100, 100, Color.ROYALBLUE, configs.POINT_RADIUS);
-        point.drawOnNode(root);
+        // scene.getStylesheets().add(getClass().getResource("UI/root/styles.css").toExternalForm());
     }
 
 }

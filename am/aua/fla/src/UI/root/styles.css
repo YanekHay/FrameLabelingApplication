@@ -3,15 +3,14 @@
     -fx-font-size: 12px;
     -fx-font-color: #fff; /* Text color */
     -fx-color: #585858; /* Text color */
-    -fx-border: none; /* Border color */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-text-decoration: none;
+    -fx-border-radius: 100;
   }
-  .flat-button:hover {
-    -fx-background-color: #272727; /* Background color on hover */
-    -fx-font-color: #fff; /* Text color */
-  }
-  
+
+.flat-button:hover {
+  -fx-background-color: #272727; /* Background color on hover */
+  -fx-font-color: #fff; /* Text color */
+}
+
 .root{
     -fx-background-color: #d7d4d4;
 }
@@ -21,4 +20,12 @@
 
 .frameBack{
     -fx-background-color: #d7d4d4;
+}
+
+.FLAPoint2D{
+    -fx-background-color: #d7d4d4;
+}
+
+.FLAPoint2D:hover{
+    -fx-background-color: #a1a9828c
 }

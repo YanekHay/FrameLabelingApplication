@@ -3,7 +3,9 @@ package controllers;
 import static utils.CalculationUtil.clamp;
 
 import java.io.File;
+import java.nio.file.Path;
 
+import core.FLAPoint2D;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
@@ -13,9 +15,12 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.Configs;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
@@ -33,8 +38,9 @@ public class MainController {
     private StackPane frameBack;
     @FXML
     private Button btnResetView;
-
+    
     private static final int MIN_PIXELS = 10;
+
     private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
     @FXML
@@ -42,10 +48,15 @@ public class MainController {
         imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
+        // frameFront.setOnMouseClicked(e -> {
+        //     FLAPoint2D point = new FLAPoint2D(e.getX(), e.getY(), Color.RED, Configs.POINT_RADIUS);
+        //     System.out.println("Mouse clicked at: " + point);
+        //     point.drawOnNode(frameFront);
+        // });
     }
 
     @FXML
-    void frameFront_onScroll(ScrollEvent event) {
+    void frameFrontOnScroll(ScrollEvent event) {
         if (!event.isControlDown()) {
             return;
         }
@@ -84,22 +95,22 @@ public class MainController {
     }
 
     @FXML
-    void frameFront_onMousePressed(MouseEvent event){
+    void frameFrontOnMousePressed(MouseEvent event){
         Point2D mousePress = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
         mouseDown.set(mousePress);
     }
 
     @FXML
-    void frameFront_onMouseDragged(MouseEvent event){
+    void frameFrontOnMouseDragged(MouseEvent event){
         if (!event.isMiddleButtonDown())
             return;
-            Point2D dragPoint = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
-            shift(imageView, dragPoint.subtract(mouseDown.get()));
-            mouseDown.set(imageViewToImage(imageView, new Point2D(event.getX(), event.getY())));
+        Point2D dragPoint = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
+        shift(imageView, dragPoint.subtract(mouseDown.get()));
+        mouseDown.set(imageViewToImage(imageView, new Point2D(event.getX(), event.getY())));
     }
     
     @FXML
-    void btnResetView_onMouseClicked(MouseEvent event){
+    void btnResetViewOnMouseClicked(MouseEvent event){
         System.out.println("Reset View");
         reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
     }
@@ -109,7 +120,7 @@ public class MainController {
     }
 
     @FXML
-    void frameFront_onKeyPressed(KeyEvent event) {
+    void frameFrontOnKeyPressed(KeyEvent event) {
         KeyCode key = event.getCode();
         if (key==KeyCode.NUMPAD0 && event.isControlDown()) {
             reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
