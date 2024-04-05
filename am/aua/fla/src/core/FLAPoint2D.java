@@ -95,6 +95,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
 
     @Override
     public void onMouseEntered(MouseEvent e) {
+        // Not implemented yet
     }
 
     @Override

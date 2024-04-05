@@ -3,9 +3,7 @@ package controllers;
 import static utils.CalculationUtil.clamp;
 
 import java.io.File;
-import java.nio.file.Path;
 
-import core.FLAPoint2D;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
@@ -15,12 +13,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.Configs;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
@@ -48,11 +43,6 @@ public class MainController {
         imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
-        // frameFront.setOnMouseClicked(e -> {
-        //     FLAPoint2D point = new FLAPoint2D(e.getX(), e.getY(), Color.RED, Configs.POINT_RADIUS);
-        //     System.out.println("Mouse clicked at: " + point);
-        //     point.drawOnNode(frameFront);
-        // });
     }
 
     @FXML
