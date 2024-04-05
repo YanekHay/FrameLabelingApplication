@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "am/aua/fla/src"
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "am/aua/fla/lib/**/*.jar",
+    ]
+}
