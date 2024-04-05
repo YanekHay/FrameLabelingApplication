@@ -11,14 +11,6 @@
             "mainClass": "Main",
             "projectName": "FrameLabelingApplication_bd2e6581",
             "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
-        },
-        {
-            "type": "java",
-            "name": "ZoomPan",
-            "request": "launch",
-            "mainClass": "ZoomPan",
-            "projectName": "FrameLabelingApplication_bd2e6581",
-            "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
