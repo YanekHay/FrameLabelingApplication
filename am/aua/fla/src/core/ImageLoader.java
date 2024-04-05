@@ -3,6 +3,7 @@ package core;
 import java.io.File;
 import javafx.scene.image.Image;
 
+
 public class ImageLoader extends FileLoader {
 
     private File path;
