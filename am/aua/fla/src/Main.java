@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -18,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        AnchorPane root = FXMLLoader.load(getClass().getResource("UI/root/Main.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("UI/root/Main.fxml"));
         // StackPane to hold the image and text
         Scene scene = new Scene(root);
         

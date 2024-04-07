@@ -8,6 +8,7 @@ public class Configs {
     public static final int WINDOW_HEIGHT;
     public static final int LINE_THICKNESS;
     public static final int POINT_RADIUS;
+    public static final double ZOOM_FACTOR;
 
     static {
         Path configFilePath = Path.of("am/aua/fla/configs/MainConfig.xml");// specify your config file path here
@@ -16,5 +17,6 @@ public class Configs {
         WINDOW_HEIGHT = Integer.parseInt(XMLParser.getNodeValue(configRoot, "WINDOW_HEIGHT"));
         LINE_THICKNESS = Integer.parseInt(XMLParser.getNodeValue(configRoot, "LINE_THICKNESS"));
         POINT_RADIUS = Integer.parseInt(XMLParser.getNodeValue(configRoot, "POINT_RADIUS"));
+        ZOOM_FACTOR = Double.parseDouble(XMLParser.getNodeValue(configRoot, "ZOOM_FACTOR"));
     }
 }

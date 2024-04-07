@@ -14,10 +14,15 @@
 .root{
     -fx-background-color: #d7d4d4;
 }
-.vbox:hover{
-    -fx-background-color: #a1a9828c
+.frameGroup{
+    -fx-background-color: #7e3f3f;
 }
-
+.frameArea{
+    -fx-background-color: #1a6c95b7
+}
+.stackPane{
+    -fx-background-color: #2f9f7f;
+}
 .frameBack{
     -fx-background-color: #d7d4d4;
 }

@@ -2,6 +2,7 @@ package core;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -78,6 +79,11 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
 
     @Override
     public void drawOnNode(Pane container) {
+        container.getChildren().add(this.pointImage);
+    }
+
+    @Override
+    public void drawOnNode(Group container) {
         container.getChildren().add(this.pointImage);
     }
 

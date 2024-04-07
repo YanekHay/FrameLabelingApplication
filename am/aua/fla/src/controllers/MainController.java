@@ -4,8 +4,12 @@ import static utils.CalculationUtil.clamp;
 
 import java.io.File;
 
+import core.FLAPoint2D;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -13,85 +17,101 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.Configs;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class MainController {
 
     @FXML
-    private AnchorPane root;
+    private BorderPane root;
     @FXML
     private ImageView imageView;
     @FXML
-    private AnchorPane frameFront;
+    private StackPane frameArea;
     @FXML
-    private StackPane frameBack;
+    private Group frameGroup;
     @FXML
     private Button btnResetView;
-    
-    private static final int MIN_PIXELS = 10;
+    @FXML
+    private VBox labelArea;
 
     private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-
+    
+    Label label = new Label("");
+    Label label2 = new Label("");
+    Label label3 = new Label("");
+    
     @FXML
     void initialize() {
-        imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
-        imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
-        imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
+        // runLater is used to ensure that the layout is already rendered
+        Platform.runLater(() -> {
+            FrameGroupController.frameGroup = frameGroup;
+            System.out.println("Frame Area: " + frameGroup.getLayoutX() + "x" + frameArea.getHeight());
+        });
+        System.out.println(frameGroup.localToScreen(0,0));
+        labelArea.getChildren().add(label);
+        labelArea.getChildren().add(label2);
+        labelArea.getChildren().add(label3);
+
+        frameArea.setOnMouseMoved(e->{
+            label.setText("X: " + Math.round(e.getX()) + " Y: " + Math.round(e.getY()));
+            label2.setText("X: " + ((int)(e.getX()-FrameGroupController.getRealXmin())) + " Y: " + (int)(e.getY()-FrameGroupController.getRealYmin()));
+        });
+        //center the frameGroup inside frameArea
+        frameArea.setOnMousePressed(e -> {
+            if (e.isMiddleButtonDown()) {
+                FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
+            }
+        });
+        frameArea.setOnMouseDragged(e -> {
+            if (e.isMiddleButtonDown()) {
+                Point2D dragPoint = new Point2D(e.getX(), e.getY());
+                double deltaX = dragPoint.getX() - FrameGroupController.mouseDown.get().getX();
+                double deltaY = dragPoint.getY() - FrameGroupController.mouseDown.get().getY();
+                FrameGroupController.frameGroup.setTranslateX(FrameGroupController.frameGroup.getTranslateX() + deltaX);
+                FrameGroupController.frameGroup.setTranslateY(FrameGroupController.frameGroup.getTranslateY() + deltaY);
+                FrameGroupController.mouseDown.set(dragPoint);
+            }
+        });
+        //     else if (e.isPrimaryButtonDown()){
+        //         FLAPoint2D point = new FLAPoint2D((e.getX()-frameGroup.getTranslateX()-FrameGroupController.getRealXmin()), (e.getY()-FrameGroupController.getRealYmin()), Color.RED, Configs.POINT_RADIUS);
+        //         System.out.println("Mouse clicked at: " + point);
+        //         point.drawOnNode(frameGroup);
+        //     }
+        // });
     }
 
     @FXML
-    void frameFrontOnScroll(ScrollEvent event) {
-        if (!event.isControlDown()) {
+    void frameAreaOnScroll(ScrollEvent e) {
+        if (!e.isControlDown()) {
             return;
         }
-        double width = imageView.getImage().getWidth();
-        double height = imageView.getImage().getHeight();
-
-        double delta = -event.getDeltaY();
-        Rectangle2D viewport = imageView.getViewport();
-
-        double scale = clamp(Math.pow(1.01, delta),
-            Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
-            Math.max(width / viewport.getWidth(), height / viewport.getHeight())
-        );
-
-        Point2D mouse = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
-
-        double newWidth = viewport.getWidth() * scale;
-        double newHeight = viewport.getHeight() * scale;
-
-        // To keep the visual point under the mouse from moving, we need
-        // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-        // where x is the mouse X coordinate in the image
-
-        // solving this for newViewportMinX gives
-
-        // newViewportMinX = x - (x - currentViewportMinX) * scale 
-
-        // we then clamp this value so the image never scrolls out
-        // of the imageview:
-        double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
-                0, width - newWidth);
-        double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
-                0, height - newHeight);
-
-        imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+        double delta = e.getDeltaY();
+        double scale = clamp(Math.pow(Configs.ZOOM_FACTOR, delta), FrameGroupController.MIN_PIXELS / FrameGroupController.getMinSideSize());
+        FrameGroupController.zoomToPoint(scale, new Point2D(e.getX(), e.getY()));
     }
 
+
     @FXML
-    void frameFrontOnMousePressed(MouseEvent event){
+    void frameAreaOnMousePressed(MouseEvent event){
         Point2D mousePress = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
         mouseDown.set(mousePress);
     }
 
     @FXML
-    void frameFrontOnMouseDragged(MouseEvent event){
+    void frameAreaOnMouseDragged(MouseEvent event){
         if (!event.isMiddleButtonDown())
             return;
         Point2D dragPoint = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
@@ -110,7 +130,7 @@ public class MainController {
     }
 
     @FXML
-    void frameFrontOnKeyPressed(KeyEvent event) {
+    void frameAreaOnKeyPressed(KeyEvent event) {
         KeyCode key = event.getCode();
         if (key==KeyCode.NUMPAD0 && event.isControlDown()) {
             reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
@@ -128,8 +148,8 @@ public class MainController {
         double maxX = width - viewport.getWidth();
         double maxY = height - viewport.getHeight();
         
-        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
-        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+        double minX = clamp(viewport.getMinX() - delta.getX(), 0.0, maxX);
+        double minY = clamp(viewport.getMinY() - delta.getY(), 0.0, maxY);
 
         imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
     }
