@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,7 +14,7 @@
    <center>
       <StackPane fx:id="frameArea" onScroll="#frameAreaOnScroll" BorderPane.alignment="TOP_LEFT">
          <children>
-            <Group fx:id="frameGroup" styleClass="frameGroup">
+            <Group fx:id="frameGroup">
                <children>
                   <ImageView fx:id="imageView" fitHeight="243.0" fitWidth="417.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -26,4 +29,25 @@
    <right>
       <VBox fx:id="labelArea" prefHeight="600.0" prefWidth="209.0" styleClass="stackPane" BorderPane.alignment="CENTER" />
    </right>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
+            </items>
+          </Menu>
+          <Menu disable="true" mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>

@@ -21,11 +21,21 @@ public class FrameGroupController {
     private static double dx;
     private static double dy;
 
+    public static void setFrameGroup(Group frameGroup) {
+        FrameGroupController.frameGroup = frameGroup;
+    }
+
     public static double getRealXmin() {
         return frameGroup.getBoundsInParent().getMinX();
     }
+    public static double getRealXmax() {
+        return frameGroup.getBoundsInParent().getMaxX();
+    }
     public static double getRealYmin() {
         return frameGroup.getBoundsInParent().getMinY();
+    }
+    public static double getRealYmax() {
+        return frameGroup.getBoundsInParent().getMaxY();
     }
     public static double getRealXc() {
         return frameGroup.getBoundsInParent().getCenterX();
@@ -77,5 +87,10 @@ public class FrameGroupController {
     public static void shift(Point2D delta){
         frameGroup.setTranslateX(frameGroup.getTranslateX() + delta.getX());
         frameGroup.setTranslateY(frameGroup.getTranslateY() + delta.getY());
+    }
+
+    public static Point2D getCoordinateOnOriginalScale(double x, double y){
+        System.out.println(x + "  " + (x-getRealXmin()));
+        return new Point2D((x-getRealXmin())/frameGroup.getScaleX(), (y-getRealYmin())/frameGroup.getScaleY());
     }
 }
