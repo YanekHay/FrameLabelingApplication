@@ -4,9 +4,11 @@ import static utils.CalculationUtil.clamp;
 
 import java.io.File;
 
+import core.FLAAnnotation2D;
 import core.FLALine2D;
 import core.FLAPoint2D;
 import core.Global;
+import core.IDraggable;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -50,8 +52,8 @@ public class MainController {
     @FXML
     private VBox labelArea;
     
-    private double scaleMultiplier = 1.0;
-
+    private static IDraggable lastDraggedObject;
+    
     Label label = new Label("");
     Label label2 = new Label("");
     Label label3 = new Label("");
@@ -63,6 +65,7 @@ public class MainController {
             FrameGroupController.setFrameGroup(frameGroup);
             FLALine2D line = new FLALine2D(new FLAPoint2D(50,50), new FLAPoint2D(100,100));
             line.drawOnNode(frameGroup);
+            frameArea.requestFocus();
         });
         labelArea.getChildren().add(label);
         labelArea.getChildren().add(label2);
@@ -81,66 +84,55 @@ public class MainController {
         if (!e.isControlDown()) {
             return;
         }
-        double delta = e.getDeltaY();
-        this.setScale(clamp(Math.pow(Configs.ZOOM_FACTOR, delta), FrameGroupController.MIN_PIXELS / FrameGroupController.getMinSideSize()));
-        FrameGroupController.zoomToPoint(this.scaleMultiplier, new Point2D(e.getX(), e.getY()));
+        double delta = e.getDeltaY()>0 ? 1 : -1;
+        Global.setScaleMultiplier(clamp(Math.pow(Configs.ZOOM_FACTOR, delta), Configs.MIN_WORLD_SCALE, Configs.MAX_WORLD_SCALE));
+        Global.setWorldScale(Global.getWorldScale()*Global.getScaleMultiplier());
+        FrameGroupController.zoomToPoint(Global.getWorldScale(), new Point2D(e.getX(), e.getY()));
         for (FLAPoint2D point : Global.points) {
-            System.out.println(point.getId());
-            point.reScale(1/this.scaleMultiplier);
+            point.rescale();
         }
         label.setText("X: " + Math.round(e.getX()) + " Y: " + Math.round(e.getY()));
         label2.setText("X: " + ((int)(e.getX()-FrameGroupController.getRealXmin())) + " Y: " + (int)(e.getY()-FrameGroupController.getRealYmin()));
-
     }
-
-    public void setScale(double scaleMultiplier) {
-        this.scaleMultiplier = scaleMultiplier;
-    }
-
-
 
     @FXML
     void frameAreaOnMousePressed(MouseEvent e){
+        e.consume();
         if (e.isMiddleButtonDown()) {
             FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
         }
-        else if (e.isPrimaryButtonDown()){
-            e.consume();
+        if (e.isPrimaryButtonDown()){
             Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-            FLAPoint2D point = new FLAPoint2D(pt, Color.RED, Configs.POINT_RADIUS);
-            Global.points.add(point);
-            point.drawOnNode(frameGroup);
-            System.out.println("Point placed on: "  + point.getX() + "  " + point.getY());
+            this.addPointAt(pt.getX(), pt.getY());
         }
     }
+    private void addPointAt(double x, double y){
+        FLAPoint2D point = new FLAPoint2D(x, y, Color.RED, Configs.POINT_RADIUS);
+        Global.points.add(point);
+        point.drawOnNode(frameGroup);
+    }
+
 
     @FXML
     void frameAreaOnMouseDragged(MouseEvent e){
         if (e.isMiddleButtonDown()) {
             Point2D dragPoint = new Point2D(e.getX(), e.getY());
-            double deltaX = dragPoint.getX() - FrameGroupController.mouseDown.get().getX();
-            double deltaY = dragPoint.getY() - FrameGroupController.mouseDown.get().getY();
-            FrameGroupController.frameGroup.setTranslateX(FrameGroupController.frameGroup.getTranslateX() + deltaX);
-            FrameGroupController.frameGroup.setTranslateY(FrameGroupController.frameGroup.getTranslateY() + deltaY);
+            FrameGroupController.shift(dragPoint.subtract(FrameGroupController.mouseDown.get()));
             FrameGroupController.mouseDown.set(dragPoint);
         }
     }
     
     @FXML
     void btnResetViewOnMouseClicked(MouseEvent e){
-        System.out.println("Reset View");
-        reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
-    }
-    // reset to the top left:
-    private void reset(ImageView imageView, double width, double height) {
-        imageView.setViewport(new Rectangle2D(0, 0, width, height));
+        FrameGroupController.resetView();
+        // reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
     }
 
     @FXML
     void frameAreaOnKeyPressed(KeyEvent e) {
         KeyCode key = e.getCode();
         if (key==KeyCode.NUMPAD0 && e.isControlDown()) {
-            reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+            FrameGroupController.resetView();
         }
     }
 
@@ -166,10 +158,14 @@ public class MainController {
             
             // Set the image to the ImageView
             imageView.setImage(image);
-            this.reset(imageView, image.getWidth(), image.getHeight());
+            // this.reset(imageView, image.getWidth(), image.getHeight());
         } else {
             System.out.println("No file selected.");
         }
+    }
+
+    public static void setLastDraggedObject(IDraggable object) {
+        MainController.lastDraggedObject = object;
     }
 }
 

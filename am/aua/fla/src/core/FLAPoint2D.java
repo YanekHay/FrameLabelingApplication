@@ -1,5 +1,6 @@
 package core;
 
+import controllers.FrameGroupController;
 import controllers.MainController;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -8,7 +9,9 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import utils.Configs;
 
 /**
@@ -33,12 +36,6 @@ import utils.Configs;
  */
 public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     private Circle pointImage;
-    private double x;
-    private double y;
-    private Color fillColor;
-    // TODO: add radius property: Use setRadius() when zooming in or out to change the radius of the point
-    // TODO: add outlineColor property
-
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
      * @param x The x-coordinate of the point.
@@ -53,6 +50,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
+        Global.points.add(this);
         this.pointImage.setFill(fillColor);
         this.pointImage.setCursor(Cursor.MOVE);
         this.pointImage.setStrokeWidth(radius/5);
@@ -61,6 +59,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setOnMouseEntered(this::onMouseEntered);
         this.pointImage.setOnMouseExited(this::onMouseExited);
         this.pointImage.setOnMousePressed(this::onMousePressed);
+        this.rescale();
         if (container!=null)
             this.drawOnNode(container);
     }
@@ -154,7 +153,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @return The x-coordinate of the point.
      */
     public double getX() {
-        return x;
+        return this.pointImage.getCenterX();
     }
 
     /**
@@ -162,7 +161,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @return The y-coordinate of the point.
      */
     public double getY() {
-        return y;
+        return this.pointImage.getCenterY();
     }
 
     /**
@@ -170,7 +169,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @param x The new x-coordinate of the point.
      */
     public void setX(double x) {
-        this.x = x;
         this.pointImage.setCenterX(x);
     }
 
@@ -179,24 +177,16 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @param y The new y-coordinate of the point.
      */
     public void setY(double y) {
-        this.y = y;
         this.pointImage.setCenterY(y);
     }
 
-    /**
-     * Sets the fillColor of the point.
-     * @param fillColor The new fillColor of the point.
-     */
-    public void setColor(Color fillColor){
-        this.fillColor = fillColor;
-    }
 
     /**
      * Gets the fillColor of the point.
      * @return The fillColor of the point.
      */
-    public Color getColor(){
-        return this.fillColor;
+    public Paint getFillColor(){
+        return this.pointImage.getFill();
     }
     /**
      * Draws the point on the specified container (Pane).
@@ -223,6 +213,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void drag(double x, double y) {
+        MainController.setLastDraggedObject(this);
         this.setX(x);
         this.setY(y);
     }
@@ -244,8 +235,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void onMouseDragged(MouseEvent e) {
-        this.setX(e.getX());
-        this.setY(e.getY());
+        this.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
 
     /**
@@ -256,6 +246,8 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     @Override
     public void onMousePressed(MouseEvent e) {
         e.consume();
+        FrameGroupController.mouseDown.set(FrameGroupController.frameGroup.localToParent(new Point2D(e.getX(), e.getY())));
+
     }
 
     /**
@@ -287,12 +279,14 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setOnMouseEntered(eventHandler);
     }
 
-    public void reScale(double scale){
-        if (this.pointImage.getRadius()*scale >= Configs.MAX_POINT_RADIUS){
-            return;
-        }
-        this.pointImage.setRadius(this.pointImage.getRadius()*scale);
-        this.pointImage.setStrokeWidth(this.pointImage.getStrokeWidth()*scale);
+    public void rescale(double scale){
+        scale = Math.max(Configs.MIN_POINT_SCALE, Math.min(Configs.MAX_POINT_SCALE, scale));
+        this.pointImage.setScaleX(scale);
+        this.pointImage.setScaleY(scale);
+    }
+
+    public void rescale(){
+        this.rescale(Global.getWorldScaleInverse()*2);
     }
     /**
      * Returns a string representation of the FLAPoint2D object.
@@ -300,6 +294,18 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public String toString(){
-        return String.format("FLAPoint2D(%.2f, %.2f)", this.x, this.y);
+        return String.format("FLAPoint2D(%.2f, %.2f)", this.getX(), this.getY());
+    }
+
+    @Override
+    public void onMouseDragEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
+    }
+
+    @Override
+    public void onMouseDragExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
     }
 }

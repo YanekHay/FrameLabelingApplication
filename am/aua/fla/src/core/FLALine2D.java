@@ -1,5 +1,6 @@
 package core;
 
+import controllers.FrameGroupController;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -21,6 +22,8 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
         this.line.setOnMouseEntered(this::onMouseEntered);
         this.line.setOnMouseExited(this::onMouseExited);
         this.line.setOnMousePressed(this::onMousePressed);
+        this.line.setOnMouseDragEntered(this::onMouseDragEntered);
+        this.line.setOnMouseDragExited(this::onMouseDragExited);
         startPoint.setOnMouseDragged(this::startPointOnMouseDragged);
         endPoint.setOnMouseDragged(this::endPointOnMouseDragged);
         
@@ -50,6 +53,17 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     }
 
     @Override
+    public double getX() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    @Override
+    public double getY() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+    @Override
     public void onMouseDragged(MouseEvent e) {
         // TODO Auto-generated method stub
         
@@ -75,16 +89,16 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
 
     @Override
     public void drawOnNode(Pane container) {
+        container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
-        container.getChildren().add(this.line);
     }
 
     @Override
     public void drawOnNode(Group container) {
+        container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
-        container.getChildren().add(this.line);
     }
     @Override
     public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
@@ -103,19 +117,37 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
         this.line.setStartX(x);
         this.line.setStartY(y);
     }
+    public void moveStartPointTo(Point2D point) {
+        this.moveStartPointTo(point.getX(), point.getY());
+    }
 
     public void moveEndPointTo(double x, double y) {
         this.endPoint.drag(x, y);
         this.line.setEndX(x);
         this.line.setEndY(y);
     }
+    public void moveEndPointTo(Point2D point) {
+        this.moveEndPointTo(point.getX(), point.getY());
+    }
 
     public void startPointOnMouseDragged(MouseEvent e) {
-        moveStartPointTo(e.getX(), e.getY());
+        moveStartPointTo(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
     
     
     public void endPointOnMouseDragged(MouseEvent e) {
-        moveEndPointTo(e.getX(), e.getY());
+        moveEndPointTo(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+    }
+
+    @Override
+    public void onMouseDragEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
+    }
+
+    @Override
+    public void onMouseDragExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
     }
 }

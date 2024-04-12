@@ -1,6 +1,7 @@
 package core;
 import java.util.UUID;
 public class FLAAnnotation2D{
+    // TODO: Implement Cloneable
     private int label;
     private String labelName;
     private final UUID id;
