@@ -140,7 +140,7 @@ public class MainController {
     public void openImageFileDialog(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Image File");
-
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         // Add filters (optional)
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
