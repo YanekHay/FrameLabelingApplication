@@ -3,7 +3,9 @@ package controllers;
 import static utils.CalculationUtil.clamp;
 
 import java.io.File;
+import java.nio.file.Path;
 
+import core.VideoLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
@@ -20,6 +22,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
 
 public class MainController {
 
@@ -33,6 +36,8 @@ public class MainController {
     private StackPane frameBack;
     @FXML
     private Button btnResetView;
+    @FXML
+    private Button btnNext;
 
     private static final int MIN_PIXELS = 10;
     private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
@@ -42,6 +47,16 @@ public class MainController {
         imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
+        btnNext.setOnAction(this::btnNextOnAction);
+        VideoLoader videoLoader = new VideoLoader();
+        videoLoader.setPath(Path.of("Labeler_V2.mp4"));
+        // videoLoader.loadVideo();
+    }
+
+    @FXML
+    void btnNextOnAction(ActionEvent event) {
+        System.out.println("Next Button Clicked");
+
     }
 
     @FXML

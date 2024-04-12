@@ -23,8 +23,12 @@
                         <Image url="@../Images/narrow_street.jpg" />
                      </image>
                   </ImageView>
-                  <AnchorPane fx:id="frameFront" onKeyPressed="#frameFront_onKeyPressed" onMouseDragged="#frameFront_onMouseDragged" onMousePressed="#frameFront_onMousePressed" onScroll="#frameFront_onScroll" prefHeight="554.0" prefWidth="794.0" />
                   <Button fx:id="btnResetView" mnemonicParsing="false" onMouseClicked="#btnResetView_onMouseClicked" styleClass="flat-button" stylesheets="@styles.css" text="Reset View" translateY="250.0" />
+                  <AnchorPane fx:id="frameFront" onKeyPressed="#frameFront_onKeyPressed" onMouseDragged="#frameFront_onMouseDragged" onMousePressed="#frameFront_onMousePressed" onScroll="#frameFront_onScroll" prefHeight="554.0" prefWidth="794.0">
+                     <children>
+                        <Button fx:id="btnNext" layoutX="578.0" layoutY="504.0" mnemonicParsing="false" text="Next" />
+                        <Button layoutX="531.0" layoutY="504.0" mnemonicParsing="false" text="Prev" />
+                     </children></AnchorPane>
                </children>
             </StackPane>
             <StackPane alignment="BASELINE_RIGHT" prefHeight="555.0" prefWidth="242.0">

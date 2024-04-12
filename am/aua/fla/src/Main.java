@@ -29,6 +29,8 @@ public class Main extends Application {
         primaryStage.setTitle("Image Coordinate App");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        // Set up the image
     }
 
 }

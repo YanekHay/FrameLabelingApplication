@@ -24,5 +24,6 @@ bin/
 hs_err_pid*
 replay_pid*
 ZoomPan.java
+*.mp4 
 
 .vscode/launch.json
