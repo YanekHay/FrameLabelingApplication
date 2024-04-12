@@ -9,6 +9,7 @@ public class Configs {
     public static final int LINE_THICKNESS;
     public static final int POINT_RADIUS;
     public static final double ZOOM_FACTOR;
+    public static final double MAX_POINT_RADIUS;
 
     static {
         Path configFilePath = Path.of("am/aua/fla/configs/MainConfig.xml");// specify your config file path here
@@ -18,5 +19,6 @@ public class Configs {
         LINE_THICKNESS = Integer.parseInt(XMLParser.getNodeValue(configRoot, "LINE_THICKNESS"));
         POINT_RADIUS = Integer.parseInt(XMLParser.getNodeValue(configRoot, "POINT_RADIUS"));
         ZOOM_FACTOR = Double.parseDouble(XMLParser.getNodeValue(configRoot, "ZOOM_FACTOR"));
+        MAX_POINT_RADIUS = Double.parseDouble(XMLParser.getNodeValue(configRoot, "MAX_POINT_RADIUS"));
     }
 }

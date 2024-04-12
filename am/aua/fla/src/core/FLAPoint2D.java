@@ -1,5 +1,7 @@
 package core;
 
+import controllers.MainController;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -7,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import utils.Configs;
 
 /**
  * The FLAPoint2D class represents a 2D point annotation in a frame labeling application.
@@ -33,7 +36,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     private double x;
     private double y;
     private Color fillColor;
-    // TODO: add radius property
+    // TODO: add radius property: Use setRadius() when zooming in or out to change the radius of the point
     // TODO: add outlineColor property
 
     /**
@@ -47,10 +50,12 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     public FLAPoint2D(double x, double y, Color fillColor, double radius, Pane container) {
         super();
         this.pointImage = new Circle(x, y, radius);
+        this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
         this.pointImage.setFill(fillColor);
         this.pointImage.setCursor(Cursor.MOVE);
+        this.pointImage.setStrokeWidth(radius/5);
         this.pointImage.setStroke(Color.rgb(200, 30, 60, 1));
         this.pointImage.setOnMouseDragged(this::onMouseDragged);
         this.pointImage.setOnMouseEntered(this::onMouseEntered);
@@ -273,6 +278,22 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setFill(Color.rgb(200, 0, 50, 0.5));
     }
 
+    
+    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
+        this.pointImage.setOnMouseDragged(eventHandler);
+    }
+
+    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
+        this.pointImage.setOnMouseEntered(eventHandler);
+    }
+
+    public void reScale(double scale){
+        if (this.pointImage.getRadius()*scale >= Configs.MAX_POINT_RADIUS){
+            return;
+        }
+        this.pointImage.setRadius(this.pointImage.getRadius()*scale);
+        this.pointImage.setStrokeWidth(this.pointImage.getStrokeWidth()*scale);
+    }
     /**
      * Returns a string representation of the FLAPoint2D object.
      * @return A string representation of the FLAPoint2D object.

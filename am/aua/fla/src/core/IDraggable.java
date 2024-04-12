@@ -1,5 +1,6 @@
 package core;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 
@@ -11,5 +12,7 @@ public interface IDraggable {
     public void onMouseEntered(MouseEvent e);
     public void onMouseExited(MouseEvent e);
     public void onMousePressed(MouseEvent e);
+    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler);
+    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler);
 
 }

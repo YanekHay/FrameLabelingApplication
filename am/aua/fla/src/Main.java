@@ -1,5 +1,7 @@
 import java.nio.file.Path;
+import java.util.ArrayList;
 
+import core.FLALine2D;
 import core.FLAPoint2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -27,6 +29,7 @@ public class Main extends Application {
         primaryStage.setTitle("Image Coordinate App");
         primaryStage.setScene(scene);
         primaryStage.show();
+
 
         // scene.getStylesheets().add(getClass().getResource("UI/root/styles.css").toExternalForm());
     }
