@@ -49,7 +49,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     public FLAPoint2D(double x, double y, Color fillColor, double radius, Pane container) {
         super();
-        this.pointImage = new Circle(x, y, radius);
+        this.pointImage = new Circle(x, y, radius); //TODO: make the scale of the pointImage dependent on the scale of the frameGroup
         this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
