@@ -16,7 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
-public class VideoLoader extends FileLoader {
+public class VideoLoader {
 
     private Path path;
     private int height;
@@ -86,7 +86,6 @@ public class VideoLoader extends FileLoader {
         this.path = path;
     }
 
-    
 
     public void loadVideo() {
         this.video = new Media(path.toString());
@@ -131,7 +130,7 @@ public class VideoLoader extends FileLoader {
 
     public BufferedImage getFrameAtTime(Duration time) {
         // Load the video
-        loadFiles();
+        
         Media video = new Media(path.toString());
 
         // Create a MediaPlayer to play the video
