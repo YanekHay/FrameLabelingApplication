@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import java.awt.image.BufferedImage;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class VideoLoader extends FileLoader {
@@ -25,7 +27,41 @@ public class VideoLoader extends FileLoader {
         super();
     }
 
-    //TODO: Constructor with path of video (it sets the path of the video)
+    public void chooseVideoFile() {
+        // Create a FileChooser object
+        FileChooser fileChooser = new FileChooser();
+
+        // Set the title of the file chooser dialog
+        fileChooser.setTitle("Choose Video File");
+
+        // Set the initial directory of the file chooser dialog
+        fileChooser.setInitialDirectory(new File("C:/"));
+
+        // Add filters to the file chooser dialog
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.avi", "*.mkv"),
+            new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        // Show the file chooser dialog
+        Stage stage = new Stage();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        // Check if a file was selected
+        if (selectedFile != null) {
+            // Set the path of the selected file
+            setPath(selectedFile.toPath());
+
+            // Load the video
+            loadVideo();
+        }
+    }
+
+    public VideoLoader(Path path) {
+        super();
+        this.path = path;
+        this.loadVideo();
+    }
     public int getHeight() {
         return height;
     }
@@ -48,9 +84,9 @@ public class VideoLoader extends FileLoader {
 
     public void setPath(Path path) {
         this.path = path;
-        this.loadVideo();
     }
 
+    
 
     public void loadVideo() {
         this.video = new Media(path.toString());
@@ -127,4 +163,51 @@ public class VideoLoader extends FileLoader {
     public BufferedImage nextFrame(int frameNumber){
         return getFrame(frameNumber + 1);
     }
+
+    public BufferedImage previousFrame(int frameNumber){
+        return getFrame(frameNumber - 1);
+    }
+
+    public void playVideo() {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaPlayer.setAutoPlay(true);
+    }
+
+    public void pauseVideo() {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.pause();
+    }
+
+    public void stopVideo() {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.stop();
+    }
+
+    public void seekVideo(Duration time) {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.seek(time);
+    }
+
+
+    public void setOnReady(Runnable action) {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.setOnReady(action);
+    }
+
+    public void setOnPlaying(Runnable action) {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.setOnPlaying(action);
+    }
+
+    public void setOnPaused(Runnable action) {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.setOnPaused(action);
+    }
+
+    public void setOnStopped(Runnable action) {
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.setOnStopped(action);
+    }
+
 }
