@@ -93,7 +93,7 @@ public class VideoLoader {
         height =  video.getHeight();
     }
 
-    public BufferedImage getFrame(int frameNumber) {
+    public Image getFrame(int frameNumber) {
         // Create a MediaPlayer to play the video
         MediaPlayer mediaPlayer = new MediaPlayer(video);
         double frameRate = (double) video.getMetadata().get("framerate");
@@ -116,11 +116,7 @@ public class VideoLoader {
         // Capture the frame as an image
         Image frameImage = mediaView.snapshot(parameters, null);
 
-        // Convert the image to a BufferedImage
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(frameImage, null);
-
-        // Return the frame as a BufferedImage
-        return bufferedImage;
+        return frameImage;
     }
 
     private int calculateFrameNumber(Duration duration, double frameDuration) {
@@ -159,11 +155,11 @@ public class VideoLoader {
         return bufferedImage;
     }
 
-    public BufferedImage nextFrame(int frameNumber){
+    public Image nextFrame(int frameNumber){
         return getFrame(frameNumber + 1);
     }
 
-    public BufferedImage previousFrame(int frameNumber){
+    public Image previousFrame(int frameNumber){
         return getFrame(frameNumber - 1);
     }
 

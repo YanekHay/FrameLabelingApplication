@@ -9,7 +9,7 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
-            "projectName": "loaders_e07c0534",
+            "projectName": "FrameLabelingApplication_a6473c2d",
             "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
         }
     ]
