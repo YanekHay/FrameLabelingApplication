@@ -68,7 +68,7 @@ public class FrameGroupController {
         relMouseX = (oldDx)/FrameGroupController.getRealWidth();
         relMouseY = (oldDy)/FrameGroupController.getRealHeight();
 
-        // Scale the frameGroup
+        // // Scale the frameGroup
         frameGroup.setScaleX(scale);
         frameGroup.setScaleY(scale);
         // Get the current REAL coordinates of the frameGroup
@@ -94,10 +94,10 @@ public class FrameGroupController {
     }
 
     public static void resetView(){
-        Global.setWorldScale(1);
         frameGroup.setTranslateX(0);
         frameGroup.setTranslateY(0);
         frameGroup.setScaleX(1);
         frameGroup.setScaleY(1);
+        Global.setWorldScale(1);
     }
 }

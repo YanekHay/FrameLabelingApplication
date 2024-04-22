@@ -70,5 +70,29 @@ public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawab
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public double getX() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getX'");
+    }
+
+    @Override
+    public double getY() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getY'");
+    }
+
+    @Override
+    public void onMouseDragEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
+    }
+
+    @Override
+    public void onMouseDragExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
+    }
     
 }

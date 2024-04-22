@@ -1,8 +1,11 @@
 package core;
 
 import controllers.FrameGroupController;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -13,60 +16,58 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     private Line line;
     private FLAPoint2D startPoint;
     private FLAPoint2D endPoint;
-
-    public FLALine2D(FLAPoint2D startPoint, FLAPoint2D endPoint) {
-        line = new Line(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-        this.setStartPoint(startPoint);
-        this.setEndPoint(endPoint);
+    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+    
+    public FLALine2D(FLAPoint2D stP, FLAPoint2D endP) {
+        line = new Line(stP.getX(), stP.getY(), endP.getX(), endP.getY());
+        this.setStartPoint(stP);
+        this.setEndPoint(endP);
+        this.line.setStrokeWidth(3);
+        this.line.setCursor(Cursor.MOVE);
         this.line.setOnMouseDragged(this::onMouseDragged);
         this.line.setOnMouseEntered(this::onMouseEntered);
         this.line.setOnMouseExited(this::onMouseExited);
         this.line.setOnMousePressed(this::onMousePressed);
         this.line.setOnMouseDragEntered(this::onMouseDragEntered);
         this.line.setOnMouseDragExited(this::onMouseDragExited);
-        startPoint.setOnMouseDragged(this::startPointOnMouseDragged);
-        endPoint.setOnMouseDragged(this::endPointOnMouseDragged);
+
+
+
+        this.startPoint.setOnMouseDragged(this::startPointOnMouseDragged);
+        this.endPoint.setOnMouseDragged(this::endPointOnMouseDragged);
         
     }
 
     public void setStartPoint(FLAPoint2D startPoint) {
         this.startPoint = startPoint;
-        this.line.setStartX(startPoint.getX());
-        this.line.setStartY(startPoint.getY());
+        this.line.startXProperty().bindBidirectional(this.startPoint.xProperty());
+        this.line.startYProperty().bindBidirectional(this.startPoint.yProperty());
     }
 
     public void setEndPoint(FLAPoint2D endPoint) {
         this.endPoint = endPoint;
-        this.line.setEndX(endPoint.getX());
-        this.line.setEndY(endPoint.getY());
+        this.line.endXProperty().bindBidirectional(this.endPoint.xProperty());
+        this.line.endYProperty().bindBidirectional(this.endPoint.yProperty());
     }   
+
     @Override
-    public void drag(double x, double y) {
-        // TODO Auto-generated method stub
-        
+    public void drag(double dx, double dy) {
+        this.startPoint.drag(this.startPoint.getX()-dx,this.startPoint.getY()-dy);
+        this.endPoint.drag(this.endPoint.getX()-dx,this.endPoint.getY()-dy);
     }
 
     @Override
-    public void drag(Point2D point) {
-        // TODO Auto-generated method stub
-        
+    public void drag(Point2D dPoint) {
+        this.drag(dPoint.getX(), dPoint.getY());
     }
 
-    @Override
-    public double getX() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-    @Override
-    public double getY() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-    
+
     @Override
     public void onMouseDragged(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+
+        this.drag(this.mouseDown.get().subtract(mousePos));      
+        this.mouseDown.set(mousePos);
     }
 
     @Override
@@ -83,8 +84,8 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
 
     @Override
     public void onMousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        e.consume();
+        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
 
     @Override
@@ -112,31 +113,14 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
         
     }
 
-    public void moveStartPointTo(double x, double y) {
-        this.startPoint.drag(x, y);
-        this.line.setStartX(x);
-        this.line.setStartY(y);
-    }
-    public void moveStartPointTo(Point2D point) {
-        this.moveStartPointTo(point.getX(), point.getY());
-    }
-
-    public void moveEndPointTo(double x, double y) {
-        this.endPoint.drag(x, y);
-        this.line.setEndX(x);
-        this.line.setEndY(y);
-    }
-    public void moveEndPointTo(Point2D point) {
-        this.moveEndPointTo(point.getX(), point.getY());
-    }
 
     public void startPointOnMouseDragged(MouseEvent e) {
-        moveStartPointTo(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        this.startPoint.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
     
     
     public void endPointOnMouseDragged(MouseEvent e) {
-        moveEndPointTo(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        this.endPoint.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
 
     @Override
@@ -149,5 +133,17 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     public void onMouseDragExited(MouseEvent e) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
+    }
+
+    @Override
+    public double getX() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getX'");
+    }
+
+    @Override
+    public double getY() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getY'");
     }
 }

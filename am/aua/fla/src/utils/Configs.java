@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import org.w3c.dom.Element;
 
 public class Configs {
+    // Make these properties
     public static final int WINDOW_WIDTH;
     public static final int WINDOW_HEIGHT;
     public static final int LINE_THICKNESS;

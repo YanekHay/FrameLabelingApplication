@@ -63,6 +63,7 @@ public class MainController {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
+            
             FLALine2D line = new FLALine2D(new FLAPoint2D(50,50), new FLAPoint2D(100,100));
             line.drawOnNode(frameGroup);
             frameArea.requestFocus();
@@ -85,12 +86,11 @@ public class MainController {
             return;
         }
         double delta = e.getDeltaY()>0 ? 1 : -1;
-        Global.setScaleMultiplier(clamp(Math.pow(Configs.ZOOM_FACTOR, delta), Configs.MIN_WORLD_SCALE, Configs.MAX_WORLD_SCALE));
-        Global.setWorldScale(Global.getWorldScale()*Global.getScaleMultiplier());
+        // Make the binding between the world scale and the world scale multiplier cleaner
+        Global.setScaleMultiplier(delta);
         FrameGroupController.zoomToPoint(Global.getWorldScale(), new Point2D(e.getX(), e.getY()));
-        for (FLAPoint2D point : Global.points) {
-            point.rescale();
-        }
+
+
         label.setText("X: " + Math.round(e.getX()) + " Y: " + Math.round(e.getY()));
         label2.setText("X: " + ((int)(e.getX()-FrameGroupController.getRealXmin())) + " Y: " + (int)(e.getY()-FrameGroupController.getRealYmin()));
     }

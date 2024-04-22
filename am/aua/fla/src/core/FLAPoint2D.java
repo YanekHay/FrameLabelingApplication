@@ -2,6 +2,7 @@ package core;
 
 import controllers.FrameGroupController;
 import controllers.MainController;
+import javafx.beans.property.Property;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -46,7 +47,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     public FLAPoint2D(double x, double y, Color fillColor, double radius, Pane container) {
         super();
-        this.pointImage = new Circle(x, y, radius); //TODO: make the scale of the pointImage dependent on the scale of the frameGroup
+        this.pointImage = new Circle(x, y, radius);
         this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
@@ -59,7 +60,9 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setOnMouseEntered(this::onMouseEntered);
         this.pointImage.setOnMouseExited(this::onMouseExited);
         this.pointImage.setOnMousePressed(this::onMousePressed);
-        this.rescale();
+        this.pointImage.scaleXProperty().bind(Global.worldScaleInverse.multiply(2));
+        this.pointImage.scaleYProperty().bind(Global.worldScaleInverse.multiply(2));
+
         if (container!=null)
             this.drawOnNode(container);
     }
@@ -247,7 +250,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     public void onMousePressed(MouseEvent e) {
         e.consume();
         FrameGroupController.mouseDown.set(FrameGroupController.frameGroup.localToParent(new Point2D(e.getX(), e.getY())));
-
     }
 
     /**
@@ -279,15 +281,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setOnMouseEntered(eventHandler);
     }
 
-    public void rescale(double scale){
-        scale = Math.max(Configs.MIN_POINT_SCALE, Math.min(Configs.MAX_POINT_SCALE, scale));
-        this.pointImage.setScaleX(scale);
-        this.pointImage.setScaleY(scale);
-    }
-
-    public void rescale(){
-        this.rescale(Global.getWorldScaleInverse()*2);
-    }
     /**
      * Returns a string representation of the FLAPoint2D object.
      * @return A string representation of the FLAPoint2D object.
@@ -307,5 +300,13 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     public void onMouseDragExited(MouseEvent e) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
+    }
+
+    public Property<Number> xProperty() {
+        return this.pointImage.centerXProperty();
+    }
+    
+    public Property<Number> yProperty() {
+        return this.pointImage.centerYProperty();
     }
 }
