@@ -197,7 +197,8 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void drawOnNode(Pane container) {
-        container.getChildren().add(this.pointImage);
+        if (!container.getChildren().contains(this.pointImage))
+            container.getChildren().add(this.pointImage);
     }
 
     /**
@@ -206,7 +207,8 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void drawOnNode(Group container) {
-        container.getChildren().add(this.pointImage);
+        if (!container.getChildren().contains(this.pointImage))
+            container.getChildren().add(this.pointImage);
     }
 
     /**

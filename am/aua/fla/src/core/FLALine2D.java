@@ -40,14 +40,14 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
 
     public void setStartPoint(FLAPoint2D startPoint) {
         this.startPoint = startPoint;
-        this.line.startXProperty().bindBidirectional(this.startPoint.xProperty());
-        this.line.startYProperty().bindBidirectional(this.startPoint.yProperty());
+        this.line.startXProperty().bind(this.startPoint.xProperty());
+        this.line.startYProperty().bind(this.startPoint.yProperty());
     }
 
     public void setEndPoint(FLAPoint2D endPoint) {
         this.endPoint = endPoint;
-        this.line.endXProperty().bindBidirectional(this.endPoint.xProperty());
-        this.line.endYProperty().bindBidirectional(this.endPoint.yProperty());
+        this.line.endXProperty().bind(this.endPoint.xProperty());
+        this.line.endYProperty().bind(this.endPoint.yProperty());
     }   
 
     @Override
@@ -91,6 +91,7 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     @Override
     public void drawOnNode(Pane container) {
         container.getChildren().add(this.line);
+        this.line.toBack();
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
     }

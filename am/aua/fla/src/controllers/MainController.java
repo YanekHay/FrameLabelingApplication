@@ -7,6 +7,7 @@ import java.io.File;
 import core.FLAAnnotation2D;
 import core.FLALine2D;
 import core.FLAPoint2D;
+import core.FLAPolygon2D;
 import core.Global;
 import core.IDraggable;
 import javafx.fxml.FXML;
@@ -65,6 +66,15 @@ public class MainController {
             FrameGroupController.setFrameGroup(frameGroup);
             
             FLALine2D line = new FLALine2D(new FLAPoint2D(50,50), new FLAPoint2D(100,100));
+            ArrayList<FLAPoint2D> points = new ArrayList<>();
+            points.add(new FLAPoint2D(120,120));
+            points.add(new FLAPoint2D(150,150));
+            points.add(new FLAPoint2D(200,200));
+            points.add(new FLAPoint2D(250,250));
+
+            
+            FLAPolygon2D poly = new FLAPolygon2D(points);
+            poly.drawOnNode(frameGroup);
             line.drawOnNode(frameGroup);
             frameArea.requestFocus();
         });
@@ -106,6 +116,7 @@ public class MainController {
             this.addPointAt(pt.getX(), pt.getY());
         }
     }
+
     private void addPointAt(double x, double y){
         FLAPoint2D point = new FLAPoint2D(x, y, Color.RED, Configs.POINT_RADIUS);
         Global.points.add(point);

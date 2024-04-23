@@ -1,20 +1,40 @@
 package core;
 
+import controllers.FrameGroupController;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-
+import java.util.ArrayList;
 public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawable {
-    private FLAPoint2D[] points;
-    private FLALine2D[] lines;
-    private int numPoints;
+    private ArrayList<FLAPoint2D> points = new ArrayList<>();
+    private ArrayList<FLALine2D> lines = new ArrayList<>();
+    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     
-    @Override
-    public void drag(double x, double y) {
-        // TODO Auto-generated method stub
+    public FLAPolygon2D(ArrayList<FLAPoint2D> points) {
+        this.points = points;
+        for (int i = 0; i < this.getPointCount(); i++) {
+            System.out.println(i + " --- " + (i + 1) % this.getPointCount());
+            lines.add(new FLALine2D(points.get(i), points.get((i + 1) % this.getPointCount())));
+        }
+    }
+
+    public int getPointCount() {
+        return points.size();
+    }
+
+    public void addPoint(FLAPoint2D point) {
         
+    }
+
+    @Override
+    public void drag(double dx, double dy) {
+        for (FLAPoint2D point : points) {
+            point.drag(point.getX() - dx, point.getY() - dy);
+        }
     }
 
     @Override
@@ -43,20 +63,24 @@ public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawab
 
     @Override
     public void onMousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        e.consume();
+        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
+
 
     @Override
     public void drawOnNode(Pane container) {
-        // TODO Auto-generated method stub
-        
+        for (FLALine2D line : lines) {
+            line.drawOnNode(container);
+        }
     }
 
     @Override
     public void drawOnNode(Group container) {
-        // TODO Auto-generated method stub
-        
+        for (FLALine2D line : lines) {
+            line.drawOnNode(container);
+        }
+   
     }
 
     @Override
