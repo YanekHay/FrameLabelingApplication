@@ -1,14 +1,15 @@
 import java.nio.file.Path;
+import java.util.ArrayList;
+
+import core.FLALine2D;
+import core.FLAPoint2D;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import utils.Configs;
 
@@ -20,8 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Configs configs = new Configs(Path.of("am/aua/fla/configs/MainConfig.xml"));
-        AnchorPane root = FXMLLoader.load(getClass().getResource("UI/root/Main.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("UI/root/Main.fxml"));
         // StackPane to hold the image and text
         Scene scene = new Scene(root);
         
@@ -29,6 +29,9 @@ public class Main extends Application {
         primaryStage.setTitle("Image Coordinate App");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
+        // scene.getStylesheets().add(getClass().getResource("UI/root/styles.css").toExternalForm());
     }
 
 }

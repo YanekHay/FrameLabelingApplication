@@ -1,60 +1,30 @@
 package utils;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Path;
-import java.io.File;
+import org.w3c.dom.Element;
 
 public class Configs {
-    public final int WINDOW_WIDTH;
-    public final int WINDOW_HEIGHT;
-    public final int LINE_THICKNESS;
-    public final int POINT_RADIUS;
-
-    /**
-     * Constructs a new Configs object by loading the configuration values from an XML file.
-     *
-     * @param configFilePath the path to the config file
-     */
-    public Configs(Path configFilePath) {
-        try {
-            // Create a DocumentBuilderFactory
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-            // Create a DocumentBuilder
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            // Load the XML file into a Document
-            Document document = builder.parse(new File(configFilePath.toString()));
-
-            // Get the root element of the XML document
-            Element root = document.getDocumentElement();
-
-            // Get values from the XML elements
-            this.WINDOW_WIDTH = Integer.parseInt(getNodeValue(root, "WINDOW_WIDTH"));
-            this.WINDOW_HEIGHT = Integer.parseInt(getNodeValue(root, "WINDOW_HEIGHT"));
-            this.LINE_THICKNESS = Integer.parseInt(getNodeValue(root, "LINE_THICKNESS"));
-            this.POINT_RADIUS = Integer.parseInt(getNodeValue(root, "POINT_RADIUS"));
-        } catch (IllegalArgumentException e) {
-            // Handle any exceptions
-            throw e;
-        }
-        catch (Exception e) {
-            // Handle any exceptions
-            throw new RuntimeException("Error loading configuration from XML file: " + e.getMessage());
-        }
-    }
-
-    private String getNodeValue(Element element, String tagName) throws IllegalArgumentException{
-        NodeList nodeList = element.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
-        } else {
-            throw new IllegalArgumentException("Element '" + tagName + "' not found in XML.");
-        }
+    // Make these properties
+    public static final int WINDOW_WIDTH;
+    public static final int WINDOW_HEIGHT;
+    public static final int LINE_THICKNESS;
+    public static final double POINT_RADIUS;
+    public static final double ZOOM_FACTOR;
+    public static final double MIN_POINT_SCALE;
+    public static final double MAX_POINT_SCALE;
+    public static final double MIN_WORLD_SCALE;
+    public static final double MAX_WORLD_SCALE;
+    static {
+        Path configFilePath = Path.of("am/aua/fla/configs/MainConfig.xml");// specify your config file path here
+        Element configRoot = XMLParser.getRootElement(configFilePath);
+        WINDOW_WIDTH = Integer.parseInt(XMLParser.getNodeValue(configRoot, "WINDOW_WIDTH"));
+        WINDOW_HEIGHT = Integer.parseInt(XMLParser.getNodeValue(configRoot, "WINDOW_HEIGHT"));
+        LINE_THICKNESS = Integer.parseInt(XMLParser.getNodeValue(configRoot, "LINE_THICKNESS"));
+        POINT_RADIUS = Double.parseDouble(XMLParser.getNodeValue(configRoot, "POINT_RADIUS"));
+        ZOOM_FACTOR = Double.parseDouble(XMLParser.getNodeValue(configRoot, "ZOOM_FACTOR"));
+        MIN_POINT_SCALE = Double.parseDouble(XMLParser.getNodeValue(configRoot, "MIN_POINT_SCALE"));
+        MAX_POINT_SCALE = Double.parseDouble(XMLParser.getNodeValue(configRoot, "MAX_POINT_SCALE"));
+        MIN_WORLD_SCALE = Double.parseDouble(XMLParser.getNodeValue(configRoot, "MIN_WORLD_SCALE"));
+        MAX_WORLD_SCALE = Double.parseDouble(XMLParser.getNodeValue(configRoot, "MAX_WORLD_SCALE"));
     }
 }

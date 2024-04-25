@@ -3,22 +3,34 @@
     -fx-font-size: 12px;
     -fx-font-color: #fff; /* Text color */
     -fx-color: #585858; /* Text color */
-    -fx-border: none; /* Border color */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-text-decoration: none;
+    -fx-border-radius: 100;
   }
-  .flat-button:hover {
-    -fx-background-color: #272727; /* Background color on hover */
-    -fx-font-color: #fff; /* Text color */
-  }
-  
+
+.flat-button:hover {
+  -fx-background-color: #272727; /* Background color on hover */
+  -fx-font-color: #fff; /* Text color */
+}
+
 .root{
     -fx-background-color: #d7d4d4;
 }
-.vbox:hover{
-    -fx-background-color: #a1a9828c
+.frameGroup{
+    -fx-background-color: #7e3f3f;
 }
-
+.frameArea{
+    -fx-background-color: #1a6c95b7
+}
+.stackPane{
+    -fx-background-color: #2f9f7f;
+}
 .frameBack{
     -fx-background-color: #d7d4d4;
+}
+
+.FLAPoint2D{
+    -fx-background-color: #d7d4d4;
+}
+
+.FLAPoint2D:hover{
+    -fx-background-color: #a1a9828c
 }
