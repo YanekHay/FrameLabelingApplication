@@ -54,6 +54,11 @@ public class ImageLoader {
         this.height = height;
     }
 
+    public void toURI() {
+        path.toURI();
+    }
+
+    
     public void chooseImageFile(){
         // Create a FileChooser object
         FileChooser fileChooser = new FileChooser();

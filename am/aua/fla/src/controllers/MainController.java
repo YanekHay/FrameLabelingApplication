@@ -3,8 +3,10 @@ package controllers;
 import static utils.CalculationUtil.clamp;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Path;
 
+import core.ImageLoader;
 import core.VideoLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
@@ -48,10 +49,7 @@ public class MainController {
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
         btnNext.setOnAction(this::btnNextOnAction);
-        VideoLoader videoLoader = new VideoLoader();
-        videoLoader.setPath(Path.of("Labeler_V2.mp4"));
-        // videoLoader.loadVideo();
-    }
+        }
 
     @FXML
     void btnNextOnAction(ActionEvent event) {
@@ -161,32 +159,32 @@ public class MainController {
     
     @FXML
     public void openImageFileDialog(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Image File");
-
-        // Add filters (optional)
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-        );
-
-        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
-
-            // Load the image into an Image object
-            Image image = new Image(selectedFile.toURI().toString());
-            
-            // Set the image to the ImageView
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.chooseImageFile();
+        File file = imageLoader.getPath();
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
             imageView.setImage(image);
-            this.reset(imageView, image.getWidth(), image.getHeight());
-        } else {
-            System.out.println("No file selected.");
         }
     }
-}
+
+        @FXML
+        public void openVideoDialog(){
+            VideoLoader videoLoader = new VideoLoader();
+            videoLoader.chooseVideoFile();
+            URI file = videoLoader.getPath();
+
+            if (file != null) {
+                videoLoader.setPath(file);
+                Image image = videoLoader.getFrame(1);
+                imageView.setImage(image);
+            }
+            
+
+        }
+    
+    }
+
 
 
     
