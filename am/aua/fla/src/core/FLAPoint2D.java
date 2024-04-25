@@ -2,7 +2,9 @@ package core;
 
 import controllers.FrameGroupController;
 import controllers.MainController;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -37,6 +39,8 @@ import utils.Configs;
  */
 public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     private Circle pointImage;
+    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
      * @param x The x-coordinate of the point.
@@ -51,7 +55,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
-        Global.points.add(this);
         this.pointImage.setFill(fillColor);
         this.pointImage.setCursor(Cursor.MOVE);
         this.pointImage.setStrokeWidth(radius/5);
@@ -60,8 +63,8 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this.pointImage.setOnMouseEntered(this::onMouseEntered);
         this.pointImage.setOnMouseExited(this::onMouseExited);
         this.pointImage.setOnMousePressed(this::onMousePressed);
-        this.pointImage.scaleXProperty().bind(Global.worldScaleInverse.multiply(2));
-        this.pointImage.scaleYProperty().bind(Global.worldScaleInverse.multiply(2));
+        this.pointImage.scaleXProperty().bind(Global.worldScaleInverse.multiply(1.5));
+        this.pointImage.scaleYProperty().bind(Global.worldScaleInverse.multiply(1.5));
 
         if (container!=null)
             this.drawOnNode(container);
@@ -209,6 +212,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     public void drawOnNode(Group container) {
         if (!container.getChildren().contains(this.pointImage))
             container.getChildren().add(this.pointImage);
+        this.pointImage.toFront();
     }
 
     /**
@@ -218,7 +222,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void drag(double x, double y) {
-        MainController.setLastDraggedObject(this);
         this.setX(x);
         this.setY(y);
     }
@@ -229,8 +232,26 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void drag(Point2D point) {
-        this.setX(point.getX());
-        this.setY(point.getY());
+        this.drag(point.getX(), point.getY());
+    }
+    
+    /**
+     * Drags the point to the specified coordinates.
+     * @param x The new x-coordinate of the point.
+     * @param y The new y-coordinate of the point.
+     */
+    @Override
+    public void dragByDelta(double dx, double dy) {
+        this.drag(this.getX()-dx, this.getY()-dy);
+    }
+    
+    /**
+     * Drags the point to the specified Point2D coordinates.
+     * @param point The new coordinates of the point.
+     */
+    @Override
+    public void dragByDelta(Point2D dPoint) {
+        this.dragByDelta(dPoint.getX(), dPoint.getY());
     }
 
     /**
@@ -240,7 +261,10 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void onMouseDragged(MouseEvent e) {
-        this.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        e.consume();
+        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        this.dragByDelta(this.mouseDown.get().subtract(mousePos));      
+        this.mouseDown.set(mousePos);
     }
 
     /**
@@ -251,7 +275,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     @Override
     public void onMousePressed(MouseEvent e) {
         e.consume();
-        FrameGroupController.mouseDown.set(FrameGroupController.frameGroup.localToParent(new Point2D(e.getX(), e.getY())));
+        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
 
     /**

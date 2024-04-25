@@ -29,6 +29,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.Configs;
@@ -53,7 +54,9 @@ public class MainController {
     @FXML
     private VBox labelArea;
     
+    private Rectangle selectArea;
     private static IDraggable lastDraggedObject;
+    FLAPolygon2D poly = new FLAPolygon2D();
     
     Label label = new Label("");
     Label label2 = new Label("");
@@ -68,15 +71,16 @@ public class MainController {
             FLALine2D line = new FLALine2D(new FLAPoint2D(50,50), new FLAPoint2D(100,100));
             ArrayList<FLAPoint2D> points = new ArrayList<>();
             points.add(new FLAPoint2D(120,120));
+            points.add(new FLAPoint2D(150,120));
             points.add(new FLAPoint2D(150,150));
-            points.add(new FLAPoint2D(200,200));
-            points.add(new FLAPoint2D(250,250));
+            points.add(new FLAPoint2D(120,150));
 
             
-            FLAPolygon2D poly = new FLAPolygon2D(points);
+            // FLAPolygon2D poly = new FLAPolygon2D(points);
             poly.drawOnNode(frameGroup);
             line.drawOnNode(frameGroup);
             frameArea.requestFocus();
+
         });
         labelArea.getChildren().add(label);
         labelArea.getChildren().add(label2);
@@ -108,18 +112,20 @@ public class MainController {
     @FXML
     void frameAreaOnMousePressed(MouseEvent e){
         e.consume();
-        if (e.isMiddleButtonDown()) {
-            FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-        }
+        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
+
         if (e.isPrimaryButtonDown()){
             Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-            this.addPointAt(pt.getX(), pt.getY());
+            if (!poly.isClosed())
+                poly.addPoint(new FLAPoint2D(pt.getX(), pt.getY(), Color.RED, Configs.POINT_RADIUS));
+        }
+        else if (e.isSecondaryButtonDown()){
+            poly.closePolygon();
         }
     }
 
     private void addPointAt(double x, double y){
         FLAPoint2D point = new FLAPoint2D(x, y, Color.RED, Configs.POINT_RADIUS);
-        Global.points.add(point);
         point.drawOnNode(frameGroup);
     }
 
@@ -130,6 +136,10 @@ public class MainController {
             Point2D dragPoint = new Point2D(e.getX(), e.getY());
             FrameGroupController.shift(dragPoint.subtract(FrameGroupController.mouseDown.get()));
             FrameGroupController.mouseDown.set(dragPoint);
+        }
+        else if (e.isPrimaryButtonDown()){
+            // this.selectArea.setWidth(e.getX()-FrameGroupController.mouseDown.get().getX());
+            // this.selectArea.setHeight(e.getY()-FrameGroupController.mouseDown.get().getY());
         }
     }
     

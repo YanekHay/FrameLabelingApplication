@@ -22,7 +22,7 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
         line = new Line(stP.getX(), stP.getY(), endP.getX(), endP.getY());
         this.setStartPoint(stP);
         this.setEndPoint(endP);
-        this.line.setStrokeWidth(3);
+        this.line.strokeWidthProperty().bind(Global.worldScaleInverse.multiply(3));
         this.line.setCursor(Cursor.MOVE);
         this.line.setOnMouseDragged(this::onMouseDragged);
         this.line.setOnMouseEntered(this::onMouseEntered);
@@ -30,11 +30,6 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
         this.line.setOnMousePressed(this::onMousePressed);
         this.line.setOnMouseDragEntered(this::onMouseDragEntered);
         this.line.setOnMouseDragExited(this::onMouseDragExited);
-
-
-
-        this.startPoint.setOnMouseDragged(this::startPointOnMouseDragged);
-        this.endPoint.setOnMouseDragged(this::endPointOnMouseDragged);
         
     }
 
@@ -51,22 +46,33 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     }   
 
     @Override
-    public void drag(double dx, double dy) {
-        this.startPoint.drag(this.startPoint.getX()-dx,this.startPoint.getY()-dy);
-        this.endPoint.drag(this.endPoint.getX()-dx,this.endPoint.getY()-dy);
+    public void dragByDelta(double dx, double dy) {
+        this.startPoint.dragByDelta(dx, dy);
+        this.endPoint.dragByDelta(dx, dy);
     }
 
     @Override
-    public void drag(Point2D dPoint) {
-        this.drag(dPoint.getX(), dPoint.getY());
+    public void dragByDelta(Point2D dPoint) {
+        this.dragByDelta(dPoint.getX(), dPoint.getY());
+    }
+
+    @Override
+    public void drag(double x, double y) {
+        this.startPoint.drag(x, y);
+        this.endPoint.drag(x, y);
+    }
+
+    @Override
+    public void drag(Point2D point) {
+        this.drag(point.getX(), point.getY());
     }
 
 
     @Override
     public void onMouseDragged(MouseEvent e) {
+        e.consume();
         Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
-
-        this.drag(this.mouseDown.get().subtract(mousePos));      
+        this.dragByDelta(this.mouseDown.get().subtract(mousePos));      
         this.mouseDown.set(mousePos);
     }
 
@@ -90,38 +96,32 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
 
     @Override
     public void drawOnNode(Pane container) {
-        container.getChildren().add(this.line);
-        this.line.toBack();
+        if (!container.getChildren().contains(this.line))
+            container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
+        this.line.toBack();
     }
 
     @Override
     public void drawOnNode(Group container) {
-        container.getChildren().add(this.line);
+        if (!container.getChildren().contains(this.line))
+            container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
+        
+
     }
+
     @Override
     public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
         // TODO Auto-generated method stub
-        this.startPoint.setOnMouseDragged(eventHandler);
     }
     
     @Override
     public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
         // TODO Auto-generated method stub
         
-    }
-
-
-    public void startPointOnMouseDragged(MouseEvent e) {
-        this.startPoint.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
-    }
-    
-    
-    public void endPointOnMouseDragged(MouseEvent e) {
-        this.endPoint.drag(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
     }
 
     @Override

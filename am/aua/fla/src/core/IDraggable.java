@@ -9,6 +9,8 @@ public interface IDraggable {
     public double getY();
     public void drag(double x, double y);
     public void drag(Point2D point);
+    public void dragByDelta(double dx, double dy);
+    public void dragByDelta(Point2D dP);
     public void onMouseDragged(MouseEvent e);
     public void onMouseEntered(MouseEvent e);
     public void onMouseExited(MouseEvent e);

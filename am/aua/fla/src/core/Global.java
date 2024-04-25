@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import controllers.FrameGroupController;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.layout.BorderPane;
 import utils.Configs;
 
 public class Global {
-    public static ArrayList<FLAPoint2D> points = new ArrayList<FLAPoint2D>(5);
-    public static ArrayList<FLALine2D> lines = new ArrayList<FLALine2D>(5);
+    public static ArrayList<FLAPoint2D> selectedPoints = new ArrayList<FLAPoint2D>();
+    public static ArrayList<FLALine2D> selectedLines = new ArrayList<FLALine2D>();
 
     public static DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
     public static DoubleProperty worldScale = new SimpleDoubleProperty(1.0);
