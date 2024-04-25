@@ -16,7 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
-public class VideoLoader {
+public class VideoLoader implements IFrameLoader {
 
     private URI path;
     private int height;
@@ -98,7 +98,6 @@ public class VideoLoader {
     }
 
     public Image getFrame(int frameNumber) {
-        loadVideo();
         double frameRate = (double) video.getMetadata().get("framerate");
         double frameDuration = 1 / frameRate; // in seconds
 
@@ -127,8 +126,6 @@ public class VideoLoader {
     }
 
     public BufferedImage getFrameAtTime(Duration time) {
-
-        loadVideo();
 
         // Create a MediaPlayer to play the video
         MediaPlayer mediaPlayer = new MediaPlayer(video);
