@@ -1,53 +1,105 @@
 package core;
 
-public class FLARectangle2D extends FLAAnnotation2D {
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
-     private double x;
-     private double y;
-     private double width;
-     private double height;
+public class FLARectangle2D extends FLAAnnotation2D implements IDraggable, IDrawable {
+    private Point2D topLeft;
+    private Point2D bottomRight;
     
-     public FLARectangle2D(double x, double y, double width, double height) {
-         this.x = x;
-         this.y = y;
-         this.width = width;
-         this.height = height;
-     }
-     public double getX() {
-         return x;
-     }
-     public double getY() {
-          return y;
-     }
-    
-        public double getWidth() {
-            return width;
-        }
-        public double getHeight() {
-            return height;
-        }
-        public double getArea() {
-            return width * height;
-        }
-        public boolean contains(double pointX, double pointY) {
-            return pointX >= x && pointX <= x + width && pointY >= y && pointY <= height;
-        }
-        public String toString() {
-            return "Rectangle2D [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + "]";
-        }
-        public boolean equals(Object obj) {
-         if(this == obj) {
-             return true;
-         }
-         if(obj == null || getClass() != obj.getClass()) {
-             return false;
-         }
-        FLARectangle2D other = (FLARectangle2D) obj;
-         return Double.compare(other.x, x) == 0 && Double.compare(other.y, y) == 0 &&
-                 Double.compare(other.width, width) == 0 && Double.compare(other.height, height) == 0;
+    public void Rectangle2D(Point2D topleft, Point2D bottomRight) {
+        this.topLeft = topleft;
+        this.bottomRight = bottomRight;
+        new Rectangle();
     }
-    
+    public void setTopLeft(Point2D topLeft) {
+        this.topLeft = topLeft;
     }
-    
-    
+    public Point2D getTopLeft() {
+        return topLeft;
+    }
+    public void setBottomRight(Point2D bottomRight) {
+        this.bottomRight = bottomRight;
+    }
+    public Point2D getBottomRight() {
+        return bottomRight;
+    }
+    public double getWidth() {
+        return Math.abs(bottomRight.getX() - topLeft.getX());
+    }
+    public double getHeight() {
+        return Math.abs(bottomRight.getY() - topLeft.getY());
+    }
+    public double getArea() {
+        return getWidth() * getHeight();
+    }
 
+
+     
+    @Override
+    public void drawOnNode(Pane container) {
+        // TODO Auto-generated method stub
+         
+    }
+
+    @Override
+    public void drawOnNode(Group container) {
+        // TODO Auto-generated method stub
+         
+    }
+
+    @Override
+    public void drag(double dx, double dy) {
+        // TODO Auto-generated method stub
+        double newTopLeftX = topLeft.getX() + dx;
+        double newTopLeftY = topLeft.getY() + dx;
+        double newBottomRightX = bottomRight.getX() + dx;
+        double newBottomRightY = bottomRight.getY() + dx;
+
+        topLeft = new Point2D(newBottomRightX, newBottomRightY);
+        bottomRight = new Point2D(newBottomRightX, newBottomRightY);
+
+    }
+
+    @Override
+    public void drag(Point2D point) {
+        // TODO Auto-generated method stub
+         
+    }
+
+    @Override
+    public void onMouseDragged(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onMouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onMouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onMousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+         
+    }
+
+    @Override
+    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
+        // TODO Auto-generated method stub
+    } 
+}
