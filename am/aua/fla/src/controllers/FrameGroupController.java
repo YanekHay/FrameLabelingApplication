@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Global;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
@@ -8,7 +9,7 @@ import javafx.scene.Parent;
 
 public class FrameGroupController {
     public static Group frameGroup;
-    public static final int MIN_PIXELS = 64;
+    
     public static ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     private static double oldX;
     private static double oldY;
@@ -57,7 +58,7 @@ public class FrameGroupController {
     }
 
 
-    public static void zoomToPoint(double scaleMultiplier, Point2D pivot) {
+    public static void zoomToPoint(double scale, Point2D pivot) {
         oldX = FrameGroupController.getRealXmin();
         oldY = FrameGroupController.getRealYmin();
         oldDx = pivot.getX()-oldX;
@@ -67,10 +68,9 @@ public class FrameGroupController {
         relMouseX = (oldDx)/FrameGroupController.getRealWidth();
         relMouseY = (oldDy)/FrameGroupController.getRealHeight();
 
-        // Scale the frameGroup
-        frameGroup.setScaleX(frameGroup.getScaleX() * scaleMultiplier);
-        frameGroup.setScaleY(frameGroup.getScaleY() * scaleMultiplier);
-
+        // // Scale the frameGroup
+        frameGroup.setScaleX(scale);
+        frameGroup.setScaleY(scale);
         // Get the current REAL coordinates of the frameGroup
         newX = FrameGroupController.getRealXmin();
         newY = FrameGroupController.getRealYmin();
@@ -88,9 +88,16 @@ public class FrameGroupController {
         frameGroup.setTranslateX(frameGroup.getTranslateX() + delta.getX());
         frameGroup.setTranslateY(frameGroup.getTranslateY() + delta.getY());
     }
+    public static void shift(double dx, double dy){
+        frameGroup.setTranslateX(frameGroup.getTranslateX() + dx);
+        frameGroup.setTranslateY(frameGroup.getTranslateY() + dy);
+    }
 
-    public static Point2D getCoordinateOnOriginalScale(double x, double y){
-        System.out.println(x + "  " + (x-getRealXmin()));
-        return new Point2D((x-getRealXmin())/frameGroup.getScaleX(), (y-getRealYmin())/frameGroup.getScaleY());
+    public static void resetView(){
+        frameGroup.setTranslateX(0);
+        frameGroup.setTranslateY(0);
+        frameGroup.setScaleX(1);
+        frameGroup.setScaleY(1);
+        Global.setWorldScale(1);
     }
 }

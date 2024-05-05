@@ -1,5 +1,7 @@
-package core;
+package core.shapes;
 
+import core.IDraggable;
+import core.IDrawable;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -7,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
-public class FLARectangle2D extends FLAAnnotation2D implements IDraggable, IDrawable {
+public class FLARectangle2D extends FLAShape2D implements IDraggable, IDrawable {
     private Point2D topLeft;
     private Point2D bottomRight;
     
@@ -78,28 +80,29 @@ public class FLARectangle2D extends FLAAnnotation2D implements IDraggable, IDraw
     }
 
     @Override
-    public void onMouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onMouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void onMousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
          
     }
 
     @Override
-    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
+    public void dragByDelta(double dx, double dy) {
         // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'dragByDelta'");
     }
-
     @Override
-    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
+    public void dragByDelta(Point2D dP) {
         // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'dragByDelta'");
+    }
+    @Override
+    public boolean equals(Object obj) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'equals'");
+    }
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toString'");
     } 
 }
