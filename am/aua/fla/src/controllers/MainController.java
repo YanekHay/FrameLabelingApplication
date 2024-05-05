@@ -117,7 +117,7 @@ public class MainController {
         if (e.isPrimaryButtonDown()){
             Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
             if (!poly.isClosed())
-                poly.addPoint(new FLAPoint2D(pt.getX(), pt.getY(), Color.RED, Configs.POINT_RADIUS));
+                poly.addPoint(new FLAPoint2D(pt.getX(), pt.getY(), Configs.POINT_RADIUS));
         }
         else if (e.isSecondaryButtonDown()){
             poly.closePolygon();
@@ -125,7 +125,7 @@ public class MainController {
     }
 
     private void addPointAt(double x, double y){
-        FLAPoint2D point = new FLAPoint2D(x, y, Color.RED, Configs.POINT_RADIUS);
+        FLAPoint2D point = new FLAPoint2D(x, y, Configs.POINT_RADIUS);
         point.drawOnNode(frameGroup);
     }
 
