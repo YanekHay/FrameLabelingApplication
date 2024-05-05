@@ -4,12 +4,12 @@ import static utils.CalculationUtil.clamp;
 
 import java.io.File;
 
-import core.FLAAnnotation2D;
-import core.FLALine2D;
-import core.FLAPoint2D;
-import core.FLAPolygon2D;
 import core.Global;
 import core.IDraggable;
+import core.shapes.FLAShape2D;
+import core.shapes.FLALine2D;
+import core.shapes.FLAPoint2D;
+import core.shapes.FLAPolygon2D;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;

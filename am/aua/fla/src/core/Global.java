@@ -4,8 +4,11 @@ import static utils.CalculationUtil.clamp;
 import java.util.ArrayList;
 
 import controllers.FrameGroupController;
+import core.shapes.FLALine2D;
+import core.shapes.FLAPoint2D;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Point2D;
 import utils.Configs;
 
 public class Global {
@@ -34,4 +37,7 @@ public class Global {
         return worldScaleMultiplier.get();
     }
 
+    public static Point2D pointOnCanvas(double x, double y){
+        return FrameGroupController.frameGroup.sceneToLocal(x, y);
+    }
 }

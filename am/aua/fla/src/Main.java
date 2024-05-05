@@ -1,8 +1,8 @@
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-import core.FLALine2D;
-import core.FLAPoint2D;
+import core.shapes.FLALine2D;
+import core.shapes.FLAPoint2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;

@@ -1,9 +1,9 @@
-package core;
+package core.shapes;
 
 import controllers.FrameGroupController;
+import core.Global;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +14,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 import java.util.ArrayList;
-public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawable {
+public class FLAPolygon2D extends FLAShape2D {
     private ArrayList<FLAPoint2D> points = new ArrayList<>();
     private ArrayList<FLALine2D> lines = new ArrayList<>();
     private Polygon polygon = new Polygon();
@@ -34,16 +34,16 @@ public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawab
 
     public FLAPolygon2D() {
         polygon.setFill(Color.rgb(100,100,100,0.5));
-        this.polygon.setOnMouseDragged(this::polygonOnMouseDragged);
-        this.polygon.setOnMousePressed(this::polygonOnMousePressed);
+        this.polygon.setOnMouseDragged(this::onMouseDragged);
+        this.polygon.setOnMousePressed(this::onMousePressed);
     }
 
-    private void polygonOnMousePressed(MouseEvent e){
+    public void onMousePressed(MouseEvent e){
         e.consume();
-        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        this.mouseDown.set(Global.pointOnCanvas(e.getSceneX(), e.getSceneY()));
     }
 
-    private void polygonOnMouseDragged(MouseEvent e) {
+    public void onMouseDragged(MouseEvent e) {
         e.consume();
         Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
         this.dragByDelta(this.mouseDown.get().subtract(mousePos));   
@@ -125,32 +125,6 @@ public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawab
         this.drag(point.getX(), point.getY());
     }
 
-
-    @Override
-    public void onMouseDragged(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void onMouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void onMouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void onMousePressed(MouseEvent e) {
-        e.consume();
-        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
-    }
-
-
     @Override
     public void drawOnNode(Pane container) {
         container.getChildren().add(this.polygon);   
@@ -169,39 +143,21 @@ public class FLAPolygon2D extends FLAAnnotation2D implements IDraggable, IDrawab
     }
 
     @Override
-    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
+    public FLAShape2D clone() {
         // TODO Auto-generated method stub
-        
-    }
-    
-    @Override
-    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
-        // TODO Auto-generated method stub
-        
+        throw new UnsupportedOperationException("Unimplemented method 'clone'");
     }
 
     @Override
-    public double getX() {
+    public boolean equals(Object obj) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getX'");
+        throw new UnsupportedOperationException("Unimplemented method 'equals'");
     }
 
     @Override
-    public double getY() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getY'");
+    public String toString() {
+        return "FLAPolygon2D [points=" + points + ", lines=" + lines + ", polygon=" + polygon + ", mouseDown=" + mouseDown
+                + ", isClosed=" + isClosed + "]";
     }
 
-    @Override
-    public void onMouseDragEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
-    }
-
-    @Override
-    public void onMouseDragExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
-    }
-    
 }

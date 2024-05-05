@@ -1,35 +1,28 @@
-package core;
+package core.shapes;
 
 import controllers.FrameGroupController;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
+import core.Global;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
+public class FLALine2D extends FLAShape2D {
     private Line line;
     private FLAPoint2D startPoint;
     private FLAPoint2D endPoint;
-    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     
     public FLALine2D(FLAPoint2D stP, FLAPoint2D endP) {
+        super();
         line = new Line(stP.getX(), stP.getY(), endP.getX(), endP.getY());
         this.setStartPoint(stP);
         this.setEndPoint(endP);
         this.line.strokeWidthProperty().bind(Global.worldScaleInverse.multiply(3));
         this.line.setCursor(Cursor.MOVE);
         this.line.setOnMouseDragged(this::onMouseDragged);
-        this.line.setOnMouseEntered(this::onMouseEntered);
-        this.line.setOnMouseExited(this::onMouseExited);
         this.line.setOnMousePressed(this::onMousePressed);
-        this.line.setOnMouseDragEntered(this::onMouseDragEntered);
-        this.line.setOnMouseDragExited(this::onMouseDragExited);
         
     }
 
@@ -77,18 +70,6 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
     }
 
     @Override
-    public void onMouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void onMouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void onMousePressed(MouseEvent e) {
         e.consume();
         this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
@@ -109,42 +90,24 @@ public class FLALine2D extends FLAAnnotation2D implements IDraggable, IDrawable{
             container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
-        
-
     }
 
     @Override
-    public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
+    public FLAShape2D clone() {
         // TODO Auto-generated method stub
-    }
-    
-    @Override
-    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
-        // TODO Auto-generated method stub
-        
+        throw new UnsupportedOperationException("Unimplemented method 'clone'");
     }
 
     @Override
-    public void onMouseDragEntered(MouseEvent e) {
+    public boolean equals(Object obj) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
+        throw new UnsupportedOperationException("Unimplemented method 'equals'");
     }
 
     @Override
-    public void onMouseDragExited(MouseEvent e) {
+    public String toString() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
+        throw new UnsupportedOperationException("Unimplemented method 'toString'");
     }
 
-    @Override
-    public double getX() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getX'");
-    }
-
-    @Override
-    public double getY() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getY'");
-    }
 }

@@ -34,3 +34,32 @@
 .FLAPoint2D:hover{
     -fx-background-color: #a1a9828c
 }
+
+
+
+/* Define a flat style for the toolbar */
+.toolbar {
+    -fx-background-color: #f0f0f0; /* Light gray background */
+    -fx-alignment: center; /* Center align the toolbar items */
+}
+
+/* Define the style for toolbar buttons */
+.tool-bar .button {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-text-fill: #333333; 
+    -fx-font-size: 14px;
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+    
+
+}
+
+/* Define hover effect for toolbar buttons */
+.tool-bar .button:hover {
+    -fx-background-color: #e0e0e0; /* Light gray background on hover */
+}
+
+/* Define pressed effect for toolbar buttons */
+.tool-bar .button:pressed {
+    -fx-background-color: #cccccc; /* Slightly darker background when pressed */
+}
