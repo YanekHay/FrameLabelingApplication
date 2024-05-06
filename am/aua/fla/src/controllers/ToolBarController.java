@@ -1,10 +1,11 @@
 package controllers;
 
+import javafx.scene.Cursor;
+
 public class ToolBarController {
     public enum Tool{
         SELECT,
         POINT,
-        LINE,
         RECTANGLE,
         POLYGON,
     }
@@ -12,6 +13,24 @@ public class ToolBarController {
     private static Tool currentTool = Tool.SELECT;
 
     public static void setCurrentTool(Tool tool){
+        currentTool = tool;
+        System.out.println("Setting tool to: " + tool.toString());
+        switch (tool) {
+            case Tool.SELECT:
+                FrameGroupController.setSelectingMode();
+                break;
+            case Tool.POINT:
+                FrameGroupController.setPointDrawingMode();
+                break;
+            case Tool.RECTANGLE:
+                FrameGroupController.setRectangleDrawingMode();
+                break;
+            case Tool.POLYGON:
+                FrameGroupController.setPolygonDrawingMode();
+                break;
+            default:
+                break;
+        }
         currentTool = tool;
     }
     

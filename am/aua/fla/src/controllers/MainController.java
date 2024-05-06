@@ -4,6 +4,7 @@ import static utils.CalculationUtil.clamp;
 
 import java.io.File;
 
+import controllers.ToolBarController.Tool;
 import core.Global;
 import core.IDraggable;
 import core.shapes.FLAShape2D;
@@ -38,9 +39,6 @@ import utils.Configs;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import java.util.ArrayList;
 import core.labeled.*;
 public class MainController {
 
@@ -51,7 +49,10 @@ public class MainController {
     @FXML private Group frameGroup;
     @FXML private Button btnResetView;
     @FXML private ScrollPane labelLayersContainer;
-    @FXML private Button btnDrawPoint, btnDrawRectangle, btnDrawPolygon, btnSelectTool;
+    @FXML private Button btnDrawPoint;
+    @FXML private Button btnDrawRectangle;
+    @FXML private Button btnDrawPolygon;
+    @FXML private Button btnSelectTool;
 
     FLAPolygon2D poly = new FLAPolygon2D();
     
@@ -78,6 +79,11 @@ public class MainController {
         });
         frameArea.setOnMousePressed(this::frameAreaOnMousePressed);
         frameArea.setOnMouseDragged(this::frameAreaOnMouseDragged);
+        btnDrawPoint.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.POINT);});
+        btnDrawRectangle.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.RECTANGLE);});
+        btnDrawPolygon.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.POLYGON);});
+        btnSelectTool.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.SELECT);});
+        
     }
 
     @FXML
@@ -98,15 +104,6 @@ public class MainController {
     void frameAreaOnMousePressed(MouseEvent e){
         e.consume();
         FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-
-        if (e.isPrimaryButtonDown()){
-            Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-            if (!poly.isClosed())
-                poly.addPoint(new FLAPoint2D(pt.getX(), pt.getY(), Configs.POINT_RADIUS));
-        }
-        else if (e.isSecondaryButtonDown()){
-            poly.closePolygon();
-        }
     }
 
     @FXML
