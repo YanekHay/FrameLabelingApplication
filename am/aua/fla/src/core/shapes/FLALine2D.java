@@ -2,6 +2,7 @@ package core.shapes;
 
 import controllers.FrameGroupController;
 import core.Global;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -10,9 +11,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 public class FLALine2D extends FLAShape2D {
-    private Line line;
-    private FLAPoint2D startPoint;
-    private FLAPoint2D endPoint;
+    protected Line line;
+    protected FLAPoint2D startPoint;
+    protected FLAPoint2D endPoint;
     
     public FLALine2D(FLAPoint2D stP, FLAPoint2D endP) {
         super();
@@ -23,7 +24,6 @@ public class FLALine2D extends FLAShape2D {
         this.line.setCursor(Cursor.MOVE);
         this.line.setOnMouseDragged(this::onMouseDragged);
         this.line.setOnMousePressed(this::onMousePressed);
-        
     }
 
     public void setStartPoint(FLAPoint2D startPoint) {
@@ -60,11 +60,10 @@ public class FLALine2D extends FLAShape2D {
         this.drag(point.getX(), point.getY());
     }
 
-
     @Override
     public void onMouseDragged(MouseEvent e) {
         e.consume();
-        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
         this.dragByDelta(this.mouseDown.get().subtract(mousePos));      
         this.mouseDown.set(mousePos);
     }
@@ -72,7 +71,7 @@ public class FLALine2D extends FLAShape2D {
     @Override
     public void onMousePressed(MouseEvent e) {
         e.consume();
-        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        this.mouseDown.set(Global.pointOnCanvas(e.getSceneX(), e.getSceneY()));
     }
 
     @Override
@@ -110,4 +109,39 @@ public class FLALine2D extends FLAShape2D {
         throw new UnsupportedOperationException("Unimplemented method 'toString'");
     }
 
+    protected void makeHorizontal(){
+        this.endPoint.yProperty().set(this.startPoint.getY());
+        this.endPoint.yProperty().unbind();
+        this.endPoint.yProperty().bindBidirectional(this.startPoint.yProperty());
+        this.line.setOnMouseDragged(this::onHorizontalDragged);
+        this.line.setCursor(Cursor.V_RESIZE);
+    }
+
+    private void onHorizontalDragged(MouseEvent e) {
+        e.consume();
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
+        Point2D delta = mousePos.subtract(this.mouseDown.get());
+        
+        this.startPoint.dragByDelta(0, -delta.getY());      
+        this.mouseDown.set(mousePos);
+    }
+
+    protected void makeVertical(){
+        this.endPoint.xProperty().set(this.startPoint.getX());
+        this.endPoint.xProperty().unbind();
+        this.endPoint.xProperty().bindBidirectional(this.startPoint.xProperty());
+        this.line.setOnMouseDragged(this::onVerticalDragged);
+        this.line.setCursor(Cursor.H_RESIZE);
+    }
+
+    private void onVerticalDragged(MouseEvent e) {
+        e.consume();
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
+        Point2D delta = mousePos.subtract(this.mouseDown.get());
+        
+        this.startPoint.dragByDelta(-delta.getX(), 0);      
+        this.mouseDown.set(mousePos);
+    }
+
+    
 }

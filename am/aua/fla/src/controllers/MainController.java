@@ -10,10 +10,12 @@ import core.shapes.FLAShape2D;
 import core.shapes.FLALine2D;
 import core.shapes.FLAPoint2D;
 import core.shapes.FLAPolygon2D;
+import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -39,56 +41,40 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.ArrayList;
+import core.labeled.*;
 public class MainController {
 
-    @FXML
-    private BorderPane root;
-    @FXML
-    private ImageView imageView;
-    @FXML
-    private StackPane frameArea;
-    @FXML
-    private Group frameGroup;
-    @FXML
-    private Button btnResetView;
-    @FXML
-    private VBox labelArea;
     
-    private Rectangle selectArea;
-    private static IDraggable lastDraggedObject;
+    @FXML private BorderPane root;
+    @FXML private ImageView imageView;
+    @FXML private StackPane frameArea;
+    @FXML private Group frameGroup;
+    @FXML private Button btnResetView;
+    @FXML private ScrollPane labelLayersContainer;
+    @FXML private Button btnDrawPoint, btnDrawRectangle, btnDrawPolygon, btnSelectTool;
+
     FLAPolygon2D poly = new FLAPolygon2D();
     
     Label label = new Label("");
-    Label label2 = new Label("");
-    Label label3 = new Label("");
-    // FLAPoint2D point = new FLAPoint2D(0,0, Color.RED, 5);
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
             
-            FLALine2D line = new FLALine2D(new FLAPoint2D(50,50), new FLAPoint2D(100,100));
-            ArrayList<FLAPoint2D> points = new ArrayList<>();
-            points.add(new FLAPoint2D(120,120));
-            points.add(new FLAPoint2D(150,120));
-            points.add(new FLAPoint2D(150,150));
-            points.add(new FLAPoint2D(120,150));
-
-            
-            // FLAPolygon2D poly = new FLAPolygon2D(points);
+            FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
+            FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
             poly.drawOnNode(frameGroup);
-            line.drawOnNode(frameGroup);
+            pt.drawOnNode(frameGroup);
+            rect.drawOnNode(frameGroup);
             frameArea.requestFocus();
-
+            
         });
-        labelArea.getChildren().add(label);
-        labelArea.getChildren().add(label2);
-        labelArea.getChildren().add(label3);
+        // labelArea.getChildren().add(label);
 
         frameArea.setOnMouseMoved(e->{
-            label.setText("X: " + Math.round(e.getX()) + " Y: " + Math.round(e.getY()));
-            label2.setText("X: " + ((int)(e.getX()-FrameGroupController.getRealXmin())) + " Y: " + (int)(e.getY()-FrameGroupController.getRealYmin()));
+            Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
+            label.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
         });
         frameArea.setOnMousePressed(this::frameAreaOnMousePressed);
         frameArea.setOnMouseDragged(this::frameAreaOnMouseDragged);
@@ -100,13 +86,12 @@ public class MainController {
             return;
         }
         double delta = e.getDeltaY()>0 ? 1 : -1;
-        // Make the binding between the world scale and the world scale multiplier cleaner
+        
         Global.setScaleMultiplier(delta);
         FrameGroupController.zoomToPoint(Global.getWorldScale(), new Point2D(e.getX(), e.getY()));
+        Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
+        label.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
 
-
-        label.setText("X: " + Math.round(e.getX()) + " Y: " + Math.round(e.getY()));
-        label2.setText("X: " + ((int)(e.getX()-FrameGroupController.getRealXmin())) + " Y: " + (int)(e.getY()-FrameGroupController.getRealYmin()));
     }
 
     @FXML
@@ -123,12 +108,6 @@ public class MainController {
             poly.closePolygon();
         }
     }
-
-    private void addPointAt(double x, double y){
-        FLAPoint2D point = new FLAPoint2D(x, y, Configs.POINT_RADIUS);
-        point.drawOnNode(frameGroup);
-    }
-
 
     @FXML
     void frameAreaOnMouseDragged(MouseEvent e){
@@ -158,7 +137,7 @@ public class MainController {
     }
 
     @FXML
-    public void openImageFileDialog(){
+    public void openImageFileDialog() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Image File");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -179,14 +158,11 @@ public class MainController {
             
             // Set the image to the ImageView
             imageView.setImage(image);
-            // this.reset(imageView, image.getWidth(), image.getHeight());
+            
+
         } else {
             System.out.println("No file selected.");
         }
-    }
-
-    public static void setLastDraggedObject(IDraggable object) {
-        MainController.lastDraggedObject = object;
     }
 }
 

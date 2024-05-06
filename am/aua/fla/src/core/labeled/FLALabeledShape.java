@@ -1,19 +1,19 @@
 package core.labeled;
 
+import core.IDrawable;
 import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
+import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public abstract class FLALabeledShape implements ILabeled, Cloneable, IStyled {
-    protected FLAShape2D shape;
+public abstract class FLALabeledShape implements IDrawable, ILabeled, Cloneable, IStyled {
     protected FLALabel label;
     protected FLAStyle style;
 
-    public FLALabeledShape(FLAShape2D shape, FLALabel label, FLAStyle style) {
-        this.setShape(shape);
+    protected FLALabeledShape(FLALabel label) {
         this.setLabel(label);
-        this.setStyle(style);
     }
 
     public void setLabel(FLALabel label) {
@@ -24,13 +24,8 @@ public abstract class FLALabeledShape implements ILabeled, Cloneable, IStyled {
         return label.clone();
     }
 
-    public void setShape(FLAShape2D shape) {
-        this.shape = shape;
-    }
-
-    public FLAShape2D getShape() {
-        return this.shape;
-    }
+    public abstract void setShape(FLAShape2D shape);
+    public abstract FLAShape2D getShape();
 
     @Override
     public String getClassName() {
@@ -72,6 +67,13 @@ public abstract class FLALabeledShape implements ILabeled, Cloneable, IStyled {
         this.style.setFillColor(color);
     }
     
+    public void drawOnNode(Pane container) {
+        this.getShape().drawOnNode(container);
+    }
+    public void drawOnNode(Group container) {
+        this.getShape().drawOnNode(container);
+    }
+
     public abstract void setStyle(FLAStyle style);
     
 }

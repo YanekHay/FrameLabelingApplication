@@ -57,7 +57,9 @@ public class FrameGroupController {
         return Math.min(getRealWidth(), getRealHeight());
     }
 
-
+    // TODO: Better Zooming
+    // In order to optimize the zooming, we can bind the scaleProperty of the
+    // frameGroup to the worldScale and set a listener for the wordlScale change
     public static void zoomToPoint(double scale, Point2D pivot) {
         oldX = FrameGroupController.getRealXmin();
         oldY = FrameGroupController.getRealYmin();

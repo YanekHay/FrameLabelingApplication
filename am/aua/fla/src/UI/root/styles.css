@@ -39,24 +39,25 @@
 
 /* Define a flat style for the toolbar */
 .toolbar {
-    -fx-background-color: #f0f0f0; /* Light gray background */
+    -fx-background-color: #f0f0f047; /* Light gray background */
     -fx-alignment: center; /* Center align the toolbar items */
 }
 
 /* Define the style for toolbar buttons */
-.tool-bar .button {
+.toolbar .button {
     -fx-background-color: transparent; /* Transparent background */
-    -fx-text-fill: #333333; 
+    -fx-text-fill: #000000; 
+    -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-min-width: 100px;
     -fx-max-width: 100px;
-    
-
+    -fx-border-color: #000000; /* Black border */
+    -fx-border-width: 1px; /* 1px border width */
 }
 
 /* Define hover effect for toolbar buttons */
-.tool-bar .button:hover {
-    -fx-background-color: #e0e0e0; /* Light gray background on hover */
+.toolbar .button:hover {
+    -fx-background-color: #406e78; /* Light gray background on hover */
 }
 
 /* Define pressed effect for toolbar buttons */

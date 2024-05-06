@@ -37,6 +37,9 @@ public abstract class FLAShape2D implements IDraggable, IDrawable, Cloneable{
     }
 
     public void bindComponentStylesTo(FLAStyle style){
+        if (style == null){
+            return;
+        }
         for (Shape shapeComponent : shapeComponents){
             shapeComponent.strokeWidthProperty().bind(style.strokeWidthProperty());
             shapeComponent.fillProperty().bind(style.fillColorProperty());

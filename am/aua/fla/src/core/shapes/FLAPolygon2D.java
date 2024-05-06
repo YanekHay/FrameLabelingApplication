@@ -20,6 +20,7 @@ public class FLAPolygon2D extends FLAShape2D {
     private Polygon polygon = new Polygon();
     private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     private boolean isClosed = false;
+    private ArrayList<DoubleProperty[]> pointProperties = new ArrayList<>();
     
     public FLAPolygon2D(ArrayList<FLAPoint2D> points) {
         this.points = points;
@@ -45,10 +46,9 @@ public class FLAPolygon2D extends FLAShape2D {
 
     public void onMouseDragged(MouseEvent e) {
         e.consume();
-        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
         this.dragByDelta(this.mouseDown.get().subtract(mousePos));   
         this.mouseDown.set(mousePos);
-
     }
 
     public int getPointCount() {
@@ -83,7 +83,8 @@ public class FLAPolygon2D extends FLAShape2D {
         yProperty.addListener((observable, oldValue, newValue) ->{
             polygon.getPoints().set(index*2+1, newValue.doubleValue());
         });
-
+        
+        pointProperties.add(new DoubleProperty[]{xProperty, yProperty}); // Keeping the properties for garbage collector not to collect them
     }
 
     public boolean isClosed() {

@@ -2,9 +2,11 @@ package core.shapes;
 
 import controllers.FrameGroupController;
 import core.Global;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -36,7 +38,7 @@ import javafx.scene.shape.Circle;
  * Extends the FLAAnnotation2D class and implements the IDraggable and IDrawable interfaces.
  */
 public class FLAPoint2D extends FLAShape2D {
-    private Circle pointImage;
+    protected Circle pointImage;
 
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
@@ -213,7 +215,7 @@ public class FLAPoint2D extends FLAShape2D {
     @Override
     public void onMouseDragged(MouseEvent e) {
         e.consume();
-        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
         this.dragByDelta(this.mouseDown.get().subtract(mousePos));      
         this.mouseDown.set(mousePos);
     }
@@ -246,13 +248,14 @@ public class FLAPoint2D extends FLAShape2D {
         return String.format("FLAPoint2D(%.2f, %.2f)", this.getX(), this.getY());
     }
 
-    public Property<Number> xProperty() {
+    public DoubleProperty xProperty() {
         return this.pointImage.centerXProperty();
     }
     
-    public Property<Number> yProperty() {
+    public DoubleProperty yProperty() {
         return this.pointImage.centerYProperty();
     }
+
     /**
      * Creates a new FLAPoint2D object with the same properties as the original object.
      * @return A new FLAPoint2D object.
