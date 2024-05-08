@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import core.shapes.FLAPoint2D;
 import core.shapes.FLAPolygon2D;
-import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.scene.paint.Color;
@@ -15,6 +14,12 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
 
     public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label, FLAStyle style){
         super(points);
+        this.setStyle(style);
+        this.setLabel(label);
+    }
+
+    public FLALabeledPolygon(FLALabel label, FLAStyle style){
+        super();
         this.setStyle(style);
         this.setLabel(label);
     }

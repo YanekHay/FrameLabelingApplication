@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import utils.Configs;
 
 /**
  * The FLAPoint2D class represents a 2D point annotation in a frame labeling application.
@@ -83,7 +84,7 @@ public class FLAPoint2D extends FLAShape2D {
      * @param y The y-coordinate of the point.
      */
     public FLAPoint2D(double x, double y){
-        this(x, y, 5);
+        this(x, y, Configs.POINT_RADIUS);
     }
 
     /**

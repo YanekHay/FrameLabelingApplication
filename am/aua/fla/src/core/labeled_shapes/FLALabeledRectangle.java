@@ -18,6 +18,16 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
         this.setLabel(label);
     }
 
+    public FLALabeledRectangle(Point2D topLeft, Point2D bottomRight, FLALabel label, FLAStyle style){
+        this(topLeft.getX(), topLeft.getY(), bottomRight.getX(), bottomRight.getY(), label, style);
+    }
+    
+    public FLALabeledRectangle(Point2D topLeft, FLALabel label, FLAStyle style){
+        super(topLeft);
+        this.setStyle(style);
+        this.setLabel(label);
+    }
+
     public void setStyle(FLAStyle style) {
         this.style = style;
         this.bindComponentStylesTo(style);
