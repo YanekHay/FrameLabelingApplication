@@ -8,12 +8,12 @@ import javafx.scene.layout.Pane;
 
 public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T> {
     
-    public FLASelectClickHandler(P clickArea, T drawArea) {
-        super(clickArea, drawArea);
+    public FLASelectClickHandler(P mouseArea, T drawArea) {
+        super(mouseArea, drawArea);
     }
     
     @Override
-    public void click(MouseEvent event) {
+    public void mousePress(MouseEvent event) {
         event.consume();
 
         Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
@@ -24,7 +24,7 @@ public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAC
 
     @Override
     public void select() {
-        this.clickArea.setCursor(Cursor.DEFAULT);
-        this.clickArea.setOnMouseClicked(this::click);
+        this.mouseArea.setCursor(Cursor.DEFAULT);
+        this.mouseArea.setOnMousePressed(this::mousePress);
     }
 }

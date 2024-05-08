@@ -130,12 +130,12 @@ public class FLAPoint2D extends FLAShape2D {
 
     /**
      * Draws the point on the specified container (Pane).
-     * @param clickArea The container where the point will be drawn.
+     * @param mouseArea The container where the point will be drawn.
      */
     @Override
-    public <T extends Group> void drawOnNode(T clickArea) {
-        if (!clickArea.getChildren().contains(this.pointImage))
-            clickArea.getChildren().add(this.pointImage);
+    public <T extends Group> void drawOnNode(T mouseArea) {
+        if (!mouseArea.getChildren().contains(this.pointImage))
+            mouseArea.getChildren().add(this.pointImage);
         this.pointImage.toFront();
     }
 

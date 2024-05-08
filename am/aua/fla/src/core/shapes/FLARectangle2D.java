@@ -46,9 +46,9 @@ public class FLARectangle2D extends FLAShape2D {
     }
 
 
-    private void onAnotherMouseDragged(MouseEvent e) {
-        System.out.println(this.toString());
-    }
+    // private void onAnotherMouseDragged(MouseEvent e) {
+    //     System.out.println(this.toString());
+    // }
     public FLARectangle2D(Point2D topleft, Point2D bottomRight) {
         this(topleft.getX(), topleft.getY(), bottomRight.getX(), bottomRight.getY());
     }

@@ -46,14 +46,13 @@ public class MainController {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
-            
+            FrameGroupController.setSelectingMode();
             FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
             FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
             poly.drawOnNode(frameGroup);
             pt.drawOnNode(frameGroup);
             rect.drawOnNode(frameGroup);
             frameArea.requestFocus();
-            
         });
         // labelArea.getChildren().add(label);
 

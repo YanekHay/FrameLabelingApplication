@@ -6,17 +6,16 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 
 import javafx.geometry.Point2D;
-
 import core.shapes.FLAPoint2D;
 
 public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T>{
 
-    public FLAPointClickHandler(P clickArea, T drawArea) {
-        super(clickArea, drawArea);
+    public FLAPointClickHandler(P mouseArea, T drawArea) {
+        super(mouseArea, drawArea);
     }
     
     @Override
-    public void click(MouseEvent event) {
+    public void mousePress(MouseEvent event) {
         event.consume();
         Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
         double x = clickPoint.getX();
@@ -28,8 +27,8 @@ public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLACl
 
     @Override
     public void select() {
-        this.clickArea.setCursor(Cursor.DEFAULT);
-        this.clickArea.setOnMouseClicked(this::click);
+        this.mouseArea.setCursor(Cursor.DEFAULT);
+        this.mouseArea.setOnMousePressed(this::mousePress);
     }
     
 }
