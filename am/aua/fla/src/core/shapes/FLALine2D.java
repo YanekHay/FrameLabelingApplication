@@ -1,8 +1,6 @@
 package core.shapes;
 
-import controllers.FrameGroupController;
 import core.Global;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;

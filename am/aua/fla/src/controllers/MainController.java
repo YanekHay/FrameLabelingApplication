@@ -1,15 +1,9 @@
 package controllers;
 
-import static utils.CalculationUtil.clamp;
-
 import java.io.File;
 
 import controllers.ToolBarController.Tool;
 import core.Global;
-import core.IDraggable;
-import core.shapes.FLAShape2D;
-import core.shapes.FLALine2D;
-import core.shapes.FLAPoint2D;
 import core.shapes.FLAPolygon2D;
 import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
@@ -17,25 +11,15 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.Configs;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;

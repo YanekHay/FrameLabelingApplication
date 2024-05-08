@@ -1,6 +1,6 @@
 package core.shapes;
-import core.IDraggable;
-import core.IDrawable;
+import core.shapes.IDraggable;
+import core.shapes.IDrawable;
 import core.styled.FLAStyle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

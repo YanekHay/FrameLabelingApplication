@@ -1,17 +1,10 @@
 package core.shapes;
 
-import controllers.FrameGroupController;
 import core.Global;
-import core.IDraggable;
-import core.IDrawable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class FLARectangle2D extends FLAShape2D {

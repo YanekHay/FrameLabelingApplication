@@ -1,6 +1,6 @@
 package core.labeled;
 
-import core.IDrawable;
+import core.shapes.IDrawable;
 import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;

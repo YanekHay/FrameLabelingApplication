@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -14,6 +15,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <center>
@@ -43,23 +45,17 @@
          <content>
             <VBox>
                <children>
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
-                  <ColorPicker minHeight="50.0" prefHeight="48.0" prefWidth="240.0" />
+                  <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="234.0">
+                     <left>
+                        <ColorPicker prefHeight="282.0" prefWidth="82.0" BorderPane.alignment="CENTER" />
+                     </left>
+                     <center>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Class Name" BorderPane.alignment="CENTER" />
+                     </center>
+                     <right>
+                        <ChoiceBox prefHeight="90.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
+                     </right>
+                  </BorderPane>
                </children>
             </VBox>
          </content>

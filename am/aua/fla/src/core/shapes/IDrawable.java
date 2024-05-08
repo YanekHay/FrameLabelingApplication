@@ -1,4 +1,4 @@
-package core;
+package core.shapes;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
