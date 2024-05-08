@@ -19,5 +19,6 @@ public abstract class FLAClickHandler<P extends Pane, T extends Group>{
         this.mouseArea = mouseArea;
     }
 
-    public abstract void select();
+    public abstract FLAClickHandler<P, T> select();
+    public abstract void deselect();
 }

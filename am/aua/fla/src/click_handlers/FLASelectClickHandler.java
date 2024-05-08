@@ -23,8 +23,14 @@ public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAC
     }
 
     @Override
-    public void select() {
+    public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.DEFAULT);
         this.mouseArea.setOnMousePressed(this::mousePress);
+        return this;
+    }
+
+    @Override
+    public void deselect() {
+        return;
     }
 }

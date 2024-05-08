@@ -1,6 +1,7 @@
 package core.shapes;
 
 import core.Global;
+import core.styled.FLAStyle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -164,5 +165,19 @@ public class FLARectangle2D extends FLAShape2D {
     @Override
     public String toString() {
         return "Rectangle: " + this.topLeft + " " + this.bottomRight;
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container) {
+        for (FLALine2D line : lines) {
+            line.removeFromNode(container);
+        }
+        container.getChildren().remove(this.rectangle);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
     } 
 }

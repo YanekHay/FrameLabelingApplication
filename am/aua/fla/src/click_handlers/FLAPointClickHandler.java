@@ -20,15 +20,22 @@ public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLACl
         Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
         double x = clickPoint.getX();
         double y = clickPoint.getY(); 
-        FLAPoint2D pt = new FLAPoint2D(x, y);
-        pt.drawOnNode(this.drawArea);
-        System.out.println("POINT: click at (" + x + ", " + y + ")");
+        if (event.isPrimaryButtonDown()){
+            FLAPoint2D pt = new FLAPoint2D(x, y);
+            pt.drawOnNode(this.drawArea);
+        }
     }
 
     @Override
-    public void select() {
-        this.mouseArea.setCursor(Cursor.DEFAULT);
+    public FLAClickHandler<P, T> select() {
+        this.mouseArea.setCursor(Cursor.CROSSHAIR);
         this.mouseArea.setOnMousePressed(this::mousePress);
+        return this;
     }
     
+    @Override
+    public void deselect() {
+        this.mouseArea.setOnMousePressed(null);
+        this.mouseArea.setCursor(Cursor.DEFAULT);
+    }
 }

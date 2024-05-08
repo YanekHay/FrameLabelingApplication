@@ -1,6 +1,7 @@
 package core.shapes;
 
 import core.Global;
+import core.styled.FLAStyle;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -257,5 +258,21 @@ public class FLAPoint2D extends FLAShape2D {
 
     public void setConsumeMousePressed(boolean value){
         this.consumeMousePressed = value;
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container) {
+        container.getChildren().remove(this.pointImage);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+    }
+
+    @Override
+    public FLAPoint2D clone() {
+        return new FLAPoint2D(this.getX(), this.getY(), this.pointImage.getRadius());
     }
 }

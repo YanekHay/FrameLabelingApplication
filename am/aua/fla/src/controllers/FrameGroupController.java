@@ -115,55 +115,28 @@ public class FrameGroupController {
     }
 
     protected static void setSelectingMode(){
-        clickHandler = Global.selectClickHandler;
-        Global.selectClickHandler.select();
-    };
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.selectClickHandler.select();
+    }
     protected static void setPointDrawingMode(){
-        clickHandler = Global.pointClickHandler;
-        Global.pointClickHandler.select();
-    };
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.pointClickHandler.select();
+    }
     protected static void setRectangleDrawingMode(){
-        clickHandler = Global.pointClickHandler;
-        Global.rectangleClickHandler.select();
-    };
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.rectangleClickHandler.select();
+    }
     protected static void setPolygonDrawingMode(){
-        clickHandler = Global.pointClickHandler;
-        Global.polygonClickHandler.select();
-    };
-
-
-    private static void frameAreaOnSelectMouseClicked(MouseEvent e){
-        e.consume();
-        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-        System.out.println("SELECT: clicked at (" + e.getX() + ", " + e.getY() + ")"); 
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.polygonClickHandler.select();
     }
 
-    private static void frameAreaOnPointMouseClicked(MouseEvent e){
-        e.consume();
-        
-        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-        System.out.println("POINT: clicked at (" + e.getX() + ", " + e.getY() + ")");
-    }
-
-    
-    private static void frameAreaOnRectangleMouseClicked(MouseEvent e){
-        e.consume();
-        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-        System.out.println("RECTANGLE: clicked at (" + e.getX() + ", " + e.getY() + ")");
-    }
-
-    
-    private static void frameAreaOnPolygonMouseClicked(MouseEvent e){
-        e.consume();
-        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
-        System.out.println("POLYGON: clicked at (" + e.getX() + ", " + e.getY() + ")");
-        // if (e.isPrimaryButtonDown()){
-        //     Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-        //     if (!poly.isClosed())
-        //         poly.addPoint(new FLAPoint2D(pt.getX(), pt.getY(), Configs.POINT_RADIUS));
-        // }
-        // else if (e.isSecondaryButtonDown()){
-        //     poly.closePolygon();
-        // }
-    }
 }

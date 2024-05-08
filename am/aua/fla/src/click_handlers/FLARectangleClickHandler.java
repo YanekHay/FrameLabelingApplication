@@ -25,8 +25,6 @@ public class FLARectangleClickHandler<P extends Pane, T extends Group> extends F
             return;
         }
         Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
-        double x = clickPoint.getX();
-        double y = clickPoint.getY(); 
         if (this.rectangle == null){
             startDrawing(clickPoint);
         }
@@ -34,7 +32,6 @@ public class FLARectangleClickHandler<P extends Pane, T extends Group> extends F
             rectangle.moveBottomRightTo(clickPoint);
             this.finishDrawing();
         }
-        System.out.println("POINT: click at (" + x + ", " + y + ")");
     }
 
     public void mouseMove(MouseEvent event) {
@@ -64,9 +61,18 @@ public class FLARectangleClickHandler<P extends Pane, T extends Group> extends F
     }
 
     @Override
-    public void select() {
+    public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.CROSSHAIR);
         this.mouseArea.setOnMousePressed(this::mousePress);
+        return this;
+    }
+
+    @Override
+    public void deselect() {
+        this.mouseArea.setCursor(Cursor.DEFAULT);
+        if (this.rectangle != null){
+            this.rectangle.removeFromNode(drawArea);
+        }
     }
     
 }

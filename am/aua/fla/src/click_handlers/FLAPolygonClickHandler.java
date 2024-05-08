@@ -16,7 +16,6 @@ public class FLAPolygonClickHandler<P extends Pane, T extends Group> extends FLA
     
     public FLAPolygonClickHandler(P mouseArea, T drawArea) {
         super(mouseArea, drawArea);
-        this.polygon.drawOnNode(this.drawArea);
     }
     
     @Override
@@ -24,32 +23,40 @@ public class FLAPolygonClickHandler<P extends Pane, T extends Group> extends FLA
         event.consume();
 
         Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
-        double x = clickPoint.getX();
-        double y = clickPoint.getY(); 
         if (event.isPrimaryButtonDown()){
             this.polygon.addPoint(clickPoint);
         }
         else if (event.isSecondaryButtonDown()){
             this.polygon.close();
-            this.polygon = new FLAPolygon2D();
+            this.newPolygon();
         }
-        System.out.println("POINT: click at (" + x + ", " + y + ")");
     }
-    // @Override
-    // public void mouseMove(MouseEvent event) {
-    //     event.consume();
-    //     Point2D clickPoint = this.drawArea.parentToLocal(event.getX(), event.getY());
-    //     double x = clickPoint.getX();
-    //     double y = clickPoint.getY(); 
-    //     FLAPoint2D pt = new FLAPoint2D(x, y);
-    //     pt.drawOnNode(this.drawArea);
-    //     System.out.println("POINT: click at (" + x + ", " + y + ")");
-    // }
+
+    private void newPolygon(){
+        this.polygon = new FLAPolygon2D();
+        this.polygon.drawOnNode(this.drawArea);
+    }
 
     @Override
-    public void select() {
+    public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.CROSSHAIR);
         this.mouseArea.setOnMousePressed(this::mousePress);
+        this.polygon.drawOnNode(this.drawArea);
+        return this;
+    }
+
+    @Override
+    public void deselect() {
+        this.mouseArea.setOnMousePressed(null);
+        this.mouseArea.setCursor(Cursor.DEFAULT);
+        if (this.polygon.getPointCount() >= 3){
+            this.polygon.close();
+            this.polygon = new FLAPolygon2D();
+        }
+        else{
+            this.polygon.removeFromNode(drawArea);
+            this.newPolygon();
+        }
     }
     
 }

@@ -1,6 +1,7 @@
 package core.shapes;
 
 import core.Global;
+import core.styled.FLAStyle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -133,6 +134,19 @@ public class FLALine2D extends FLAShape2D {
         
         this.startPoint.dragByDelta(-delta.getX(), 0);      
         this.mouseDown.set(mousePos);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container){
+        container.getChildren().remove(this.line);
+        startPoint.removeFromNode(container);
+        endPoint.removeFromNode(container);
     }
 
     

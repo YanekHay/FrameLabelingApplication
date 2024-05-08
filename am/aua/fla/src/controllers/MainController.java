@@ -75,7 +75,6 @@ public class MainController {
         frameArea.addEventHandler(MouseEvent.MOUSE_PRESSED, this::frameAreaOnMousePressed);
         frameArea.addEventHandler(ScrollEvent.SCROLL, this::frameAreaOnScroll);
         frameArea.setOnMouseDragged(this::frameAreaOnMouseDragged);
-        
         btnSelectTool.setOnAction(this::btnSelectToolOnAction);
         btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
@@ -83,20 +82,44 @@ public class MainController {
     }
     
     private void btnSelectToolOnAction(ActionEvent e){
-        ToolBarController.setCurrentTool(Tool.SELECT);
-        deselectOtherTools((ToggleButton) e.getSource());
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            ToolBarController.setCurrentTool(Tool.SELECT);
+            deselectOtherTools(source);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
     private void btnDrawPointOnAction(ActionEvent e){
-        ToolBarController.setCurrentTool(Tool.POINT);
-        deselectOtherTools((ToggleButton) e.getSource());
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            ToolBarController.setCurrentTool(Tool.POINT);
+            deselectOtherTools(source);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
     private void btnDrawRectangleOnAction(ActionEvent e){
-        ToolBarController.setCurrentTool(Tool.RECTANGLE);
-        deselectOtherTools((ToggleButton) e.getSource());
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            ToolBarController.setCurrentTool(Tool.RECTANGLE);
+            deselectOtherTools(source);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
     private void btnDrawPolygonOnAction(ActionEvent e){
-        ToolBarController.setCurrentTool(Tool.POLYGON);
-        deselectOtherTools((ToggleButton) e.getSource());
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            ToolBarController.setCurrentTool(Tool.POLYGON);
+            deselectOtherTools(source);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
 
     private void deselectOtherTools(ToggleButton btn){

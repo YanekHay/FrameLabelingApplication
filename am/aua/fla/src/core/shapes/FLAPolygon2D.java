@@ -2,20 +2,17 @@ package core.shapes;
 
 import controllers.FrameGroupController;
 import core.Global;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import core.styled.FLAStyle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-
 import java.util.ArrayList;
+
 public class FLAPolygon2D extends FLAShape2D {
     private ArrayList<FLAPoint2D> points = new ArrayList<>();
     private ArrayList<FLALine2D> lines = new ArrayList<>();
@@ -30,14 +27,14 @@ public class FLAPolygon2D extends FLAShape2D {
             this.addPoint(i, this.points.get(i));
         }
         this.isClosed = true;
-        this.polygon.setCursor(Cursor.MOVE);
-        this.polygon.setFill(Color.rgb(100,100,100,0.1));
+        this.polygon.setCursor(Cursor.HAND);
+        this.polygon.setFill(Color.rgb(100,100,100,0.2));
         this.close();
     }
 
     public FLAPolygon2D() {
-        this.polygon.setFill(Color.rgb(100,100,100,0.1));
-        this.polygon.setCursor(Cursor.MOVE);
+        this.polygon.setFill(Color.rgb(100,100,100,0.2));
+        this.polygon.setCursor(Cursor.HAND);
         this.polygon.setOnMouseDragged(this::onMouseDragged);
         this.polygon.setOnMousePressed(this::onMousePressed);
     }
@@ -71,11 +68,11 @@ public class FLAPolygon2D extends FLAShape2D {
 
     public void addPoint(int index, FLAPoint2D point) {
         this.points.add(point);
-        point.drawOnNode(FrameGroupController.frameGroup);
+        point.drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
 
         if (index>0){
             this.lines.add(new FLALine2D(points.get(index-1), points.get((index) % this.getPointCount())));
-            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup);
+            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
         }
         
         DoubleProperty xProperty = new SimpleDoubleProperty(points.get(index).getX());
@@ -103,10 +100,11 @@ public class FLAPolygon2D extends FLAShape2D {
     public void close(){
         if (this.points.size()>=3){
             this.lines.add(new FLALine2D(points.get(this.getPointCount()-1), points.get(0)));
-            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup);
+            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
             this.isClosed = true;
         }
     }
+
 
     @Override
     public void dragByDelta(double dx, double dy) {
@@ -137,17 +135,31 @@ public class FLAPolygon2D extends FLAShape2D {
 
     @Override
     public <T extends Group> void drawOnNode(T container) {
-        container.getChildren().add(this.polygon);   
-        for (FLALine2D line : lines) {
+        if (!container.getChildren().contains(this.polygon))
+            container.getChildren().add(this.polygon);   
+        
+            for (FLALine2D line : lines) {
             line.drawOnNode(container);
         }
-        
     }
 
     @Override
-    public FLAShape2D clone() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clone'");
+    public <T extends Group> void removeFromNode(T container){
+        for (FLALine2D line : lines) {
+            line.removeFromNode(container);
+        }
+        container.getChildren().remove(this.polygon);
+    }
+    
+    @Override
+    public FLAPolygon2D clone() {
+        ArrayList<FLAPoint2D> clonedPoints = new ArrayList<>();
+        for (FLAPoint2D point : points) {
+            clonedPoints.add(point.clone());
+        }
+        FLAPolygon2D clonedPolygon = new FLAPolygon2D(clonedPoints);
+        clonedPolygon.isClosed = this.isClosed;
+        return clonedPolygon;
     }
 
     @Override
@@ -160,6 +172,12 @@ public class FLAPolygon2D extends FLAShape2D {
     public String toString() {
         return "FLAPolygon2D [points=" + points + ", lines=" + lines + ", polygon=" + polygon + ", mouseDown=" + mouseDown
                 + ", isClosed=" + isClosed + "]";
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
     }
 
 }
