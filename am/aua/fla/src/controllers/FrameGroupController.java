@@ -122,14 +122,15 @@ public class FrameGroupController {
         clickHandler = Global.pointClickHandler;
         Global.pointClickHandler.select();
     };
-    protected static void setPolygonDrawingMode(){
-        parent.setCursor(Cursor.CROSSHAIR);
-        parent.setOnMouseClicked(FrameGroupController::frameAreaOnPolygonMouseClicked);
-    };
     protected static void setRectangleDrawingMode(){
-        parent.setCursor(Cursor.CROSSHAIR);
-        parent.setOnMouseClicked(FrameGroupController::frameAreaOnRectangleMouseClicked);
+        clickHandler = Global.pointClickHandler;
+        Global.rectangleClickHandler.select();
     };
+    protected static void setPolygonDrawingMode(){
+        clickHandler = Global.pointClickHandler;
+        Global.polygonClickHandler.select();
+    };
+
 
     private static void frameAreaOnSelectMouseClicked(MouseEvent e){
         e.consume();

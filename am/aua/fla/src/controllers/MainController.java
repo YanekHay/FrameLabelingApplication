@@ -11,6 +11,8 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToolBar;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -18,11 +20,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import core.labeled.*;
 public class MainController {
 
@@ -33,42 +39,73 @@ public class MainController {
     @FXML private Group frameGroup;
     @FXML private Button btnResetView;
     @FXML private ScrollPane labelLayersContainer;
-    @FXML private Button btnDrawPoint;
-    @FXML private Button btnDrawRectangle;
-    @FXML private Button btnDrawPolygon;
-    @FXML private Button btnSelectTool;
-
+    @FXML private ToggleButton btnDrawPoint;
+    @FXML private ToggleButton btnDrawRectangle;
+    @FXML private ToggleButton btnDrawPolygon;
+    @FXML private ToggleButton btnSelectTool;
+    @FXML private ToolBar toolbar;
+    @FXML private Label coordLabel;
+    
+    private ToggleButton[] tools = new ToggleButton[4];
     FLAPolygon2D poly = new FLAPolygon2D();
     
-    Label label = new Label("");
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
-            FrameGroupController.setSelectingMode();
-            FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
-            FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
-            poly.drawOnNode(frameGroup);
-            pt.drawOnNode(frameGroup);
-            rect.drawOnNode(frameGroup);
+            // FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
+            // FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
+            // poly.drawOnNode(frameGroup);
+            // pt.drawOnNode(frameGroup);
+            // rect.drawOnNode(frameGroup);
             frameArea.requestFocus();
+            tools[0] = btnSelectTool;
+            tools[1] = btnDrawPoint;
+            tools[2] = btnDrawRectangle;
+            tools[3] = btnDrawPolygon;
+            btnSelectTool.fire();
+
         });
-        // labelArea.getChildren().add(label);
 
         frameArea.setOnMouseMoved(e->{
             Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-            label.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
+            coordLabel.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
         });
-        frameArea.setOnMousePressed(this::frameAreaOnMousePressed);
+        frameArea.addEventHandler(MouseEvent.MOUSE_PRESSED, this::frameAreaOnMousePressed);
+        frameArea.addEventHandler(ScrollEvent.SCROLL, this::frameAreaOnScroll);
         frameArea.setOnMouseDragged(this::frameAreaOnMouseDragged);
-        btnDrawPoint.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.POINT);});
-        btnDrawRectangle.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.RECTANGLE);});
-        btnDrawPolygon.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.POLYGON);});
-        btnSelectTool.setOnMouseClicked(e->{ToolBarController.setCurrentTool(Tool.SELECT);});
         
+        btnSelectTool.setOnAction(this::btnSelectToolOnAction);
+        btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
+        btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
+        btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
+    }
+    
+    private void btnSelectToolOnAction(ActionEvent e){
+        ToolBarController.setCurrentTool(Tool.SELECT);
+        deselectOtherTools((ToggleButton) e.getSource());
+    }
+    private void btnDrawPointOnAction(ActionEvent e){
+        ToolBarController.setCurrentTool(Tool.POINT);
+        deselectOtherTools((ToggleButton) e.getSource());
+    }
+    private void btnDrawRectangleOnAction(ActionEvent e){
+        ToolBarController.setCurrentTool(Tool.RECTANGLE);
+        deselectOtherTools((ToggleButton) e.getSource());
+    }
+    private void btnDrawPolygonOnAction(ActionEvent e){
+        ToolBarController.setCurrentTool(Tool.POLYGON);
+        deselectOtherTools((ToggleButton) e.getSource());
     }
 
+    private void deselectOtherTools(ToggleButton btn){
+        for (ToggleButton tool : tools) {
+            if (tool != btn) {
+                tool.setSelected(false);
+            }
+        }
+    }
     @FXML
     void frameAreaOnScroll(ScrollEvent e) {
         if (!e.isControlDown()) {
@@ -79,13 +116,12 @@ public class MainController {
         Global.setScaleMultiplier(delta);
         FrameGroupController.zoomToPoint(Global.getWorldScale(), new Point2D(e.getX(), e.getY()));
         Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
-        label.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
+        coordLabel.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
 
     }
 
     @FXML
     void frameAreaOnMousePressed(MouseEvent e){
-        e.consume();
         FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
     }
 

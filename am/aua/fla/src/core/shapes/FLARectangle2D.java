@@ -2,6 +2,7 @@ package core.shapes;
 
 import core.Global;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -31,9 +32,19 @@ public class FLARectangle2D extends FLAShape2D {
         this.addLines();
         this.rectangle.setOnMouseDragged(this::onMouseDragged);
         this.rectangle.setOnMousePressed(this::onMousePressed);
-        // this.rectangle.addEventHandler(MouseEvent.MOUSE_DRAGGED, this::onAnotherMouseDragged);
-
+        this.rectangle.setCursor(Cursor.CLOSED_HAND);
     }
+
+    public FLARectangle2D(Point2D topleft) {
+        this(topleft.getX(), topleft.getY(), topleft.getX(), topleft.getY());
+    }
+
+
+
+    public FLARectangle2D(Point2D topleft, Point2D bottomRight) {
+        this(topleft.getX(), topleft.getY(), bottomRight.getX(), bottomRight.getY());
+    }
+
     private void addLines(){
         for(int i=0; i<this.points.length; i++){
             this.lines[i] = new FLALine2D(this.points[i], this.points[(i+1)%4]);
@@ -43,14 +54,6 @@ public class FLARectangle2D extends FLAShape2D {
         this.lines[1].makeVertical();
         this.lines[2].makeHorizontal();
         this.lines[3].makeVertical();
-    }
-
-
-    // private void onAnotherMouseDragged(MouseEvent e) {
-    //     System.out.println(this.toString());
-    // }
-    public FLARectangle2D(Point2D topleft, Point2D bottomRight) {
-        this(topleft.getX(), topleft.getY(), bottomRight.getX(), bottomRight.getY());
     }
 
     private void onPointXPropChange(){
@@ -83,11 +86,17 @@ public class FLARectangle2D extends FLAShape2D {
         this.bottomLeft.yProperty().addListener((obs, oldVal, newVal) -> onPointYPropChange());
     }
 
-    public void setTopLeft(FLAPoint2D topLeft) {
-        this.topLeft = topLeft;
+    public FLAPoint2D getStartPoint() {
+        return this.topLeft;
     }
 
+    public FLAPoint2D getEndPoint() {
+        return this.bottomRight;
+    }
 
+    public void moveBottomRightTo(Point2D point){
+        this.bottomRight.drag(point);
+    }
     public double getWidth() {
         return this.rectangle.getWidth();
     }
@@ -98,8 +107,6 @@ public class FLARectangle2D extends FLAShape2D {
         return getWidth() * getHeight();
     }
 
-
-     
     @Override
     public <T extends Group> void drawOnNode(T container) {
         container.getChildren().add(this.rectangle);
@@ -107,8 +114,6 @@ public class FLARectangle2D extends FLAShape2D {
             line.drawOnNode(container);
         }
     }
-
-
 
     @Override
     public void drag(double x, double y) {
@@ -155,6 +160,7 @@ public class FLARectangle2D extends FLAShape2D {
             return this.topLeft.equals(other.topLeft) && this.bottomRight.equals(other.bottomRight);
         }
     }
+
     @Override
     public String toString() {
         return "Rectangle: " + this.topLeft + " " + this.bottomRight;

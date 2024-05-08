@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Group?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -21,7 +21,7 @@
    <center>
       <BorderPane>
          <center>
-            <StackPane fx:id="frameArea" onKeyPressed="#frameAreaOnKeyPressed" onScroll="#frameAreaOnScroll">
+            <StackPane fx:id="frameArea">
                <children>
                   <Group fx:id="frameGroup">
                      <children>
@@ -35,31 +35,39 @@
                </children>
             </StackPane>
          </center>
-         <bottom>
-            <Slider prefHeight="60.0" prefWidth="688.0" BorderPane.alignment="CENTER" />
-         </bottom>
       </BorderPane>
    </center>
    <right>
-      <ScrollPane hbarPolicy="NEVER" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
-         <content>
-            <VBox>
+      <BorderPane>
+         <center>
+            <ScrollPane hbarPolicy="NEVER" prefHeight="574.0" prefWidth="250.0" styleClass="bottom-panel" vbarPolicy="ALWAYS">
+               <content>
+                  <VBox styleClass="layer-panel">
+                     <children>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="234.0">
+                           <left>
+                              <ColorPicker prefHeight="282.0" prefWidth="82.0" BorderPane.alignment="CENTER" />
+                           </left>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Class Name" BorderPane.alignment="CENTER" />
+                           </center>
+                           <right>
+                              <ChoiceBox prefHeight="90.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
+                           </right>
+                        </BorderPane>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </center>
+         <bottom>
+            <StackPane styleClass="bottom-panel" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="234.0">
-                     <left>
-                        <ColorPicker prefHeight="282.0" prefWidth="82.0" BorderPane.alignment="CENTER" />
-                     </left>
-                     <center>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Class Name" BorderPane.alignment="CENTER" />
-                     </center>
-                     <right>
-                        <ChoiceBox prefHeight="90.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
-                     </right>
-                  </BorderPane>
+                  <Label fx:id="coordLabel" />
                </children>
-            </VBox>
-         </content>
-      </ScrollPane>
+            </StackPane>
+         </bottom>
+      </BorderPane>
    </right>
    <top>
       <MenuBar BorderPane.alignment="CENTER">
@@ -83,12 +91,12 @@
       </MenuBar>
    </top>
    <left>
-      <ToolBar orientation="VERTICAL" prefHeight="574.0" prefWidth="54.0" styleClass="toolbar" BorderPane.alignment="CENTER">
+      <ToolBar fx:id="toolbar" orientation="VERTICAL" prefHeight="574.0" prefWidth="54.0" styleClass="toolbar" BorderPane.alignment="CENTER">
         <items>
-          <Button fx:id="btnDrawPoint" mnemonicParsing="false" prefHeight="34.0" prefWidth="61.0" text="Point" />
-            <Button fx:id="btnDrawRectangle" mnemonicParsing="false" prefHeight="34.0" prefWidth="90.0" text="Rectangle" />
-            <Button fx:id="btnDrawPolygon" mnemonicParsing="false" prefHeight="34.0" prefWidth="96.0" text="Polygon" />
-            <Button fx:id="btnSelectTool" mnemonicParsing="false" text="Select" />
+            <ToggleButton fx:id="btnSelectTool" mnemonicParsing="false" text="Select" />
+            <ToggleButton fx:id="btnDrawPoint" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" styleClass="button" text="Point" />
+            <ToggleButton fx:id="btnDrawRectangle" mnemonicParsing="false" text="Rectangle" />
+            <ToggleButton fx:id="btnDrawPolygon" mnemonicParsing="false" text="Polygon" />
         </items>
       </ToolBar>
    </left>

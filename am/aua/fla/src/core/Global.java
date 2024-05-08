@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import click_handlers.FLAPointClickHandler;
+import click_handlers.FLAPolygonClickHandler;
+import click_handlers.FLARectangleClickHandler;
 import click_handlers.FLASelectClickHandler;
 import controllers.FrameGroupController;
 import javafx.beans.property.DoubleProperty;
@@ -20,6 +22,8 @@ public final class Global {
     public static final DoubleProperty worldScaleInverse = new SimpleDoubleProperty(1.0);
     public static final FLASelectClickHandler<StackPane, Group> selectClickHandler = new FLASelectClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
     public static final FLAPointClickHandler<StackPane, Group> pointClickHandler = new FLAPointClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
+    public static final FLARectangleClickHandler<StackPane, Group> rectangleClickHandler = new FLARectangleClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
+    public static final FLAPolygonClickHandler<StackPane, Group> polygonClickHandler = new FLAPolygonClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
   
     public static void setWorldScale(double worldScale) {
         Global.worldScale.set(clamp(worldScale, Configs.MIN_WORLD_SCALE, Configs.MAX_WORLD_SCALE));

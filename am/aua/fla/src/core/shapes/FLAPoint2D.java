@@ -31,7 +31,7 @@ import javafx.scene.shape.Circle;
  */
 public class FLAPoint2D extends FLAShape2D {
     protected Circle pointImage;
-
+    protected boolean consumeMousePressed=true;
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
      * @param x The x-coordinate of the point.
@@ -198,7 +198,9 @@ public class FLAPoint2D extends FLAShape2D {
      */
     @Override
     public void onMousePressed(MouseEvent e) {
-        e.consume();
+        if (this.consumeMousePressed || !e.isPrimaryButtonDown()){
+            e.consume();
+        }
         this.mouseDown.set(Global.pointOnCanvas(e.getSceneX(), e.getSceneY()));
     }
 
@@ -227,6 +229,9 @@ public class FLAPoint2D extends FLAShape2D {
         return this.pointImage.centerYProperty();
     }
 
+    public Point2D getLocation() {
+        return new Point2D(this.getX(), this.getY());
+    }
     /**
      * Creates a new FLAPoint2D object with the same properties as the original object.
      * @return A new FLAPoint2D object.
@@ -240,7 +245,16 @@ public class FLAPoint2D extends FLAShape2D {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'equals'");
+        if (!(obj instanceof FLAPoint2D)){
+            return false;
+        }
+        else {
+            FLAPoint2D other = (FLAPoint2D) obj;
+            return this.getX() == other.getX() && this.getY() == other.getY();
+        }
+    }
+
+    public void setConsumeMousePressed(boolean value){
+        this.consumeMousePressed = value;
     }
 }

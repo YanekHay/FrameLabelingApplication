@@ -79,7 +79,7 @@ public class FLALine2D extends FLAShape2D {
             container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
-        this.line.toBack();
+        // this.line.toBack();
     }
 
 

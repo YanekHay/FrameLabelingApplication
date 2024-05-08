@@ -1,9 +1,5 @@
 package controllers;
 
-import click_handlers.FLAClickHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-
 public class ToolBarController {
     public enum Tool{
         SELECT,
@@ -33,6 +29,10 @@ public class ToolBarController {
             default:
                 break;
         }
+    }
+
+    public static Tool getCurrentTool(){
+        return currentTool;
     }
     
 }
