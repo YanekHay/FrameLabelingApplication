@@ -1,9 +1,7 @@
-package core.labeled;
+package core.labeled_shapes;
 
 public interface ILabeled {
     public int getClassNumber();
     public String getClassName();
     public String getId();
-    public void setClassNumber(int label);
-    public void setClassName(String labelName);
 }

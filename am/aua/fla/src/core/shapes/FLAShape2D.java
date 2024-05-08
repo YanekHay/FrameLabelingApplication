@@ -1,10 +1,11 @@
 package core.shapes;
-import core.IDraggable;
-import core.IDrawable;
+import core.shapes.IDraggable;
+import core.shapes.IDrawable;
 import core.styled.FLAStyle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
@@ -36,20 +37,13 @@ public abstract class FLAShape2D implements IDraggable, IDrawable, Cloneable{
         this.mouseDown.set(mouseDown);
     }
 
-    public void bindComponentStylesTo(FLAStyle style){
-        if (style == null){
-            return;
-        }
-        for (Shape shapeComponent : shapeComponents){
-            shapeComponent.strokeWidthProperty().bind(style.strokeWidthProperty());
-            shapeComponent.fillProperty().bind(style.fillColorProperty());
-            shapeComponent.strokeProperty().bind(style.strokeColorProperty());
-        }
-    }
-
     @Override
     public abstract boolean equals(Object obj);
-
+    
     @Override
     public abstract String toString();
+    
+    
+    
+    public abstract void bindComponentStylesTo(FLAStyle style);
 }

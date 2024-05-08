@@ -1,11 +1,11 @@
 package core.shapes;
 
-import controllers.FrameGroupController;
 import core.Global;
-import javafx.event.EventHandler;
+import core.styled.FLAStyle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
@@ -75,21 +75,14 @@ public class FLALine2D extends FLAShape2D {
     }
 
     @Override
-    public void drawOnNode(Pane container) {
+    public <T extends Group> void drawOnNode(T container) {
         if (!container.getChildren().contains(this.line))
             container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
         endPoint.drawOnNode(container);
-        this.line.toBack();
+        // this.line.toBack();
     }
 
-    @Override
-    public void drawOnNode(Group container) {
-        if (!container.getChildren().contains(this.line))
-            container.getChildren().add(this.line);
-        startPoint.drawOnNode(container);
-        endPoint.drawOnNode(container);
-    }
 
     @Override
     public FLAShape2D clone() {
@@ -141,6 +134,19 @@ public class FLALine2D extends FLAShape2D {
         
         this.startPoint.dragByDelta(-delta.getX(), 0);      
         this.mouseDown.set(mousePos);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container){
+        container.getChildren().remove(this.line);
+        startPoint.removeFromNode(container);
+        endPoint.removeFromNode(container);
     }
 
     

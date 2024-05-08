@@ -2,23 +2,28 @@ package core;
 import static utils.CalculationUtil.clamp;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import click_handlers.FLAPointClickHandler;
+import click_handlers.FLAPolygonClickHandler;
+import click_handlers.FLARectangleClickHandler;
+import click_handlers.FLASelectClickHandler;
 import controllers.FrameGroupController;
-import core.shapes.FLALine2D;
-import core.shapes.FLAPoint2D;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.layout.StackPane;
 import utils.Configs;
 
-public class Global {
-    public static ArrayList<FLAPoint2D> selectedPoints = new ArrayList<FLAPoint2D>();
-    public static ArrayList<FLALine2D> selectedLines = new ArrayList<FLALine2D>();
-
-    public static DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
-    public static DoubleProperty worldScale = new SimpleDoubleProperty(1.0);
-    public static DoubleProperty worldScaleInverse = new SimpleDoubleProperty(1.0);
-
+public final class Global {
+    public static final DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
+    public static final DoubleProperty worldScale = new SimpleDoubleProperty(1.0);
+    public static final DoubleProperty worldScaleInverse = new SimpleDoubleProperty(1.0);
+    public static final FLASelectClickHandler<StackPane, Group> selectClickHandler = new FLASelectClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
+    public static final FLAPointClickHandler<StackPane, Group> pointClickHandler = new FLAPointClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
+    public static final FLARectangleClickHandler<StackPane, Group> rectangleClickHandler = new FLARectangleClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
+    public static final FLAPolygonClickHandler<StackPane, Group> polygonClickHandler = new FLAPolygonClickHandler<>(FrameGroupController.parent, FrameGroupController.frameGroup);
   
     public static void setWorldScale(double worldScale) {
         Global.worldScale.set(clamp(worldScale, Configs.MIN_WORLD_SCALE, Configs.MAX_WORLD_SCALE));

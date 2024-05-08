@@ -1,4 +1,4 @@
-package core;
+package core.shapes;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;

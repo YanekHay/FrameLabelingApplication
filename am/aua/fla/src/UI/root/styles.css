@@ -1,66 +1,33 @@
-.flat-button {
-    -fx-padding: 5px 5px;
-    -fx-font-size: 12px;
-    -fx-font-color: #fff; /* Text color */
-    -fx-color: #585858; /* Text color */
-    -fx-border-radius: 100;
-  }
-
-.flat-button:hover {
-  -fx-background-color: #272727; /* Background color on hover */
-  -fx-font-color: #fff; /* Text color */
-}
-
-.root{
-    -fx-background-color: #d7d4d4;
-}
-.frameGroup{
-    -fx-background-color: #7e3f3f;
-}
-.frameArea{
-    -fx-background-color: #1a6c95b7
-}
-.stackPane{
-    -fx-background-color: #2f9f7f;
-}
-.frameBack{
-    -fx-background-color: #d7d4d4;
-}
-
-.FLAPoint2D{
-    -fx-background-color: #d7d4d4;
-}
-
-.FLAPoint2D:hover{
-    -fx-background-color: #a1a9828c
-}
-
-
-
 /* Define a flat style for the toolbar */
 .toolbar {
-    -fx-background-color: #f0f0f047; /* Light gray background */
-    -fx-alignment: center; /* Center align the toolbar items */
+    -fx-background-color: #f0f0f047;
+    -fx-alignment: center;
 }
 
 /* Define the style for toolbar buttons */
-.toolbar .button {
-    -fx-background-color: transparent; /* Transparent background */
-    -fx-text-fill: #000000; 
-    -fx-font-weight: bold;
+.toolbar .toggle-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
     -fx-font-size: 14px;
     -fx-min-width: 100px;
     -fx-max-width: 100px;
-    -fx-border-color: #000000; /* Black border */
-    -fx-border-width: 1px; /* 1px border width */
+    /* -fx-border-color: #000000; */
+    -fx-border-width: 1px;
 }
 
-/* Define hover effect for toolbar buttons */
-.toolbar .button:hover {
-    -fx-background-color: #406e78; /* Light gray background on hover */
+.toolbar .toggle-button:hover {
+    -fx-background-color: #406e78;
 }
 
-/* Define pressed effect for toolbar buttons */
-.tool-bar .button:pressed {
-    -fx-background-color: #cccccc; /* Slightly darker background when pressed */
+.toolbar .toggle-button:selected {
+    -fx-background-color: #1e464f;
+}
+
+.bottom-panel {
+    -fx-background-color: #f0f0f047;
+    -fx-alignment: center;
+}
+
+.layer-panel {
+    -fx-background-color: #f0f0f047;
 }

@@ -1,21 +1,15 @@
 package core.shapes;
 
-import controllers.FrameGroupController;
 import core.Global;
+import core.styled.FLAStyle;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import utils.Configs;
 
 /**
  * The FLAPoint2D class represents a 2D point annotation in a frame labeling application.
@@ -39,7 +33,7 @@ import javafx.scene.shape.Circle;
  */
 public class FLAPoint2D extends FLAShape2D {
     protected Circle pointImage;
-
+    protected boolean consumeMousePressed=true;
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
      * @param x The x-coordinate of the point.
@@ -47,7 +41,7 @@ public class FLAPoint2D extends FLAShape2D {
      * @param radius The radius of the point.
      * @param container The container where the point will be drawn.
      */
-    public FLAPoint2D(double x, double y, double radius, Pane container) {
+    public FLAPoint2D(double x, double y, double radius, Group container) {
         super();
         this.pointImage = new Circle(x, y, radius);
         this.setX(x);
@@ -74,17 +68,6 @@ public class FLAPoint2D extends FLAShape2D {
     }
 
     /**
-     * Constructs a FLAPoint2D object with the specified Point2D, fillColor, radius, and container.
-     * @param point The Point2D representing the coordinates of the point.
-     * @param radius The radius of the point.
-     * @param container The container where the point will be drawn.
-     */
-    public FLAPoint2D(Point2D point, double radius, Pane container) {
-        this(point.getX(), point.getY(), radius);
-        this.drawOnNode(container);
-    }
-
-    /**
      * Constructs a FLAPoint2D object with the specified Point2D, fillColor, and radius.
      * The point will not be drawn on any container.
      * @param point The Point2D representing the coordinates of the point.
@@ -102,7 +85,7 @@ public class FLAPoint2D extends FLAShape2D {
      * @param y The y-coordinate of the point.
      */
     public FLAPoint2D(double x, double y){
-        this(x, y, 5);
+        this(x, y, Configs.POINT_RADIUS);
     }
 
     /**
@@ -149,22 +132,12 @@ public class FLAPoint2D extends FLAShape2D {
 
     /**
      * Draws the point on the specified container (Pane).
-     * @param container The container where the point will be drawn.
+     * @param mouseArea The container where the point will be drawn.
      */
     @Override
-    public void drawOnNode(Pane container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
-    }
-
-    /**
-     * Draws the point on the specified container (Group).
-     * @param container The container where the point will be drawn.
-     */
-    @Override
-    public void drawOnNode(Group container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
+    public <T extends Group> void drawOnNode(T mouseArea) {
+        if (!mouseArea.getChildren().contains(this.pointImage))
+            mouseArea.getChildren().add(this.pointImage);
         this.pointImage.toFront();
     }
 
@@ -227,7 +200,9 @@ public class FLAPoint2D extends FLAShape2D {
      */
     @Override
     public void onMousePressed(MouseEvent e) {
-        e.consume();
+        if (this.consumeMousePressed || !e.isPrimaryButtonDown()){
+            e.consume();
+        }
         this.mouseDown.set(Global.pointOnCanvas(e.getSceneX(), e.getSceneY()));
     }
 
@@ -256,6 +231,9 @@ public class FLAPoint2D extends FLAShape2D {
         return this.pointImage.centerYProperty();
     }
 
+    public Point2D getLocation() {
+        return new Point2D(this.getX(), this.getY());
+    }
     /**
      * Creates a new FLAPoint2D object with the same properties as the original object.
      * @return A new FLAPoint2D object.
@@ -269,7 +247,32 @@ public class FLAPoint2D extends FLAShape2D {
 
     @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof FLAPoint2D)){
+            return false;
+        }
+        else {
+            FLAPoint2D other = (FLAPoint2D) obj;
+            return this.getX() == other.getX() && this.getY() == other.getY();
+        }
+    }
+
+    public void setConsumeMousePressed(boolean value){
+        this.consumeMousePressed = value;
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container) {
+        container.getChildren().remove(this.pointImage);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'equals'");
+        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+    }
+
+    @Override
+    public FLAPoint2D clone() {
+        return new FLAPoint2D(this.getX(), this.getY(), this.pointImage.getRadius());
     }
 }

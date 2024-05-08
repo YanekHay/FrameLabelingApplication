@@ -1,14 +1,24 @@
 package controllers;
 
+import click_handlers.FLAClickHandler;
 import core.Global;
+import core.shapes.FLAPoint2D;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import utils.Configs;
 
 public class FrameGroupController {
     public static Group frameGroup;
+    public static StackPane parent;
+    public static FLAClickHandler<StackPane, Group> clickHandler;
     
     public static ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     private static double oldX;
@@ -24,6 +34,7 @@ public class FrameGroupController {
 
     public static void setFrameGroup(Group frameGroup) {
         FrameGroupController.frameGroup = frameGroup;
+        FrameGroupController.parent = (StackPane) frameGroup.getParent();
     }
 
     public static double getRealXmin() {
@@ -102,4 +113,30 @@ public class FrameGroupController {
         frameGroup.setScaleY(1);
         Global.setWorldScale(1);
     }
+
+    protected static void setSelectingMode(){
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.selectClickHandler.select();
+    }
+    protected static void setPointDrawingMode(){
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.pointClickHandler.select();
+    }
+    protected static void setRectangleDrawingMode(){
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.rectangleClickHandler.select();
+    }
+    protected static void setPolygonDrawingMode(){
+        if (clickHandler != null) {
+            clickHandler.deselect();
+        }
+        clickHandler = Global.polygonClickHandler.select();
+    }
+
 }
