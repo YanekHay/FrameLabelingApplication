@@ -1,4 +1,4 @@
-package core.labeled;
+package core.labeled_shapes;
 import java.util.UUID;
 
 public class FLALabel implements ILabeled, Cloneable{
@@ -31,12 +31,10 @@ public class FLALabel implements ILabeled, Cloneable{
         return id.toString();
     }
 
-    @Override
     public void setClassNumber(int classNumber) {
         this.classNumber = classNumber;
     }
 
-    @Override
     public void setClassName(String className) {
         this.className = className;
     }

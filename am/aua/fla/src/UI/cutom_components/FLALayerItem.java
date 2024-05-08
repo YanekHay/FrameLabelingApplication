@@ -1,6 +1,6 @@
 package UI.cutom_components;
 
-import core.labeled.FLALabel;
+import core.labeled_shapes.FLALabel;
 import core.styled.FLAStyle;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;

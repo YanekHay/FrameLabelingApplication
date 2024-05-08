@@ -4,6 +4,7 @@ import java.io.File;
 
 import controllers.ToolBarController.Tool;
 import core.Global;
+import core.labeled_shapes.*;
 import core.shapes.FLAPolygon2D;
 import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
@@ -29,7 +30,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import core.labeled.*;
 public class MainController {
 
     
