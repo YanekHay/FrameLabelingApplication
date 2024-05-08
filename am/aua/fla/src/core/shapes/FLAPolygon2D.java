@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -127,20 +128,12 @@ public class FLAPolygon2D extends FLAShape2D {
     }
 
     @Override
-    public void drawOnNode(Pane container) {
+    public <T extends Group> void drawOnNode(T container) {
         container.getChildren().add(this.polygon);   
         for (FLALine2D line : lines) {
             line.drawOnNode(container);
         }
         
-    }
-
-    @Override
-    public void drawOnNode(Group container) {
-        container.getChildren().add(this.polygon);   
-        for (FLALine2D line : lines) {
-            line.drawOnNode(container);
-        }
     }
 
     @Override

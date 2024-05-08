@@ -5,6 +5,7 @@ import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -67,10 +68,7 @@ public abstract class FLALabeledShape implements IDrawable, ILabeled, Cloneable,
         this.style.setFillColor(color);
     }
     
-    public void drawOnNode(Pane container) {
-        this.getShape().drawOnNode(container);
-    }
-    public void drawOnNode(Group container) {
+    public <T extends Group> void drawOnNode(T container) {
         this.getShape().drawOnNode(container);
     }
 

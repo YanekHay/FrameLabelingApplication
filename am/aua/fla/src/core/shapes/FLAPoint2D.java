@@ -1,20 +1,12 @@
 package core.shapes;
 
-import controllers.FrameGroupController;
 import core.Global;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 /**
@@ -47,7 +39,7 @@ public class FLAPoint2D extends FLAShape2D {
      * @param radius The radius of the point.
      * @param container The container where the point will be drawn.
      */
-    public FLAPoint2D(double x, double y, double radius, Pane container) {
+    public FLAPoint2D(double x, double y, double radius, Group container) {
         super();
         this.pointImage = new Circle(x, y, radius);
         this.setX(x);
@@ -71,17 +63,6 @@ public class FLAPoint2D extends FLAShape2D {
      */
     public FLAPoint2D(double x, double y, double radius) {
         this(x, y,  radius, null);
-    }
-
-    /**
-     * Constructs a FLAPoint2D object with the specified Point2D, fillColor, radius, and container.
-     * @param point The Point2D representing the coordinates of the point.
-     * @param radius The radius of the point.
-     * @param container The container where the point will be drawn.
-     */
-    public FLAPoint2D(Point2D point, double radius, Pane container) {
-        this(point.getX(), point.getY(), radius);
-        this.drawOnNode(container);
     }
 
     /**
@@ -149,22 +130,12 @@ public class FLAPoint2D extends FLAShape2D {
 
     /**
      * Draws the point on the specified container (Pane).
-     * @param container The container where the point will be drawn.
+     * @param clickArea The container where the point will be drawn.
      */
     @Override
-    public void drawOnNode(Pane container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
-    }
-
-    /**
-     * Draws the point on the specified container (Group).
-     * @param container The container where the point will be drawn.
-     */
-    @Override
-    public void drawOnNode(Group container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
+    public <T extends Group> void drawOnNode(T clickArea) {
+        if (!clickArea.getChildren().contains(this.pointImage))
+            clickArea.getChildren().add(this.pointImage);
         this.pointImage.toFront();
     }
 

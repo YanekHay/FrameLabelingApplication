@@ -3,6 +3,7 @@ package core.shapes;
 import core.Global;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -100,28 +101,14 @@ public class FLARectangle2D extends FLAShape2D {
 
      
     @Override
-    public void drawOnNode(Pane container) {
+    public <T extends Group> void drawOnNode(T container) {
         container.getChildren().add(this.rectangle);
         for(FLALine2D line: this.lines){
             line.drawOnNode(container);
         }
-        // this.topLeft.drawOnNode(container);
-        // this.topRight.drawOnNode(container);
-        // this.bottomRight.drawOnNode(container);
-        // this.bottomLeft.drawOnNode(container);
     }
 
-    @Override
-    public void drawOnNode(Group container) {
-        container.getChildren().add(this.rectangle);
-        for(FLALine2D line: this.lines){
-            line.drawOnNode(container);
-        }
-        // this.topLeft.drawOnNode(container);
-        // this.topRight.drawOnNode(container);
-        // this.bottomRight.drawOnNode(container);
-        // this.bottomLeft.drawOnNode(container);         
-    }
+
 
     @Override
     public void drag(double x, double y) {

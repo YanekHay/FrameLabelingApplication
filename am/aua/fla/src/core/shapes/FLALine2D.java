@@ -4,6 +4,7 @@ import core.Global;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
@@ -73,7 +74,7 @@ public class FLALine2D extends FLAShape2D {
     }
 
     @Override
-    public void drawOnNode(Pane container) {
+    public <T extends Group> void drawOnNode(T container) {
         if (!container.getChildren().contains(this.line))
             container.getChildren().add(this.line);
         startPoint.drawOnNode(container);
@@ -81,13 +82,6 @@ public class FLALine2D extends FLAShape2D {
         this.line.toBack();
     }
 
-    @Override
-    public void drawOnNode(Group container) {
-        if (!container.getChildren().contains(this.line))
-            container.getChildren().add(this.line);
-        startPoint.drawOnNode(container);
-        endPoint.drawOnNode(container);
-    }
 
     @Override
     public FLAShape2D clone() {

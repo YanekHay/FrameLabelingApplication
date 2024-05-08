@@ -1,5 +1,6 @@
 package controllers;
 
+import click_handlers.FLAClickHandler;
 import core.Global;
 import core.shapes.FLAPoint2D;
 import javafx.beans.property.ObjectProperty;
@@ -10,12 +11,14 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import utils.Configs;
 
 public class FrameGroupController {
     public static Group frameGroup;
     public static StackPane parent;
+    public static FLAClickHandler<StackPane, Group> clickHandler;
     
     public static ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     private static double oldX;
@@ -112,12 +115,12 @@ public class FrameGroupController {
     }
 
     protected static void setSelectingMode(){
-        parent.setCursor(Cursor.DEFAULT);
-        parent.setOnMouseClicked(FrameGroupController::frameAreaOnSelectMouseClicked);
+        clickHandler = Global.selectClickHandler;
+        Global.selectClickHandler.select();
     };
     protected static void setPointDrawingMode(){
-        parent.setCursor(Cursor.CROSSHAIR);
-        parent.setOnMouseClicked(FrameGroupController::frameAreaOnPointMouseClicked);
+        clickHandler = Global.pointClickHandler;
+        Global.pointClickHandler.select();
     };
     protected static void setPolygonDrawingMode(){
         parent.setCursor(Cursor.CROSSHAIR);
@@ -132,8 +135,6 @@ public class FrameGroupController {
         e.consume();
         FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
         System.out.println("SELECT: clicked at (" + e.getX() + ", " + e.getY() + ")"); 
-        ColorPicker colorPicker = new ColorPicker();
-        colorPicker.show();
     }
 
     private static void frameAreaOnPointMouseClicked(MouseEvent e){
