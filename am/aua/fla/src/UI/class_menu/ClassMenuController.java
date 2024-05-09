@@ -4,6 +4,7 @@ import java.util.ResourceBundle;
 
 import UI.class_menu_item.ClassMenuItem;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,31 +12,29 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 public class ClassMenuController implements Initializable{
-    private static int classCount = 0;
     @FXML VBox classListContainer;
     @FXML Button btnAddClass;
-    protected ClassMenu parent;
+
+    protected ClassMenu owner = null;
 
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             btnAddClass.setOnAction(this::addClass);
         });
-        
     }
 
-    public static int getClassCount() {
-        return classCount;
+    public int getClassCount() {
+        return this.classListContainer.getChildren().size()-1; // -1 because the last child is the HBox for titles
     }
 
-    public void setParent(ClassMenu parent) {
-        this.parent = parent;
+    public void setOwner(ClassMenu owner) {
+        this.owner = owner;
     }
 
     public void addClass(ActionEvent event) {
         ClassMenuItem classMenuItem = new ClassMenuItem();
+        // classMenuItem.setContainer(this.owner);
         classListContainer.getChildren().add(classMenuItem);
-        classCount++;
     }
-
 
 }

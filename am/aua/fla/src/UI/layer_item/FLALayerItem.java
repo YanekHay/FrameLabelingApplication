@@ -1,4 +1,4 @@
-package UI.cutom_components;
+package UI.layer_item;
 
 import core.labeled_shapes.FLALabel;
 import core.styled.FLAStyle;

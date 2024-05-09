@@ -21,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -48,25 +50,18 @@ public class MainController {
     @FXML private Label coordLabel;
     
     private ToggleButton[] tools = new ToggleButton[4];
-    FLAPolygon2D poly = new FLAPolygon2D();
     
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
-            // FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
-            // FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
-            // poly.drawOnNode(frameGroup);
-            // pt.drawOnNode(frameGroup);
-            // rect.drawOnNode(frameGroup);
             frameArea.requestFocus();
             tools[0] = btnSelectTool;
             tools[1] = btnDrawPoint;
             tools[2] = btnDrawRectangle;
             tools[3] = btnDrawPolygon;
             btnSelectTool.fire();
-
         });
 
         frameArea.setOnMouseMoved(e->{
@@ -134,7 +129,6 @@ public class MainController {
             source.setSelected(true);
         }
     }
-
     private void deselectOtherTools(ToggleButton btn){
         for (ToggleButton tool : tools) {
             if (tool != btn) {
@@ -214,6 +208,24 @@ public class MainController {
 
         } else {
             System.out.println("No file selected.");
+        }
+    }
+
+    public void openVideoFileDialog(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image File");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        // Add filters (optional)
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.avi", "*.mov", "*.wmv", "*.webm")
+        );
+
+        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
+            Media media = new Media(selectedFile.toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
         }
     }
 }

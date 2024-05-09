@@ -75,6 +75,7 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
+                  <MenuItem mnemonicParsing="false" onAction="#openVideoFileDialog" text="Open Video" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

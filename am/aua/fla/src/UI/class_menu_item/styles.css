@@ -1,5 +1,3 @@
 #colorPickerNode .color-picker-label .picker-color .picker-color-rect{
-    -fx-scale-x: 6;
-    -fx-scale-y: 4;
-    -fx-translate-x: 20;
+    -fx-stroke: #808080;
 }
