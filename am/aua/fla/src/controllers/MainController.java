@@ -86,7 +86,13 @@ public class MainController {
     @FXML
     private void openClassEditMenu(){
         System.out.println("Opening class edit menu");
-        ClassMenu newWindow = new ClassMenu();
+        if (!Global.classMenu.isShowing()){
+            Global.classMenu.show();
+        }
+        else{
+            Global.classMenu.hide();
+            Global.classMenu.show();
+        }
     }
     private void btnSelectToolOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();

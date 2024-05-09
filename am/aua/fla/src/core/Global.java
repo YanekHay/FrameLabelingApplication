@@ -4,6 +4,7 @@ import static utils.CalculationUtil.clamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import UI.class_menu.ClassMenu;
 import click_handlers.FLAPointClickHandler;
 import click_handlers.FLAPolygonClickHandler;
 import click_handlers.FLARectangleClickHandler;
@@ -17,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import utils.Configs;
 
 public final class Global {
+    public static final ClassMenu classMenu = new ClassMenu();
     public static final DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
     public static final DoubleProperty worldScale = new SimpleDoubleProperty(1.0);
     public static final DoubleProperty worldScaleInverse = new SimpleDoubleProperty(1.0);
