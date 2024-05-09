@@ -8,19 +8,21 @@ import java.nio.file.Path;
 
 import core.ImageLoader;
 import core.VideoLoader;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.media.*;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -39,6 +41,8 @@ public class MainController {
     private Button btnResetView;
     @FXML
     private Button btnNext;
+    
+    private VideoLoader videoLoader = new VideoLoader();
 
     private static final int MIN_PIXELS = 10;
     private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
@@ -170,21 +174,15 @@ public class MainController {
 
         @FXML
         public void openVideoDialog(){
-            VideoLoader videoLoader = new VideoLoader();
             videoLoader.chooseVideoFile();
-            URI file = videoLoader.getPath();
-
+            File file = videoLoader.getPath();
             if (file != null) {
-                videoLoader.setPath(file);
-                Image image = videoLoader.getFrame(1);
+                videoLoader.loadVideo(file);
+                Image image = videoLoader.getFrame(0);
                 imageView.setImage(image);
             }
-            
-
         }
-    
     }
-
 
 
     
