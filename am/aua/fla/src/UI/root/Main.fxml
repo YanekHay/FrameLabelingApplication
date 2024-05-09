@@ -27,7 +27,7 @@
                   <AnchorPane fx:id="frameFront" onKeyPressed="#frameFront_onKeyPressed" onMouseDragged="#frameFront_onMouseDragged" onMousePressed="#frameFront_onMousePressed" onScroll="#frameFront_onScroll" prefHeight="554.0" prefWidth="794.0">
                      <children>
                         <Button fx:id="btnNext" layoutX="578.0" layoutY="504.0" mnemonicParsing="false" text="Next" />
-                        <Button layoutX="531.0" layoutY="504.0" mnemonicParsing="false" text="Prev" />
+                        <Button fx:id="btnPrevious" layoutX="531.0" layoutY="504.0" mnemonicParsing="false" text="Prev" />
                      </children></AnchorPane>
                </children>
             </StackPane>

@@ -2,17 +2,24 @@ package controllers;
 
 import static utils.CalculationUtil.clamp;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 
 import core.ImageLoader;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.FFmpegFrameGrabber.Exception;
+import org.bytedeco.librealsense.frame;
+
 import core.VideoLoader;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.media.*;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.geometry.Point2D;
@@ -25,7 +32,9 @@ import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import org.bytedeco.opencv.opencv_core.IplImage;
 
 public class MainController {
 
@@ -41,6 +50,8 @@ public class MainController {
     private Button btnResetView;
     @FXML
     private Button btnNext;
+    @FXML
+    private Button btnPrevious;
     
     private VideoLoader videoLoader = new VideoLoader();
 
@@ -52,14 +63,25 @@ public class MainController {
         imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
         imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
         imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
-        btnNext.setOnAction(this::btnNextOnAction);
+        btnNext.setOnAction(arg0 -> {
+            try {
+                btnNextOnAction(arg0);
+            } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+        btnPrevious.setOnAction(arg0 -> {
+            try {
+                btnPreviousOnAction(arg0);
+            } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
         }
 
-    @FXML
-    void btnNextOnAction(ActionEvent event) {
-        System.out.println("Next Button Clicked");
-
-    }
+    
 
     @FXML
     void frameFront_onScroll(ScrollEvent event) {
@@ -172,17 +194,45 @@ public class MainController {
         }
     }
 
-        @FXML
-        public void openVideoDialog(){
-            videoLoader.chooseVideoFile();
-            File file = videoLoader.getPath();
-            if (file != null) {
+    private int frameNumber = 1;
+
+    public void openVideoDialog() throws FrameGrabber.Exception {
+        videoLoader = new VideoLoader(); // Assign to the member variable
+        videoLoader.chooseVideoFile();
+        File file = videoLoader.getPath();
+        if (file != null) {
+            try {
                 videoLoader.loadVideo(file);
-                Image image = videoLoader.getFrame(0);
+                Image image = videoLoader.getFrame(frameNumber);
                 imageView.setImage(image);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
+
+    @FXML
+    public void btnNextOnAction(ActionEvent event) throws FrameGrabber.Exception {
+        try {
+            frameNumber++;
+            Image nextFrameImage = videoLoader.nextFrame();
+            imageView.setImage(nextFrameImage);
+        } catch (FrameGrabber.Exception e) {
+            System.out.println("Error retrieving next frame: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void btnPreviousOnAction(ActionEvent event) throws FrameGrabber.Exception {
+        try {
+            frameNumber--;
+            Image previousFrameImage = videoLoader.getFrame(frameNumber);
+            imageView.setImage(previousFrameImage);
+        } catch (FrameGrabber.Exception e) {
+            System.out.println("Error retrieving previous frame: " + e.getMessage());
+        }
+    }
+}
 
 
     
