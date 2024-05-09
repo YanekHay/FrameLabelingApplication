@@ -77,8 +77,9 @@
               <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
             </items>
           </Menu>
-          <Menu disable="true" mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Edit">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openClassEditMenu" text="Edit Classes" />
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>

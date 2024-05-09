@@ -30,6 +30,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import UI.class_menu.ClassMenu;
 public class MainController {
 
     
@@ -81,6 +82,12 @@ public class MainController {
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
     }
     
+
+    @FXML
+    private void openClassEditMenu(){
+        System.out.println("Opening class edit menu");
+        ClassMenu newWindow = new ClassMenu();
+    }
     private void btnSelectToolOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
