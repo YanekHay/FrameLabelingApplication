@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.File;
 
+import UI.class_menu.ClassMenu;
+import UI.class_menu_item.ClassMenuItem;
 import controllers.ToolBarController.Tool;
 import core.Global;
 import core.labeled_shapes.*;
@@ -9,7 +11,9 @@ import core.shapes.FLAPolygon2D;
 import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
@@ -21,14 +25,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
 public class MainController {
 
@@ -45,27 +53,29 @@ public class MainController {
     @FXML private ToggleButton btnSelectTool;
     @FXML private ToolBar toolbar;
     @FXML private Label coordLabel;
-    
+    @FXML private VBox layerContainer;
+    @FXML private ChoiceBox<String> chooseLayerClass;
+
     private ToggleButton[] tools = new ToggleButton[4];
-    FLAPolygon2D poly = new FLAPolygon2D();
     
+
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
         Platform.runLater(() -> {
             FrameGroupController.setFrameGroup(frameGroup);
-            // FLALabeledPoint pt = new FLALabeledPoint(50,50, 0);
-            // FLARectangle2D rect = new FLARectangle2D(100, 100, 200, 200);
-            // poly.drawOnNode(frameGroup);
-            // pt.drawOnNode(frameGroup);
-            // rect.drawOnNode(frameGroup);
             frameArea.requestFocus();
             tools[0] = btnSelectTool;
             tools[1] = btnDrawPoint;
             tools[2] = btnDrawRectangle;
             tools[3] = btnDrawPolygon;
             btnSelectTool.fire();
-
+            chooseLayerClass.setItems(Global.layerClasses);
+            chooseLayerClass.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+                System.out.println("Selected: " + newVal.intValue() + " " + oldVal.intValue());
+                if (newVal.intValue() == -1) return;
+                ToolBarController.setCurrentLabel(Global.labelList.get(newVal.intValue()));
+            });
         });
 
         frameArea.setOnMouseMoved(e->{
@@ -79,12 +89,26 @@ public class MainController {
         btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
+
     }
     
+
+
+    @FXML
+    private void openClassEditMenu(){
+        if (!Global.classMenu.isShowing()){
+            Global.classMenu.show();
+        }
+        else{
+            Global.classMenu.hide();
+            Global.classMenu.show();
+        }
+    }
     private void btnSelectToolOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.SELECT);
+            if (ToolBarController.setCurrentTool(Tool.SELECT)) deselectOtherTools(source);
+            else source.setSelected(false);
             deselectOtherTools(source);
         }
         else{
@@ -94,8 +118,8 @@ public class MainController {
     private void btnDrawPointOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.POINT);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.POINT)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
@@ -104,8 +128,8 @@ public class MainController {
     private void btnDrawRectangleOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.RECTANGLE);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.RECTANGLE)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
@@ -114,14 +138,13 @@ public class MainController {
     private void btnDrawPolygonOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.POLYGON);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.POLYGON)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
         }
     }
-
     private void deselectOtherTools(ToggleButton btn){
         for (ToggleButton tool : tools) {
             if (tool != btn) {
@@ -201,6 +224,24 @@ public class MainController {
 
         } else {
             System.out.println("No file selected.");
+        }
+    }
+
+    public void openVideoFileDialog(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image File");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        // Add filters (optional)
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.avi", "*.mov", "*.wmv", "*.webm")
+        );
+
+        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
+            Media media = new Media(selectedFile.toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
         }
     }
 }

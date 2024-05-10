@@ -3,20 +3,22 @@ package core.labeled_shapes;
 import core.shapes.FLAPoint2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
 public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cloneable{
     private FLALabel label;
-    private FLAStyle style;
 
-    public FLALabeledPoint(double x, double y, FLALabel label, FLAStyle style){
+    public FLALabeledPoint(double x, double y, FLALabel label){
         super(x, y);
-        this.setStyle(style);
         this.setLabel(label);
     }
 
     public void setStyle(FLAStyle style) {
-        this.style = style;
+        this.label.setStyle(style);
         this.bindComponentStylesTo(style);
     }
 
@@ -24,15 +26,37 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
         this.label = label;
     }
     
+    @Override
     public int getClassNumber() {
         return this.label.getClassNumber();
     }
+    @Override
     public String getClassName() {
         return this.label.getClassName();
     }
+    @Override
     public String getId() {
         return this.label.getId();
     }
+    
+    @Override
+    public void setClassNumber(int classNumber) {
+        this.label.setClassNumber(classNumber);
+    }
+    @Override
+    public void setClassName(String className) {
+        this.label.setClassName(className);
+    }
+    @Override
+    public StringProperty classNameProperty() {
+        return this.label.classNameProperty();
+    }
+    @Override
+    public IntegerProperty classNumberProperty() {
+        return this.label.classNumberProperty();
+    }
+
+
     public FLALabel getLabel() {
         return this.label;
     }
@@ -48,15 +72,15 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
     
     @Override
     public void setStrokeWidth(double width) {
-        this.style.setStrokeWidth(width);
+        this.label.setStrokeWidth(width);
     }
     @Override
     public void setStrokeColor(Color color) {
-        this.style.setStrokeColor(color);
+        this.label.setStrokeColor(color);
     }
     @Override
     public void setFillColor(Color color) {
-        this.style.setFillColor(color);
+        this.label.setFillColor(color);
     }
     
 }

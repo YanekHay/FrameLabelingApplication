@@ -4,12 +4,15 @@ import core.shapes.FLARectangle2D;
 import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
-
+import java.util.Objects;
 import javafx.scene.paint.Color;
 
 public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, IStyled, Cloneable{
-    private FLAStyle style;
     private FLALabel label;
     
     public FLALabeledRectangle(double xMin, double yMin, double xMax, double yMax, FLALabel label, FLAStyle style){
@@ -29,7 +32,7 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
     }
 
     public void setStyle(FLAStyle style) {
-        this.style = style;
+        this.label.setStyle(style);
         this.bindComponentStylesTo(style);
     }
 
@@ -37,17 +40,38 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
         this.label = label;
     }
 
+    public FLALabel getLabel() {
+        return this.label;
+    }
+   
+    @Override
     public int getClassNumber() {
         return this.label.getClassNumber();
     }
+    @Override
     public String getClassName() {
         return this.label.getClassName();
     }
+    @Override
     public String getId() {
         return this.label.getId();
     }
-    public FLALabel getLabel() {
-        return this.label;
+    
+    @Override
+    public void setClassNumber(int classNumber) {
+        this.label.setClassNumber(classNumber);
+    }
+    @Override
+    public void setClassName(String className) {
+        this.label.setClassName(className);
+    }
+    @Override
+    public StringProperty classNameProperty() {
+        return this.label.classNameProperty();
+    }
+    @Override
+    public IntegerProperty classNumberProperty() {
+        return this.label.classNumberProperty();
     }
 
     @Override
@@ -60,16 +84,21 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), label);
+    }
+
+    @Override
     public void setStrokeWidth(double width) {
-        this.style.setStrokeWidth(width);
+        this.label.setStrokeWidth(width);
     }
     @Override
     public void setStrokeColor(Color color) {
-        this.style.setStrokeColor(color);
+        this.label.setStrokeColor(color);
     }
     @Override
     public void setFillColor(Color color) {
-        this.style.setFillColor(color);
+        this.label.setFillColor(color);
     }
     
 }

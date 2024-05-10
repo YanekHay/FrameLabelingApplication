@@ -6,6 +6,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 
 import javafx.geometry.Point2D;
+import controllers.ToolBarController;
+import core.Global;
 import core.shapes.FLAPoint2D;
 
 public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T>{
