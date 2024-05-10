@@ -1,53 +1,56 @@
 package controllers;
 
-import static utils.CalculationUtil.clamp;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
 
 import core.ImageLoader;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.FFmpegFrameGrabber.Exception;
-import org.bytedeco.librealsense.frame;
 
 import core.VideoLoader;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.media.*;
+import controllers.ToolBarController.Tool;
+import core.Global;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToolBar;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import javafx.scene.input.ScrollEvent;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import org.bytedeco.opencv.opencv_core.IplImage;
 
 public class MainController {
 
-    @FXML
-    private AnchorPane root;
-    @FXML
-    private ImageView imageView;
-    @FXML
-    private AnchorPane frameFront;
-    @FXML
-    private StackPane frameBack;
-    @FXML
-    private Button btnResetView;
+    
+    @FXML private BorderPane root;
+    @FXML private ImageView imageView;
+    @FXML private StackPane frameArea;
+    @FXML private Group frameGroup;
+    @FXML private Button btnResetView;
+    @FXML private ScrollPane labelLayersContainer;
+    @FXML private ToggleButton btnDrawPoint;
+    @FXML private ToggleButton btnDrawRectangle;
+    @FXML private ToggleButton btnDrawPolygon;
+    @FXML private ToggleButton btnSelectTool;
+    @FXML private ToolBar toolbar;
+    @FXML private Label coordLabel;
+    @FXML private VBox layerContainer;
+    @FXML private ChoiceBox<String> chooseLayerClass;
+
+    private ToggleButton[] tools = new ToggleButton[4];
+    
     @FXML
     private Button btnNext;
     @FXML
@@ -55,134 +58,146 @@ public class MainController {
     
     private VideoLoader videoLoader = new VideoLoader();
 
-    private static final int MIN_PIXELS = 10;
-    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-
     @FXML
     void initialize() {
-        imageView.fitHeightProperty().bind(frameBack.prefHeightProperty());
-        imageView.fitWidthProperty().bind(frameBack.prefWidthProperty());
-        imageView.setViewport(new Rectangle2D(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight()));
-        btnNext.setOnAction(arg0 -> {
-            try {
-                btnNextOnAction(arg0);
-            } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        // runLater is used to ensure that the layout is already rendered
+        Platform.runLater(() -> {
+            FrameGroupController.setFrameGroup(frameGroup);
+            frameArea.requestFocus();
+            tools[0] = btnSelectTool;
+            tools[1] = btnDrawPoint;
+            tools[2] = btnDrawRectangle;
+            tools[3] = btnDrawPolygon;
+            btnSelectTool.fire();
+            chooseLayerClass.setItems(Global.layerClasses);
+            chooseLayerClass.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+                System.out.println("Selected: " + newVal.intValue() + " " + oldVal.intValue());
+                if (newVal.intValue() == -1) return;
+                ToolBarController.setCurrentLabel(Global.labelList.get(newVal.intValue()));
+            });
         });
-        btnPrevious.setOnAction(arg0 -> {
-            try {
-                btnPreviousOnAction(arg0);
-            } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
-        }
 
+        frameArea.setOnMouseMoved(e->{
+            Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
+            coordLabel.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
+        });
+        frameArea.addEventHandler(MouseEvent.MOUSE_PRESSED, this::frameAreaOnMousePressed);
+        frameArea.addEventHandler(ScrollEvent.SCROLL, this::frameAreaOnScroll);
+        frameArea.setOnMouseDragged(this::frameAreaOnMouseDragged);
+        btnSelectTool.setOnAction(this::btnSelectToolOnAction);
+        btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
+        btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
+        btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
+
+    }
     
 
+
     @FXML
-    void frameFront_onScroll(ScrollEvent event) {
-        if (!event.isControlDown()) {
-            return;
+    private void openClassEditMenu(){
+        if (!Global.classMenu.isShowing()){
+            Global.classMenu.show();
         }
-        double width = imageView.getImage().getWidth();
-        double height = imageView.getImage().getHeight();
-
-        double delta = -event.getDeltaY();
-        Rectangle2D viewport = imageView.getViewport();
-
-        double scale = clamp(Math.pow(1.01, delta),
-            Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
-            Math.max(width / viewport.getWidth(), height / viewport.getHeight())
-        );
-
-        Point2D mouse = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
-
-        double newWidth = viewport.getWidth() * scale;
-        double newHeight = viewport.getHeight() * scale;
-
-        // To keep the visual point under the mouse from moving, we need
-        // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-        // where x is the mouse X coordinate in the image
-
-        // solving this for newViewportMinX gives
-
-        // newViewportMinX = x - (x - currentViewportMinX) * scale 
-
-        // we then clamp this value so the image never scrolls out
-        // of the imageview:
-        double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
-                0, width - newWidth);
-        double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
-                0, height - newHeight);
-
-        imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+        else{
+            Global.classMenu.hide();
+            Global.classMenu.show();
+        }
     }
-
-    @FXML
-    void frameFront_onMousePressed(MouseEvent event){
-        Point2D mousePress = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
-        mouseDown.set(mousePress);
+    private void btnSelectToolOnAction(ActionEvent e){
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            if (ToolBarController.setCurrentTool(Tool.SELECT)) deselectOtherTools(source);
+            else source.setSelected(false);
+            deselectOtherTools(source);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
-
-    @FXML
-    void frameFront_onMouseDragged(MouseEvent event){
-        if (!event.isMiddleButtonDown())
-            return;
-            Point2D dragPoint = imageViewToImage(imageView, new Point2D(event.getX(), event.getY()));
-            shift(imageView, dragPoint.subtract(mouseDown.get()));
-            mouseDown.set(imageViewToImage(imageView, new Point2D(event.getX(), event.getY())));
+    private void btnDrawPointOnAction(ActionEvent e){
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            if (ToolBarController.setCurrentTool(Tool.POINT)) deselectOtherTools(source);
+            else source.setSelected(false);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
-    
-    @FXML
-    void btnResetView_onMouseClicked(MouseEvent event){
-        System.out.println("Reset View");
-        reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+    private void btnDrawRectangleOnAction(ActionEvent e){
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            if (ToolBarController.setCurrentTool(Tool.RECTANGLE)) deselectOtherTools(source);
+            else source.setSelected(false);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
-    // reset to the top left:
-    private void reset(ImageView imageView, double width, double height) {
-        imageView.setViewport(new Rectangle2D(0, 0, width, height));
+    private void btnDrawPolygonOnAction(ActionEvent e){
+        ToggleButton source = (ToggleButton) e.getSource();
+        if (source.isSelected()){
+            if (ToolBarController.setCurrentTool(Tool.POLYGON)) deselectOtherTools(source);
+            else source.setSelected(false);
+        }
+        else{
+            source.setSelected(true);
+        }
     }
-
-    @FXML
-    void frameFront_onKeyPressed(KeyEvent event) {
-        KeyCode key = event.getCode();
-        if (key==KeyCode.NUMPAD0 && event.isControlDown()) {
-            reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+    private void deselectOtherTools(ToggleButton btn){
+        for (ToggleButton tool : tools) {
+            if (tool != btn) {
+                tool.setSelected(false);
+            }
         }
     }
 
-    // shift the viewport of the imageView by the specified delta, clamping so
-    // the viewport does not move off the actual image:
-    private void shift(ImageView imageView, Point2D delta) {
-        Rectangle2D viewport = imageView.getViewport();
-
-        double width = imageView.getImage().getWidth() ;
-        double height = imageView.getImage().getHeight() ;
-
-        double maxX = width - viewport.getWidth();
-        double maxY = height - viewport.getHeight();
+    @FXML
+    void frameAreaOnScroll(ScrollEvent e) {
+        if (!e.isControlDown()) {
+            return;
+        }
+        double delta = e.getDeltaY()>0 ? 1 : -1;
         
-        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
-        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+        Global.setScaleMultiplier(delta);
+        FrameGroupController.zoomToPoint(Global.getWorldScale(), new Point2D(e.getX(), e.getY()));
+        Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
+        coordLabel.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
 
-        imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
     }
 
-    // convert mouse coordinates in the imageView to coordinates in the actual image:
-    private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
-        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
-        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+    @FXML
+    void frameAreaOnMousePressed(MouseEvent e){
+        FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
+    }
 
-        Rectangle2D viewport = imageView.getViewport();
-        return new Point2D(
-                viewport.getMinX() + xProportion * viewport.getWidth(), 
-                viewport.getMinY() + yProportion * viewport.getHeight());
+    @FXML
+    void frameAreaOnMouseDragged(MouseEvent e){
+        if (e.isMiddleButtonDown()) {
+            Point2D dragPoint = new Point2D(e.getX(), e.getY());
+            FrameGroupController.shift(dragPoint.subtract(FrameGroupController.mouseDown.get()));
+            FrameGroupController.mouseDown.set(dragPoint);
+        }
+        else if (e.isPrimaryButtonDown()){
+            // this.selectArea.setWidth(e.getX()-FrameGroupController.mouseDown.get().getX());
+            // this.selectArea.setHeight(e.getY()-FrameGroupController.mouseDown.get().getY());
+        }
     }
     
+    @FXML
+    void btnResetViewOnMouseClicked(MouseEvent e){
+        FrameGroupController.resetView();
+        // reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+    }
+
+    @FXML
+    void frameAreaOnKeyPressed(KeyEvent e) {
+        KeyCode key = e.getCode();
+        if (key==KeyCode.NUMPAD0 && e.isControlDown()) {
+            FrameGroupController.resetView();
+        }
+    }
+
     @FXML
     public void openImageFileDialog(){
         ImageLoader imageLoader = new ImageLoader();
@@ -232,6 +247,7 @@ public class MainController {
             System.out.println("Error retrieving previous frame: " + e.getMessage());
         }
     }
+
 }
 
 

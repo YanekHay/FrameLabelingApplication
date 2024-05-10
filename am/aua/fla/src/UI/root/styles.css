@@ -1,24 +1,33 @@
-.flat-button {
-    -fx-padding: 5px 5px;
-    -fx-font-size: 12px;
-    -fx-font-color: #fff; /* Text color */
-    -fx-color: #585858; /* Text color */
-    -fx-border: none; /* Border color */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-text-decoration: none;
-  }
-  .flat-button:hover {
-    -fx-background-color: #272727; /* Background color on hover */
-    -fx-font-color: #fff; /* Text color */
-  }
-  
-.root{
-    -fx-background-color: #d7d4d4;
-}
-.vbox:hover{
-    -fx-background-color: #a1a9828c
+/* Define a flat style for the toolbar */
+.toolbar {
+    -fx-background-color: #f0f0f047;
+    -fx-alignment: center;
 }
 
-.frameBack{
-    -fx-background-color: #d7d4d4;
+/* Define the style for toolbar buttons */
+.toolbar .toggle-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-font-size: 14px;
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+    /* -fx-border-color: #000000; */
+    -fx-border-width: 1px;
+}
+
+.toolbar .toggle-button:hover {
+    -fx-background-color: #406e78;
+}
+
+.toolbar .toggle-button:selected {
+    -fx-background-color: #1e464f;
+}
+
+.bottom-panel {
+    -fx-background-color: #f0f0f047;
+    -fx-alignment: center;
+}
+
+.layer-panel {
+    -fx-background-color: #f0f0f047;
 }
