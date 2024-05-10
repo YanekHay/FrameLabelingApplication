@@ -3,6 +3,8 @@ package core.labeled_shapes;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import controllers.FrameGroupController;
+import core.shapes.FLALine2D;
 import core.shapes.FLAPoint2D;
 import core.shapes.FLAPolygon2D;
 import core.styled.FLAStyle;
@@ -40,6 +42,16 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
         if (label==null)
             return;
         this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
+    }
+
+    @Override
+    public void close(){
+        if (this.points.size()>=3){
+            this.lines.add(new FLALine2D(points.get(this.getPointCount()-1), points.get(0)));
+            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
+            this.isClosed = true;
+        }
         this.bindComponentStylesTo(this.label.getStyle());
     }
     

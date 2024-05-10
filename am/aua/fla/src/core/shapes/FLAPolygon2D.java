@@ -14,10 +14,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import java.util.ArrayList;
 
 public class FLAPolygon2D extends FLAShape2D {
-    private ArrayList<FLAPoint2D> points = new ArrayList<>();
-    private ArrayList<FLALine2D> lines = new ArrayList<>();
-    private Polygon polygon = new Polygon();
-    private boolean isClosed = false;
+    protected ArrayList<FLAPoint2D> points = new ArrayList<>();
+    protected ArrayList<FLALine2D> lines = new ArrayList<>();
+    protected Polygon polygon = new Polygon();
+    protected boolean isClosed = false;
     private ArrayList<DoubleProperty[]> pointProperties = new ArrayList<>();
     
     public FLAPolygon2D(ArrayList<FLAPoint2D> points) {
@@ -176,9 +176,6 @@ public class FLAPolygon2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        for (FLAPoint2D point : points) {
-            point.bindComponentStylesTo(style);
-        }
         for (FLALine2D line : lines) {
             line.bindComponentStylesTo(style);
         }

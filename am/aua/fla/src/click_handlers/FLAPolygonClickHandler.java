@@ -46,7 +46,6 @@ public class FLAPolygonClickHandler<P extends Pane, T extends Group> extends FLA
     public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.CROSSHAIR);
         this.mouseArea.setOnMousePressed(this::mousePress);
-        this.polygon.drawOnNode(this.drawArea);
         return this;
     }
 
