@@ -3,28 +3,31 @@ package core.labeled_shapes;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import controllers.FrameGroupController;
+import core.shapes.FLALine2D;
 import core.shapes.FLAPoint2D;
 import core.shapes.FLAPolygon2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
 public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled, Cloneable{
     private FLALabel label;
 
-    public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label, FLAStyle style){
+
+    public FLALabeledPolygon(){
+        super();
+        this.setLabel(null);
+    }
+    public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label){
         super(points);
-        this.setStyle(style);
         this.setLabel(label);
     }
 
-    public FLALabeledPolygon(FLALabel label, FLAStyle style){
+    public FLALabeledPolygon(FLALabel label){
         super();
-        this.setStyle(style);
         this.setLabel(label);
     }
 
@@ -34,7 +37,20 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
     }
 
     public void setLabel(FLALabel label) {
+        if (label==null)
+            return;
         this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
+    }
+
+    @Override
+    public void close(){
+        if (this.points.size()>=3){
+            this.lines.add(new FLALine2D(points.get(this.getPointCount()-1), points.get(0)));
+            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
+            this.isClosed = true;
+        }
+        this.bindComponentStylesTo(this.label.getStyle());
     }
     
     @Override
@@ -100,4 +116,6 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
         copy.setLabel(this.label.clone());
         return copy;
     }
+
+
 }

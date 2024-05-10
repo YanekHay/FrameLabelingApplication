@@ -66,13 +66,9 @@ public class MainController {
             tools[3] = btnDrawPolygon;
             btnSelectTool.fire();
             chooseLayerClass.setItems(Global.layerClasses);
-            chooseLayerClass.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
-                System.out.println("Selected: " + newVal.intValue() + " " + oldVal.intValue());
-                if (newVal.intValue() == -1) return;
-                ToolBarController.setCurrentLabel(Global.labelList.get(newVal.intValue()));
-            });
+            Global.setLayerContainer(this.layerContainer);
         });
-
+        
         frameArea.setOnMouseMoved(e->{
             Point2D pt = frameGroup.parentToLocal(e.getX(), e.getY());
             coordLabel.setText("X: " + Math.round(pt.getX()) + " Y: " + Math.round(pt.getY()));
@@ -85,10 +81,15 @@ public class MainController {
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
         btnNext.setOnAction(this::btnNextOnAction);
-        btnPrev.setOnAction(this::btnPreviousOnAction);
+        btnPrev.setOnAction(this::btnPreviousOnAction);        
+        chooseLayerClass.setOnAction(this::onChooseLayerClassAction);
     }
     
-
+    private void onChooseLayerClassAction(ActionEvent e){
+        int newVal = chooseLayerClass.getSelectionModel().getSelectedIndex();
+        if (newVal == -1) return;
+        ToolBarController.setCurrentLabel(Global.labelList.get(newVal));
+    }
 
     @FXML
     private void openClassEditMenu(){

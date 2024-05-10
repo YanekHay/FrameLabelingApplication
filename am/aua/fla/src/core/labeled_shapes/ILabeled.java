@@ -9,6 +9,7 @@ public interface ILabeled {
     public String getId();
     public void setClassNumber(int classNumber);
     public void setClassName(String className);
+    public void setLabel(FLALabel label);
     public IntegerProperty classNumberProperty();
     public StringProperty classNameProperty();
 }

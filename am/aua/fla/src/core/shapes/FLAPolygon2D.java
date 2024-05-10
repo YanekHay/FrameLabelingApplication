@@ -14,10 +14,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import java.util.ArrayList;
 
 public class FLAPolygon2D extends FLAShape2D {
-    private ArrayList<FLAPoint2D> points = new ArrayList<>();
-    private ArrayList<FLALine2D> lines = new ArrayList<>();
-    private Polygon polygon = new Polygon();
-    private boolean isClosed = false;
+    protected ArrayList<FLAPoint2D> points = new ArrayList<>();
+    protected ArrayList<FLALine2D> lines = new ArrayList<>();
+    protected Polygon polygon = new Polygon();
+    protected boolean isClosed = false;
     private ArrayList<DoubleProperty[]> pointProperties = new ArrayList<>();
     
     public FLAPolygon2D(ArrayList<FLAPoint2D> points) {
@@ -28,12 +28,12 @@ public class FLAPolygon2D extends FLAShape2D {
         }
         this.isClosed = true;
         this.polygon.setCursor(Cursor.HAND);
-        this.polygon.setFill(Color.rgb(100,100,100,0.2));
+        this.polygon.setFill(Color.rgb(100,100,200,0.4));
         this.close();
     }
 
     public FLAPolygon2D() {
-        this.polygon.setFill(Color.rgb(100,100,100,0.2));
+        this.polygon.setFill(Color.rgb(100,100,200,0.4));
         this.polygon.setCursor(Cursor.HAND);
         this.polygon.setOnMouseDragged(this::onMouseDragged);
         this.polygon.setOnMousePressed(this::onMousePressed);
@@ -176,8 +176,21 @@ public class FLAPolygon2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+        for (FLALine2D line : lines) {
+            line.bindComponentStylesTo(style);
+        }
+        this.polygon.fillProperty().bind(style.fillColorProperty());
+    }
+
+    @Override
+    public void remove(Group node){
+        for (FLAPoint2D pt : this.points){
+            pt.removeFromNode(node);
+        }
+        for (FLALine2D line: this.lines){
+            line.remove(node);
+        }
+        node.getChildren().remove(this.polygon);
     }
 
 }

@@ -36,6 +36,7 @@ public class FLARectangle2D extends FLAShape2D {
         this.rectangle.setOnMousePressed(this::onMousePressed);
         this.rectangle.setCursor(Cursor.CLOSED_HAND);
         this.rectangle.setFill(Color.valueOf("#ff000077"));
+
     }
 
     public FLARectangle2D(Point2D topleft) {
@@ -179,7 +180,14 @@ public class FLARectangle2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+        for (FLALine2D line : lines) {
+            line.bindComponentStylesTo(style);
+        }
+        this.rectangle.fillProperty().bind(style.fillColorProperty());
     } 
+
+    @Override
+    public void remove(Group node){
+        this.removeFromNode(node);
+    }
 }

@@ -1,12 +1,9 @@
 package core.labeled_shapes;
 
 import core.shapes.FLARectangle2D;
-import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import java.util.Objects;
@@ -15,19 +12,17 @@ import javafx.scene.paint.Color;
 public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, IStyled, Cloneable{
     private FLALabel label;
     
-    public FLALabeledRectangle(double xMin, double yMin, double xMax, double yMax, FLALabel label, FLAStyle style){
+    public FLALabeledRectangle(double xMin, double yMin, double xMax, double yMax, FLALabel label){
         super(xMin, yMin, xMax, yMax);
-        this.setStyle(style);
         this.setLabel(label);
     }
 
-    public FLALabeledRectangle(Point2D topLeft, Point2D bottomRight, FLALabel label, FLAStyle style){
-        this(topLeft.getX(), topLeft.getY(), bottomRight.getX(), bottomRight.getY(), label, style);
+    public FLALabeledRectangle(Point2D topLeft, Point2D bottomRight, FLALabel label){
+        this(topLeft.getX(), topLeft.getY(), bottomRight.getX(), bottomRight.getY(), label);
     }
     
-    public FLALabeledRectangle(Point2D topLeft, FLALabel label, FLAStyle style){
+    public FLALabeledRectangle(Point2D topLeft, FLALabel label){
         super(topLeft);
-        this.setStyle(style);
         this.setLabel(label);
     }
 
@@ -36,8 +31,10 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
         this.bindComponentStylesTo(style);
     }
 
+    @Override
     public void setLabel(FLALabel label) {
         this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
     }
 
     public FLALabel getLabel() {

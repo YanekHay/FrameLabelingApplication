@@ -24,6 +24,7 @@ public class ClassMenuController implements Initializable{
             btnAddClass.setOnAction(this::addClass);
             classListContainer.getChildren().addListener((ListChangeListener<Node>) e->{
                 Global.layerClasses.clear();
+                Global.labelList.clear();
                 e.getList().forEach(node -> {
                     if (node instanceof ClassMenuItem) {
                         ClassMenuItem classMenuItem = (ClassMenuItem) node;
@@ -51,10 +52,12 @@ public class ClassMenuController implements Initializable{
         classMenuItem.classNameProperty().addListener(
             (observable, oldValue, newValue) -> {
                 Global.layerClasses.clear();
+                Global.labelList.clear();
                 classListContainer.getChildren().forEach(node -> {
                     if (node instanceof ClassMenuItem) {
                         ClassMenuItem item = (ClassMenuItem) node;
                         Global.layerClasses.add(item.getClassName());
+                        Global.labelList.add(item.getLabel());
                     }
                 });
             }

@@ -2,12 +2,16 @@ package controllers;
 
 import click_handlers.FLAClickHandler;
 import core.Global;
+import core.labeled_shapes.ILabeled;
+import core.labeled_shapes.IRemovable;
 import core.shapes.FLAPoint2D;
+import core.styled.IStyled;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.input.MouseEvent;
@@ -139,4 +143,8 @@ public class FrameGroupController {
         clickHandler = Global.polygonClickHandler.select();
     }
 
+
+    public static void remove(IRemovable item){
+        item.remove(frameGroup);
+    }
 }

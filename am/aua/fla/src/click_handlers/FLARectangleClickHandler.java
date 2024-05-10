@@ -6,12 +6,15 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 
 import javafx.geometry.Point2D;
+import UI.layer_item.LayerItem;
 import controllers.ToolBarController;
 import core.Global;
+import core.labeled_shapes.FLALabeledPolygon;
+import core.labeled_shapes.FLALabeledRectangle;
 import core.shapes.FLARectangle2D;
 
 public class FLARectangleClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T>{
-    FLARectangle2D rectangle = null;
+    FLALabeledRectangle rectangle = null;
     
     public FLARectangleClickHandler(P mouseArea, T drawArea) {
         super(mouseArea, drawArea);
@@ -52,13 +55,15 @@ public class FLARectangleClickHandler<P extends Pane, T extends Group> extends F
     }
 
     private void startDrawing(Point2D startPoint){
-        rectangle = new FLARectangle2D(startPoint);
+        rectangle = new FLALabeledRectangle(startPoint, ToolBarController.getCurrentLabel());
         rectangle.drawOnNode(this.drawArea);
         rectangle.getEndPoint().setConsumeMousePressed(false);
     }
 
     private void finishDrawing(){
         rectangle.getEndPoint().setConsumeMousePressed(true);
+        LayerItem<FLALabeledRectangle> layerItem = new LayerItem<>(this.rectangle);
+        Global.addLayer(layerItem);
         rectangle = null;
     }
 
