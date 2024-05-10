@@ -150,5 +150,10 @@ public class FLALine2D extends FLAShape2D {
         endPoint.removeFromNode(container);
     }
 
+    @Override
+    public void remove(Group node) {
+        this.removeFromNode(node);
+    }
+
     
 }

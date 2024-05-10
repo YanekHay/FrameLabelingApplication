@@ -3,6 +3,9 @@ package UI.layer_item;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.swing.Action;
+
+import core.Global;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,11 +24,22 @@ public class LayerItemController implements Initializable{
 
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
-            owner.getLabeledShape().classNameProperty().bindBidirectional(this.classNameChoiceBox.valueProperty());
+            classNameChoiceBox.setItems(Global.layerClasses);
+            classNameChoiceBox.getSelectionModel().select(Global.layerClasses.indexOf(owner.getLabeledShape().getClassName()));
+            this.lblNumber.setText(Global.getLayerContainerChildCount() + "");
+            this.lblShapeType.setText(owner.getLabeledShape().getClass().getSimpleName());
         });
         this.btnRemove.setOnAction(this::onBtnRemoveAction);
+        classNameChoiceBox.setOnAction(this::onClassNameChoiceBoxAction);
     }
 
+
+    public void onClassNameChoiceBoxAction(ActionEvent e){
+        int newVal = classNameChoiceBox.getSelectionModel().getSelectedIndex();
+        if (newVal == -1) return;
+        this.owner.getLabeledShape().setLabel(Global.labelList.get(newVal));
+    }
+    
     public void setOwner(LayerItem owner) {
         this.owner = owner;
     }

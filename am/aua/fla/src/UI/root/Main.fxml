@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -38,10 +39,13 @@
    <right>
       <BorderPane>
          <center>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="574.0" prefWidth="250.0" styleClass="bottom-panel" vbarPolicy="ALWAYS">
+            <ScrollPane hbarPolicy="NEVER" maxWidth="288.0" minWidth="262.0" prefHeight="557.0" prefWidth="279.0" styleClass="bottom-panel" vbarPolicy="ALWAYS">
                <content>
-                  <VBox fx:id="layerContainer" styleClass="layer-panel" />
+                  <VBox fx:id="layerContainer" fillWidth="false" styleClass="layer-panel" />
                </content>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </ScrollPane>
          </center>
          <bottom>

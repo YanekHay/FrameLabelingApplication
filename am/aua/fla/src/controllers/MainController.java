@@ -71,6 +71,7 @@ public class MainController {
             tools[3] = btnDrawPolygon;
             btnSelectTool.fire();
             chooseLayerClass.setItems(Global.layerClasses);
+            Global.setLayerContainer(this.layerContainer);
         });
         
         frameArea.setOnMouseMoved(e->{
@@ -243,6 +244,7 @@ public class MainController {
             MediaPlayer mediaPlayer = new MediaPlayer(media);
         }
     }
+
 }
 
 

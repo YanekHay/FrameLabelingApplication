@@ -1,4 +1,5 @@
 package core.shapes;
+import core.labeled_shapes.IRemovable;
 import core.shapes.IDraggable;
 import core.shapes.IDrawable;
 import core.styled.FLAStyle;
@@ -10,7 +11,7 @@ import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 
-public abstract class FLAShape2D implements IDraggable, IDrawable, Cloneable{
+public abstract class FLAShape2D implements IDraggable, IDrawable, IRemovable, Cloneable{
     protected ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
     protected ArrayList<Shape> shapeComponents;
 
@@ -43,7 +44,8 @@ public abstract class FLAShape2D implements IDraggable, IDrawable, Cloneable{
     @Override
     public abstract String toString();
     
-    
+    @Override
+    public abstract void remove(Group node);
     
     public abstract void bindComponentStylesTo(FLAStyle style);
 }

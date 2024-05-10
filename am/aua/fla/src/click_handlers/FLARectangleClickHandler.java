@@ -6,8 +6,10 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 
 import javafx.geometry.Point2D;
+import UI.layer_item.LayerItem;
 import controllers.ToolBarController;
 import core.Global;
+import core.labeled_shapes.FLALabeledPolygon;
 import core.labeled_shapes.FLALabeledRectangle;
 import core.shapes.FLARectangle2D;
 
@@ -60,6 +62,8 @@ public class FLARectangleClickHandler<P extends Pane, T extends Group> extends F
 
     private void finishDrawing(){
         rectangle.getEndPoint().setConsumeMousePressed(true);
+        LayerItem<FLALabeledRectangle> layerItem = new LayerItem<>(this.rectangle);
+        Global.addLayer(layerItem);
         rectangle = null;
     }
 

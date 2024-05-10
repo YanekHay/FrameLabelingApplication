@@ -185,4 +185,9 @@ public class FLARectangle2D extends FLAShape2D {
         }
         this.rectangle.fillProperty().bind(style.fillColorProperty());
     } 
+
+    @Override
+    public void remove(Group node){
+        this.removeFromNode(node);
+    }
 }

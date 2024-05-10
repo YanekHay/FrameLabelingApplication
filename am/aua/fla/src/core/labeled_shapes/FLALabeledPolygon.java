@@ -10,8 +10,6 @@ import core.shapes.FLAPolygon2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
@@ -118,4 +116,6 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
         copy.setLabel(this.label.clone());
         return copy;
     }
+
+
 }

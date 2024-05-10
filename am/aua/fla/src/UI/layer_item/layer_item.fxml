@@ -8,12 +8,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="263.0" styleClass="HBox" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.layer_item.LayerItemController">
    <children>
       <Label fx:id="lblNumber" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="45.0" prefWidth="50.0" text="0">
          <font>
             <Font size="16.0" />
-         </font></Label>
+         </font>
+      </Label>
       <VBox alignment="CENTER" prefHeight="60.0" prefWidth="226.0">
          <children>
             <Label fx:id="lblShapeType" prefHeight="20.0" prefWidth="150.0" text="Polygon:" />

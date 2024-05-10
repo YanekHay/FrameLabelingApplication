@@ -7,6 +7,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cloneable{
@@ -22,6 +23,7 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
         this.bindComponentStylesTo(style);
     }
 
+    @Override
     public void setLabel(FLALabel label) {
         this.label = label;
         this.bindComponentStylesTo(this.label.getStyle());
@@ -83,5 +85,7 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
     public void setFillColor(Color color) {
         this.label.setFillColor(color);
     }
+
+
 
 }

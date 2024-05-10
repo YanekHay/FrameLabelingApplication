@@ -1,12 +1,9 @@
 package core.labeled_shapes;
 
 import core.shapes.FLARectangle2D;
-import core.shapes.FLAShape2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import java.util.Objects;
@@ -34,6 +31,7 @@ public class FLALabeledRectangle extends FLARectangle2D implements ILabeled, ISt
         this.bindComponentStylesTo(style);
     }
 
+    @Override
     public void setLabel(FLALabel label) {
         this.label = label;
         this.bindComponentStylesTo(this.label.getStyle());

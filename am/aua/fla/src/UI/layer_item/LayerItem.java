@@ -1,16 +1,18 @@
 package UI.layer_item;
 
+import controllers.FrameGroupController;
 import core.labeled_shapes.ILabeled;
+import core.labeled_shapes.IRemovable;
 import core.styled.IStyled;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class LayerItem<T extends ILabeled & IStyled> extends AnchorPane{
-    private static final String LAYER_ITEM_ROOT_PATH = "class_menu_item.fxml";
+public class LayerItem<T extends ILabeled & IStyled & IRemovable> extends Group{
+    private static final String LAYER_ITEM_ROOT_PATH = "layer_item.fxml";
     Parent container;
     LayerItemController controller;
     T labeledShape;
@@ -33,6 +35,7 @@ public class LayerItem<T extends ILabeled & IStyled> extends AnchorPane{
     public void remove(){
         VBox parent = (VBox)this.getParent();
         parent.getChildren().remove(this);
+        FrameGroupController.remove(this.labeledShape);
         int q=0;
         for(Node item : parent.getChildren()){
             if ((item instanceof LayerItem)){

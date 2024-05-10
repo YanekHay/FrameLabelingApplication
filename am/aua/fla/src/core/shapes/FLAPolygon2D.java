@@ -182,4 +182,15 @@ public class FLAPolygon2D extends FLAShape2D {
         this.polygon.fillProperty().bind(style.fillColorProperty());
     }
 
+    @Override
+    public void remove(Group node){
+        for (FLAPoint2D pt : this.points){
+            pt.removeFromNode(node);
+        }
+        for (FLALine2D line: this.lines){
+            line.remove(node);
+        }
+        node.getChildren().remove(this.polygon);
+    }
+
 }

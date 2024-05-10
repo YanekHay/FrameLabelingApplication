@@ -275,4 +275,9 @@ public class FLAPoint2D extends FLAShape2D {
     public FLAPoint2D clone() {
         return new FLAPoint2D(this.getX(), this.getY(), this.pointImage.getRadius());
     }
+
+    @Override
+    public void remove(Group node){
+        node.getChildren().remove(this.pointImage);
+    }
 }

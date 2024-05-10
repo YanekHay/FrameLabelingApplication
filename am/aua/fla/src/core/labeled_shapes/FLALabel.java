@@ -120,4 +120,8 @@ public class FLALabel implements ILabeled, IStyled, Cloneable{
     public String toString(){
         return this.getClassName() + " " + this.getClassNumber() + " " + this.getId();
     }
+    @Override
+    public void setLabel(FLALabel label) {
+        this.bind(label);
+    }
 }
