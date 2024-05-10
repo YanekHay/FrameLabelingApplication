@@ -26,10 +26,13 @@ public class FLAStyle implements IStyled, Cloneable{
     }
 
     public FLAStyle(ObjectProperty<Color> fillColor) {
-        this.strokeWidth.bind(Global.worldScale.multiply(Configs.LINE_THICKNESS));
+        Global.worldScaleInverse.addListener((obs, oldVal, newVal)->{
+            this.strokeWidth.set(Configs.LINE_THICKNESS * newVal.doubleValue());
+        });
         this.fillColor.bind(fillColor);
         this.fillColor.addListener(e->{
-            this.strokeColor.set(this.fillColor.get().darker());
+            Color darkerColor = this.fillColor.get().darker();
+            this.strokeColor.set(Color.rgb((int)(darkerColor.getRed()*255), (int)(darkerColor.getGreen()*255), (int)(darkerColor.getBlue()*255)));
         });
     }
 

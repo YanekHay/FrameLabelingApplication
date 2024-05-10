@@ -1,12 +1,7 @@
 package core;
 import static utils.CalculationUtil.clamp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import UI.class_menu.ClassMenu;
-import UI.class_menu_item.ClassMenuItem;
 import UI.layer_item.LayerItem;
 import click_handlers.FLAPointClickHandler;
 import click_handlers.FLAPolygonClickHandler;
@@ -16,20 +11,14 @@ import controllers.FrameGroupController;
 import core.labeled_shapes.FLALabel;
 import core.labeled_shapes.FLALabeledPoint;
 import core.labeled_shapes.FLALabeledRectangle;
-import core.shapes.FLAShape2D;
-import core.styled.FLAStyle;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableStringValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
 import utils.Configs;
-import java.util.UUID;
 
 public final class Global {
     public static final DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
@@ -46,7 +35,6 @@ public final class Global {
     public static final ObservableList<FLALabel> labelList = FXCollections.observableArrayList();
     public static final ObservableList<LayerItem<FLALabeledPoint>> pointLayerItemList = FXCollections.observableArrayList();
     public static final ObservableList<LayerItem<FLALabeledRectangle>> rectangleLayerItemList = FXCollections.observableArrayList();
-
         
     public static void setWorldScale(double worldScale) {
         Global.worldScale.set(clamp(worldScale, Configs.MIN_WORLD_SCALE, Configs.MAX_WORLD_SCALE));

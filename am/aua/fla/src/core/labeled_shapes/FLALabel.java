@@ -103,6 +103,10 @@ public class FLALabel implements ILabeled, IStyled, Cloneable{
         this.style = style;
     }
 
+    public FLAStyle getStyle() {
+        return this.style;
+    }
+
     public void bindStyle(FLAStyle style) {
         this.style.bind(style);
     }

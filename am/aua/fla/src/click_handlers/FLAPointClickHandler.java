@@ -7,8 +7,7 @@ import javafx.scene.Group;
 
 import javafx.geometry.Point2D;
 import controllers.ToolBarController;
-import core.Global;
-import core.shapes.FLAPoint2D;
+import core.labeled_shapes.FLALabeledPoint;
 
 public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T>{
 
@@ -23,7 +22,7 @@ public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLACl
         double x = clickPoint.getX();
         double y = clickPoint.getY(); 
         if (event.isPrimaryButtonDown()){
-            FLAPoint2D pt = new FLAPoint2D(x, y);
+            FLALabeledPoint pt = new FLALabeledPoint(x, y, ToolBarController.getCurrentLabel());
             pt.drawOnNode(this.drawArea);
         }
     }

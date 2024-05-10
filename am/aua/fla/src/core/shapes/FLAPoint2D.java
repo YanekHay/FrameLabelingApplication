@@ -267,8 +267,8 @@ public class FLAPoint2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+        this.pointImage.fillProperty().bind(style.fillColorProperty());
+        this.pointImage.strokeProperty().bind(style.strokeColorProperty());
     }
 
     @Override

@@ -24,6 +24,7 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
 
     public void setLabel(FLALabel label) {
         this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
     }
     
     @Override
@@ -82,5 +83,5 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
     public void setFillColor(Color color) {
         this.label.setFillColor(color);
     }
-    
+
 }

@@ -28,12 +28,12 @@ public class FLAPolygon2D extends FLAShape2D {
         }
         this.isClosed = true;
         this.polygon.setCursor(Cursor.HAND);
-        this.polygon.setFill(Color.rgb(100,100,100,0.2));
+        this.polygon.setFill(Color.rgb(100,100,200,0.4));
         this.close();
     }
 
     public FLAPolygon2D() {
-        this.polygon.setFill(Color.rgb(100,100,100,0.2));
+        this.polygon.setFill(Color.rgb(100,100,200,0.4));
         this.polygon.setCursor(Cursor.HAND);
         this.polygon.setOnMouseDragged(this::onMouseDragged);
         this.polygon.setOnMousePressed(this::onMousePressed);
@@ -176,8 +176,13 @@ public class FLAPolygon2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+        for (FLAPoint2D point : points) {
+            point.bindComponentStylesTo(style);
+        }
+        for (FLALine2D line : lines) {
+            line.bindComponentStylesTo(style);
+        }
+        this.polygon.fillProperty().bind(style.fillColorProperty());
     }
 
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Global;
 import core.labeled_shapes.FLALabel;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -20,6 +21,7 @@ public class ToolBarController {
         currentTool = tool;
         if (currentLabel == null && tool != Tool.SELECT) {
             alertLabelNotSelected();
+            Global.classMenu.show();
             return false;
         }
         switch (currentTool) {
@@ -51,7 +53,6 @@ public class ToolBarController {
 
     public static void setCurrentLabel(FLALabel label){
         currentLabel = label;
-        System.out.println("Current label set to: " + label);
     }
     
     public static void alertLabelNotSelected() {

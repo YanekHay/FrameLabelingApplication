@@ -16,15 +16,18 @@ import javafx.scene.paint.Color;
 public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled, Cloneable{
     private FLALabel label;
 
-    public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label, FLAStyle style){
+
+    public FLALabeledPolygon(){
+        super();
+        this.setLabel(null);
+    }
+    public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label){
         super(points);
-        this.setStyle(style);
         this.setLabel(label);
     }
 
-    public FLALabeledPolygon(FLALabel label, FLAStyle style){
+    public FLALabeledPolygon(FLALabel label){
         super();
-        this.setStyle(style);
         this.setLabel(label);
     }
 
@@ -34,7 +37,10 @@ public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled
     }
 
     public void setLabel(FLALabel label) {
+        if (label==null)
+            return;
         this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
     }
     
     @Override

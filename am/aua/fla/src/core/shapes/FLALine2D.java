@@ -138,8 +138,9 @@ public class FLALine2D extends FLAShape2D {
 
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bindComponentStylesTo'");
+        this.startPoint.bindComponentStylesTo(style);
+        this.endPoint.bindComponentStylesTo(style);
+        this.line.strokeProperty().bind(style.strokeColorProperty());
     }
 
     @Override
