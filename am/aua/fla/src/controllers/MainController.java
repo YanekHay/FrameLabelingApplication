@@ -48,12 +48,9 @@ public class MainController {
     @FXML private Label coordLabel;
     @FXML private VBox layerContainer;
     @FXML private ChoiceBox<String> chooseLayerClass;
+    @FXML private Button btnPrev;
+    @FXML private Button btnNext;
     private ToggleButton[] tools = new ToggleButton[4];
-    
-    @FXML
-    private Button btnNext;
-    @FXML
-    private Button btnPrevious;
     
     private VideoLoader videoLoader = new VideoLoader();
 
@@ -87,7 +84,8 @@ public class MainController {
         btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
-
+        btnNext.setOnAction(this::btnNextOnAction);
+        btnPrev.setOnAction(this::btnPreviousOnAction);
     }
     
 
@@ -226,7 +224,7 @@ public class MainController {
     }
 
     @FXML
-    public void btnNextOnAction(ActionEvent event) throws FrameGrabber.Exception {
+    public void btnNextOnAction(ActionEvent event) {
         try {
             frameNumber++;
             Image nextFrameImage = videoLoader.nextFrame();
@@ -237,7 +235,7 @@ public class MainController {
     }
 
     @FXML
-    public void btnPreviousOnAction(ActionEvent event) throws FrameGrabber.Exception {
+    public void btnPreviousOnAction(ActionEvent event){
         try {
             frameNumber--;
             Image previousFrameImage = videoLoader.getFrame(frameNumber);
