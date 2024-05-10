@@ -1,0 +1,121 @@
+package core.labeled_shapes;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
+import controllers.FrameGroupController;
+import core.shapes.FLALine2D;
+import core.shapes.FLAPoint2D;
+import core.shapes.FLAPolygon2D;
+import core.styled.FLAStyle;
+import core.styled.IStyled;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.paint.Color;
+
+public class FLALabeledPolygon extends FLAPolygon2D implements ILabeled, IStyled, Cloneable{
+    private FLALabel label;
+
+
+    public FLALabeledPolygon(){
+        super();
+        this.setLabel(null);
+    }
+    public FLALabeledPolygon(ArrayList<FLAPoint2D> points, FLALabel label){
+        super(points);
+        this.setLabel(label);
+    }
+
+    public FLALabeledPolygon(FLALabel label){
+        super();
+        this.setLabel(label);
+    }
+
+    public void setStyle(FLAStyle style) {
+        this.label.setStyle(style);
+        this.bindComponentStylesTo(style);
+    }
+
+    public void setLabel(FLALabel label) {
+        if (label==null)
+            return;
+        this.label = label;
+        this.bindComponentStylesTo(this.label.getStyle());
+    }
+
+    @Override
+    public void close(){
+        if (this.points.size()>=3){
+            this.lines.add(new FLALine2D(points.get(this.getPointCount()-1), points.get(0)));
+            this.lines.getLast().drawOnNode(FrameGroupController.frameGroup); // TODO: Modify this part to depend on parent container
+            this.isClosed = true;
+        }
+        this.bindComponentStylesTo(this.label.getStyle());
+    }
+    
+    @Override
+    public int getClassNumber() {
+        return this.label.getClassNumber();
+    }
+    @Override
+    public String getClassName() {
+        return this.label.getClassName();
+    }
+    @Override
+    public String getId() {
+        return this.label.getId();
+    }
+    
+    @Override
+    public void setClassNumber(int classNumber) {
+        this.label.setClassNumber(classNumber);
+    }
+    @Override
+    public void setClassName(String className) {
+        this.label.setClassName(className);
+    }
+    @Override
+    public StringProperty classNameProperty() {
+        return this.label.classNameProperty();
+    }
+    @Override
+    public IntegerProperty classNumberProperty() {
+        return this.label.classNumberProperty();
+    }
+
+    @Override
+    public boolean equals(Object that){
+        if (!(that instanceof FLALabeledPolygon)){
+            return false;
+        }
+        FLALabeledPolygon thatPolygon = (FLALabeledPolygon) that;
+        return super.equals(that) && this.label.equals(thatPolygon.label);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), label);
+    }
+    
+    @Override
+    public void setStrokeWidth(double width) {
+        this.label.setStrokeWidth(width);
+    }
+    @Override
+    public void setStrokeColor(Color color) {
+        this.label.setStrokeColor(color);
+    }
+    @Override
+    public void setFillColor(Color color) {
+        this.label.setFillColor(color);
+    }
+    
+    @Override
+    public FLALabeledPolygon clone() {
+        FLALabeledPolygon copy = (FLALabeledPolygon) super.clone();
+        copy.setLabel(this.label.clone());
+        return copy;
+    }
+
+
+}

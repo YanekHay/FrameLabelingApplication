@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,22 +18,44 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <center>
-      <StackPane fx:id="frameArea" onKeyPressed="#frameAreaOnKeyPressed" onScroll="#frameAreaOnScroll" BorderPane.alignment="TOP_LEFT">
-         <children>
-            <Group fx:id="frameGroup">
+      <BorderPane>
+         <center>
+            <StackPane fx:id="frameArea">
                <children>
-                  <ImageView fx:id="imageView" fitHeight="243.0" fitWidth="417.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/narrow_street.jpg" />
-                     </image>
-                  </ImageView>
+                  <Group fx:id="frameGroup">
+                     <children>
+                        <ImageView fx:id="imageView" fitHeight="243.0" fitWidth="417.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/narrow_street.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Group>
                </children>
-            </Group>
-         </children>
-      </StackPane>
+            </StackPane>
+         </center>
+      </BorderPane>
    </center>
    <right>
-      <VBox fx:id="labelArea" prefHeight="600.0" prefWidth="209.0" styleClass="stackPane" BorderPane.alignment="CENTER" />
+      <BorderPane>
+         <center>
+            <ScrollPane hbarPolicy="NEVER" maxWidth="288.0" minWidth="262.0" prefHeight="557.0" prefWidth="279.0" styleClass="bottom-panel" vbarPolicy="ALWAYS">
+               <content>
+                  <VBox fx:id="layerContainer" fillWidth="false" styleClass="layer-panel" />
+               </content>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </ScrollPane>
+         </center>
+         <bottom>
+            <StackPane styleClass="bottom-panel" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="coordLabel" />
+               </children>
+            </StackPane>
+         </bottom>
+      </BorderPane>
    </right>
    <top>
       <MenuBar BorderPane.alignment="CENTER">
@@ -35,10 +63,12 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
+                  <MenuItem mnemonicParsing="false" onAction="#openVideoFileDialog" text="Open Video" />
             </items>
           </Menu>
-          <Menu disable="true" mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Edit">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openClassEditMenu" text="Edit Classes" />
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
@@ -50,4 +80,15 @@
         </menus>
       </MenuBar>
    </top>
+   <left>
+      <ToolBar fx:id="toolbar" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="574.0" prefWidth="100.0" styleClass="toolbar" BorderPane.alignment="CENTER">
+        <items>
+            <ChoiceBox fx:id="chooseLayerClass" prefWidth="150.0" />
+            <ToggleButton fx:id="btnSelectTool" mnemonicParsing="false" text="Select" />
+            <ToggleButton fx:id="btnDrawPoint" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" styleClass="button" text="Point" />
+            <ToggleButton fx:id="btnDrawRectangle" mnemonicParsing="false" text="Rectangle" />
+            <ToggleButton fx:id="btnDrawPolygon" mnemonicParsing="false" text="Polygon" />
+        </items>
+      </ToolBar>
+   </left>
 </BorderPane>

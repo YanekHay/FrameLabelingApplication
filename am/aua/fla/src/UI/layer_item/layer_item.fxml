@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="263.0" styleClass="HBox" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.layer_item.LayerItemController">
+   <children>
+      <Label fx:id="lblNumber" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="45.0" prefWidth="50.0" text="0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <VBox alignment="CENTER" prefHeight="60.0" prefWidth="226.0">
+         <children>
+            <Label fx:id="lblShapeType" prefHeight="20.0" prefWidth="150.0" text="Polygon:" />
+            <ChoiceBox fx:id="classNameChoiceBox" prefHeight="26.0" prefWidth="150.0" />
+         </children>
+      </VBox>
+      <Button fx:id="btnRemove" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="🗑" textFill="#d90606">
+         <font>
+            <Font size="10.0" />
+         </font>
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin>
+      </Button>
+   </children>
+</HBox>

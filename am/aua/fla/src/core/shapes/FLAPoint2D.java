@@ -1,20 +1,14 @@
-package core;
+package core.shapes;
 
-import controllers.FrameGroupController;
-import controllers.MainController;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
+import core.Global;
+import core.styled.FLAStyle;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import utils.Configs;
 
 /**
@@ -37,31 +31,23 @@ import utils.Configs;
  * Represents a 2D point in the Frame Labeling Application.
  * Extends the FLAAnnotation2D class and implements the IDraggable and IDrawable interfaces.
  */
-public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable{
-    private Circle pointImage;
-    private ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-
+public class FLAPoint2D extends FLAShape2D {
+    protected Circle pointImage;
+    protected boolean consumeMousePressed=true;
     /**
      * Constructs a FLAPoint2D object with the specified coordinates, fillColor, radius, and container.
      * @param x The x-coordinate of the point.
      * @param y The y-coordinate of the point.
-     * @param fillColor The fillColor of the point.
      * @param radius The radius of the point.
      * @param container The container where the point will be drawn.
      */
-    public FLAPoint2D(double x, double y, Color fillColor, double radius, Pane container) {
+    public FLAPoint2D(double x, double y, double radius, Group container) {
         super();
         this.pointImage = new Circle(x, y, radius);
-        this.pointImage.setId(this.getId());
         this.setX(x);
         this.setY(y);
-        this.pointImage.setFill(fillColor);
         this.pointImage.setCursor(Cursor.MOVE);
-        this.pointImage.setStrokeWidth(radius/5);
-        this.pointImage.setStroke(Color.rgb(200, 30, 60, 1));
         this.pointImage.setOnMouseDragged(this::onMouseDragged);
-        this.pointImage.setOnMouseEntered(this::onMouseEntered);
-        this.pointImage.setOnMouseExited(this::onMouseExited);
         this.pointImage.setOnMousePressed(this::onMousePressed);
         this.pointImage.scaleXProperty().bind(Global.worldScaleInverse.multiply(1.5));
         this.pointImage.scaleYProperty().bind(Global.worldScaleInverse.multiply(1.5));
@@ -75,23 +61,10 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * The point will not be drawn on any container.
      * @param x The x-coordinate of the point.
      * @param y The y-coordinate of the point.
-     * @param fillColor The fillColor of the point.
      * @param radius The radius of the point.
      */
-    public FLAPoint2D(double x, double y, Color fillColor, double radius) {
-        this(x, y, fillColor, radius, null);
-    }
-
-    /**
-     * Constructs a FLAPoint2D object with the specified Point2D, fillColor, radius, and container.
-     * @param point The Point2D representing the coordinates of the point.
-     * @param fillColor The fillColor of the point.
-     * @param radius The radius of the point.
-     * @param container The container where the point will be drawn.
-     */
-    public FLAPoint2D(Point2D point, Color fillColor, double radius, Pane container) {
-        this(point.getX(), point.getY(), fillColor, radius);
-        this.drawOnNode(container);
+    public FLAPoint2D(double x, double y, double radius) {
+        this(x, y,  radius, null);
     }
 
     /**
@@ -101,30 +74,8 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @param fillColor The fillColor of the point.
      * @param radius The radius of the point.
      */
-    public FLAPoint2D(Point2D point, Color fillColor, double radius) {
-        this(point.getX(), point.getY(), fillColor, radius);
-    }
-
-    /**
-     * Constructs a FLAPoint2D object with the specified coordinates and radius.
-     * The point will be black in fillColor.
-     * @param x The x-coordinate of the point.
-     * @param y The y-coordinate of the point.
-     * @param radius The radius of the point.
-     */
-    public FLAPoint2D(double x, double y, double radius){
-        this(x, y, Color.BLACK, radius);
-    }
-    
-    /**
-     * Constructs a FLAPoint2D object with the specified coordinates and fillColor.
-     * The point will have a radius of 5.
-     * @param x The x-coordinate of the point.
-     * @param y The y-coordinate of the point.
-     * @param fillColor The fillColor of the point.
-     */
-    public FLAPoint2D(double x, double y, Color fillColor){
-        this(x, y, fillColor, 5 );
+    public FLAPoint2D(Point2D point, double radius) {
+        this(point.getX(), point.getY(), radius);
     }
 
     /**
@@ -134,7 +85,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      * @param y The y-coordinate of the point.
      */
     public FLAPoint2D(double x, double y){
-        this(x, y, Color.BLACK, 5);
+        this(x, y, Configs.POINT_RADIUS);
     }
 
     /**
@@ -146,14 +97,6 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         this(point.getX(), point.getY());
     }
 
-    /**
-     * Constructs a FLAPoint2D object with the default coordinates (0, 0).
-     * The point will be black in fillColor and have a radius of 5.
-     */
-    public FLAPoint2D(){
-        this(0, 0);
-    }
-    
     /**
      * Gets the x-coordinate of the point.
      * @return The x-coordinate of the point.
@@ -188,30 +131,13 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
 
 
     /**
-     * Gets the fillColor of the point.
-     * @return The fillColor of the point.
-     */
-    public Paint getFillColor(){
-        return this.pointImage.getFill();
-    }
-    /**
      * Draws the point on the specified container (Pane).
-     * @param container The container where the point will be drawn.
+     * @param mouseArea The container where the point will be drawn.
      */
     @Override
-    public void drawOnNode(Pane container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
-    }
-
-    /**
-     * Draws the point on the specified container (Group).
-     * @param container The container where the point will be drawn.
-     */
-    @Override
-    public void drawOnNode(Group container) {
-        if (!container.getChildren().contains(this.pointImage))
-            container.getChildren().add(this.pointImage);
+    public <T extends Group> void drawOnNode(T mouseArea) {
+        if (!mouseArea.getChildren().contains(this.pointImage))
+            mouseArea.getChildren().add(this.pointImage);
         this.pointImage.toFront();
     }
 
@@ -262,7 +188,7 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
     @Override
     public void onMouseDragged(MouseEvent e) {
         e.consume();
-        Point2D mousePos = FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
         this.dragByDelta(this.mouseDown.get().subtract(mousePos));      
         this.mouseDown.set(mousePos);
     }
@@ -274,31 +200,12 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
      */
     @Override
     public void onMousePressed(MouseEvent e) {
-        e.consume();
-        this.mouseDown.set(FrameGroupController.frameGroup.sceneToLocal(e.getSceneX(), e.getSceneY()));
+        if (this.consumeMousePressed || !e.isPrimaryButtonDown()){
+            e.consume();
+        }
+        this.mouseDown.set(Global.pointOnCanvas(e.getSceneX(), e.getSceneY()));
     }
 
-    /**
-     * Event handler for the onMouseEntered event.
-     * Changes the fill fillColor of the point.
-     * @param e The MouseEvent object.
-     */
-    @Override
-    public void onMouseEntered(MouseEvent e) {
-        this.pointImage.setFill(Color.rgb(100, 0, 50, 0.3));
-    }
-
-    /**
-     * Event handler for the onMouseExited event.
-     * Changes the fill fillColor of the point.
-     * @param e The MouseEvent object.
-     */
-    @Override
-    public void onMouseExited(MouseEvent e) {
-        this.pointImage.setFill(Color.rgb(200, 0, 50, 0.5));
-    }
-
-    
     public void setOnMouseDragged(EventHandler<MouseEvent> eventHandler) {
         this.pointImage.setOnMouseDragged(eventHandler);
     }
@@ -316,23 +223,61 @@ public class FLAPoint2D extends FLAAnnotation2D implements IDraggable, IDrawable
         return String.format("FLAPoint2D(%.2f, %.2f)", this.getX(), this.getY());
     }
 
-    @Override
-    public void onMouseDragEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragEntered'");
-    }
-
-    @Override
-    public void onMouseDragExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseDragExited'");
-    }
-
-    public Property<Number> xProperty() {
+    public DoubleProperty xProperty() {
         return this.pointImage.centerXProperty();
     }
     
-    public Property<Number> yProperty() {
+    public DoubleProperty yProperty() {
         return this.pointImage.centerYProperty();
+    }
+
+    public Point2D getLocation() {
+        return new Point2D(this.getX(), this.getY());
+    }
+    /**
+     * Creates a new FLAPoint2D object with the same properties as the original object.
+     * @return A new FLAPoint2D object.
+     */
+    public FLAPoint2D copy() {
+        FLAPoint2D copy = new FLAPoint2D(this.getX(), this.getY());
+        copy.pointImage = new Circle(this.getX(), this.getY(), this.pointImage.getRadius());
+        return copy;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FLAPoint2D)){
+            return false;
+        }
+        else {
+            FLAPoint2D other = (FLAPoint2D) obj;
+            return this.getX() == other.getX() && this.getY() == other.getY();
+        }
+    }
+
+    public void setConsumeMousePressed(boolean value){
+        this.consumeMousePressed = value;
+    }
+
+    @Override
+    public <T extends Group> void removeFromNode(T container) {
+        container.getChildren().remove(this.pointImage);
+    }
+
+    @Override
+    public void bindComponentStylesTo(FLAStyle style) {
+        this.pointImage.fillProperty().bind(style.fillColorProperty());
+        this.pointImage.strokeProperty().bind(style.strokeColorProperty());
+    }
+
+    @Override
+    public FLAPoint2D clone() {
+        return new FLAPoint2D(this.getX(), this.getY(), this.pointImage.getRadius());
+    }
+
+    @Override
+    public void remove(Group node){
+        node.getChildren().remove(this.pointImage);
     }
 }
