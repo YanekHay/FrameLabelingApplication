@@ -48,7 +48,6 @@ public class MainController {
     @FXML private Label coordLabel;
     @FXML private VBox layerContainer;
     @FXML private ChoiceBox<String> chooseLayerClass;
-
     private ToggleButton[] tools = new ToggleButton[4];
     
     @FXML
