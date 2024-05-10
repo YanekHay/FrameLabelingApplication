@@ -1,17 +1,20 @@
 package controllers;
 
+
 import java.io.File;
 
-import UI.class_menu.ClassMenu;
-import UI.class_menu_item.ClassMenuItem;
+import core.ImageLoader;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.FFmpegFrameGrabber.Exception;
+
+import core.VideoLoader;
 import controllers.ToolBarController.Tool;
 import core.Global;
-import core.labeled_shapes.*;
-import core.shapes.FLAPolygon2D;
-import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -21,23 +24,13 @@ import javafx.scene.control.ToolBar;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
+
 public class MainController {
 
     
@@ -55,9 +48,11 @@ public class MainController {
     @FXML private Label coordLabel;
     @FXML private VBox layerContainer;
     @FXML private ChoiceBox<String> chooseLayerClass;
-
+    @FXML private Button btnPrev;
+    @FXML private Button btnNext;
     private ToggleButton[] tools = new ToggleButton[4];
     
+    private VideoLoader videoLoader = new VideoLoader();
 
     @FXML
     void initialize() {
@@ -85,6 +80,8 @@ public class MainController {
         btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
+        btnNext.setOnAction(this::btnNextOnAction);
+        btnPrev.setOnAction(this::btnPreviousOnAction);        
         chooseLayerClass.setOnAction(this::onChooseLayerClassAction);
     }
     
@@ -152,6 +149,7 @@ public class MainController {
             }
         }
     }
+
     @FXML
     void frameAreaOnScroll(ScrollEvent e) {
         if (!e.isControlDown()) {
@@ -199,49 +197,52 @@ public class MainController {
     }
 
     @FXML
-    public void openImageFileDialog() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Image File");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        // Add filters (optional)
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-        );
-
-        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
-
-            // Load the image into an Image object
-            Image image = new Image(selectedFile.toURI().toString());
-            
-            // Set the image to the ImageView
+    public void openImageFileDialog(){
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.chooseImageFile();
+        File file = imageLoader.getPath();
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
             imageView.setImage(image);
-            
-
-        } else {
-            System.out.println("No file selected.");
         }
     }
 
-    public void openVideoFileDialog(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Image File");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        // Add filters (optional)
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.avi", "*.mov", "*.wmv", "*.webm")
-        );
+    private int frameNumber = 1;
 
-        Stage stage = (Stage) root.getScene().getWindow(); // Get the window from the imageView
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
-            Media media = new Media(selectedFile.toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
+    public void openVideoDialog() throws FrameGrabber.Exception {
+        videoLoader = new VideoLoader(); // Assign to the member variable
+        videoLoader.chooseVideoFile();
+        File file = videoLoader.getPath();
+        if (file != null) {
+            try {
+                videoLoader.loadVideo(file);
+                Image image = videoLoader.getFrame(frameNumber);
+                imageView.setImage(image);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void btnNextOnAction(ActionEvent event) {
+        try {
+            frameNumber++;
+            Image nextFrameImage = videoLoader.nextFrame();
+            imageView.setImage(nextFrameImage);
+        } catch (FrameGrabber.Exception e) {
+            System.out.println("Error retrieving next frame: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void btnPreviousOnAction(ActionEvent event){
+        try {
+            frameNumber--;
+            Image previousFrameImage = videoLoader.getFrame(frameNumber);
+            imageView.setImage(previousFrameImage);
+        } catch (FrameGrabber.Exception e) {
+            System.out.println("Error retrieving previous frame: " + e.getMessage());
         }
     }
 

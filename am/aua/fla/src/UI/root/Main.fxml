@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -13,6 +14,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -62,8 +64,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
-                  <MenuItem mnemonicParsing="false" onAction="#openVideoFileDialog" text="Open Video" />
+                  <MenuItem mnemonicParsing="false" onAction="#openImageFileDialog" text="Open Image" />
+                  <MenuItem mnemonicParsing="false" onAction="#openVideoDialog" text="Open Video" />
+              <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -91,4 +94,12 @@
         </items>
       </ToolBar>
    </left>
+   <bottom>
+      <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnPrev" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" text="Previous" />
+            <Button fx:id="btnNext" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" text="Next" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
