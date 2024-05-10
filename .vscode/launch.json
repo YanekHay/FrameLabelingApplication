@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "Main",
             "projectName": "FrameLabelingApplication_a6473c2d",
-            "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path '${env:PATH_TO_FX}' --add-modules javafx.graphics,javafx.media,javafx.controls,javafx.fxml,org.bytedeco.javacv,org.bytedeco.javacpp,org.bytedeco.ffmpeg,org.bytedeco.videoinput,org.bytedeco.libfreenect,org.bytedeco.flycapture,org.bytedeco.libdc1394,org.bytedeco.leptonica,org.bytedeco.librealsense,org.bytedeco.tesseract,org.bytedeco.openblas,org.bytedeco.artoolkitplus,org.bytedeco.librealsense2,org.bytedeco.libfreenect2"
         }
     ]
 }
