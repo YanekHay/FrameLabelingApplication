@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 import UI.class_menu.ClassMenu;
 import UI.class_menu.ClassMenuController;
 import core.Global;
+import core.labeled_shapes.FLALabel;
+import core.styled.FLAStyle;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -21,6 +23,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 public class ClassMenuItemController implements Initializable{
@@ -42,12 +46,11 @@ public class ClassMenuItemController implements Initializable{
             this.colorPickerNode.valueProperty().bindBidirectional(owner.colorProperty());
         });
         this.classNameNode.textProperty().addListener(e->{
-            // System.out.println(this.classNameNode.getText());
-            // System.out.println(this.className.get());
         });
 
         this.btnRemove.setOnAction(this::onBtnRemoveAction);
         this.btnEdit.setOnAction(this::onBtnEditAction);
+        this.classNameNode.setOnKeyPressed(this::onClassNameNodeKeyPressed);
     }
 
     public void setOwner(ClassMenuItem owner) {
@@ -62,8 +65,15 @@ public class ClassMenuItemController implements Initializable{
     public void onBtnEditAction(ActionEvent e){
         if (this.btnEdit.isSelected()) {
             this.classNameNode.setEditable(true);
+            this.classNameNode.requestFocus();
         } else {
             this.classNameNode.setEditable(false);
+        }
+    }
+
+    public void onClassNameNodeKeyPressed(KeyEvent e){
+        if (e.getCode() == KeyCode.ENTER) {
+            this.btnEdit.fire();
         }
     }
 
@@ -73,5 +83,11 @@ public class ClassMenuItemController implements Initializable{
 
     public void setClassNumber(int classNumber) {
         this.classNumberNode.setText(Integer.toString(classNumber));
+    }
+
+    public FLALabel getLabel() {
+        FLAStyle style = new FLAStyle(this.colorPickerNode.valueProperty());
+        System.out.println(this.classNumberNode.textProperty().get());
+        return new FLALabel(this.classNumberNode.textProperty(), this.classNameNode.textProperty(), style);
     }
 }

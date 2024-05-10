@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.File;
 
+import UI.class_menu.ClassMenu;
+import UI.class_menu_item.ClassMenuItem;
 import controllers.ToolBarController.Tool;
 import core.Global;
 import core.labeled_shapes.*;
@@ -9,7 +11,9 @@ import core.shapes.FLAPolygon2D;
 import core.shapes.FLARectangle2D;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
@@ -21,18 +25,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
-import UI.class_menu.ClassMenu;
 public class MainController {
 
     
@@ -48,9 +53,12 @@ public class MainController {
     @FXML private ToggleButton btnSelectTool;
     @FXML private ToolBar toolbar;
     @FXML private Label coordLabel;
-    
+    @FXML private VBox layerContainer;
+    @FXML private ChoiceBox<String> chooseLayerClass;
+
     private ToggleButton[] tools = new ToggleButton[4];
     
+
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
@@ -62,6 +70,12 @@ public class MainController {
             tools[2] = btnDrawRectangle;
             tools[3] = btnDrawPolygon;
             btnSelectTool.fire();
+            chooseLayerClass.setItems(Global.layerClasses);
+            chooseLayerClass.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+                System.out.println("Selected: " + newVal.intValue() + " " + oldVal.intValue());
+                if (newVal.intValue() == -1) return;
+                ToolBarController.setCurrentLabel(Global.labelList.get(newVal.intValue()));
+            });
         });
 
         frameArea.setOnMouseMoved(e->{
@@ -75,12 +89,13 @@ public class MainController {
         btnDrawPoint.setOnAction(this::btnDrawPointOnAction);
         btnDrawRectangle.setOnAction(this::btnDrawRectangleOnAction);
         btnDrawPolygon.setOnAction(this::btnDrawPolygonOnAction);
+
     }
     
 
+
     @FXML
     private void openClassEditMenu(){
-        System.out.println("Opening class edit menu");
         if (!Global.classMenu.isShowing()){
             Global.classMenu.show();
         }
@@ -92,7 +107,8 @@ public class MainController {
     private void btnSelectToolOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.SELECT);
+            if (ToolBarController.setCurrentTool(Tool.SELECT)) deselectOtherTools(source);
+            else source.setSelected(false);
             deselectOtherTools(source);
         }
         else{
@@ -102,8 +118,8 @@ public class MainController {
     private void btnDrawPointOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.POINT);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.POINT)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
@@ -112,8 +128,8 @@ public class MainController {
     private void btnDrawRectangleOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.RECTANGLE);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.RECTANGLE)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
@@ -122,8 +138,8 @@ public class MainController {
     private void btnDrawPolygonOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
-            ToolBarController.setCurrentTool(Tool.POLYGON);
-            deselectOtherTools(source);
+            if (ToolBarController.setCurrentTool(Tool.POLYGON)) deselectOtherTools(source);
+            else source.setSelected(false);
         }
         else{
             source.setSelected(true);
