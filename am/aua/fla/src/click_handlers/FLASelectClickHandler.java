@@ -6,12 +6,30 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+/**
+ * The FLASelectClickHandler class represents a click handler for selecting objects in a drawing area.
+ * It extends the FLAClickHandler class and provides methods for handling mouse events related to selection.
+ *
+ * @param <P> the type of the mouse area (e.g., Pane)
+ * @param <T> the type of the draw area (e.g., Group)
+ */
 public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T> {
     
+    /**
+     * Constructs a FLASelectClickHandler with the specified mouse area and draw area.
+     *
+     * @param mouseArea the mouse area where the click handler is applied
+     * @param drawArea the draw area where the objects are displayed
+     */
     public FLASelectClickHandler(P mouseArea, T drawArea) {
         super(mouseArea, drawArea);
     }
     
+    /**
+     * Handles the mouse press event.
+     *
+     * @param event the mouse event
+     */
     @Override
     public void mousePress(MouseEvent event) {
         event.consume();
@@ -22,6 +40,11 @@ public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAC
         System.out.println("SELECT: click at (" + x + ", " + y + ")");
     }
 
+    /**
+     * Sets the click handler to the select mode.
+     *
+     * @return the click handler in select mode
+     */
     @Override
     public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.DEFAULT);
@@ -29,8 +52,11 @@ public class FLASelectClickHandler<P extends Pane, T extends Group> extends FLAC
         return this;
     }
 
+    /**
+     * Deselects the click handler.
+     */
     @Override
     public void deselect() {
-        return;
+        /* Nothing to do */
     }
 }

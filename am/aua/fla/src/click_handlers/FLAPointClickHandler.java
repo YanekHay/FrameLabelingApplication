@@ -1,3 +1,7 @@
+/**
+ * This class represents a click handler for points in the Frame Labeling Application.
+ * It extends the FLAClickHandler class and handles mouse events related to points.
+ */
 package click_handlers;
 
 import javafx.scene.input.MouseEvent;
@@ -10,14 +14,23 @@ import UI.layer_item.LayerItem;
 import controllers.ToolBarController;
 import core.Global;
 import core.labeled_shapes.FLALabeledPoint;
-import core.labeled_shapes.FLALabeledPolygon;
 
 public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLAClickHandler<P, T>{
 
+    /**
+     * Constructs a FLAPointClickHandler with the specified mouse area and draw area.
+     * @param mouseArea the mouse area where the click handler is applied
+     * @param drawArea the draw area where the points are displayed
+     */
     public FLAPointClickHandler(P mouseArea, T drawArea) {
         super(mouseArea, drawArea);
     }
     
+    /**
+     * Handles the mouse press event.
+     * Creates a new FLALabeledPoint at the clicked coordinates and adds it to the draw area.
+     * @param event the mouse event
+     */
     @Override
     public void mousePress(MouseEvent event) {
         event.consume();
@@ -32,6 +45,10 @@ public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLACl
         }
     }
 
+    /**
+     * Sets the cursor to CROSSHAIR and registers the mouse press event handler.
+     * @return the FLAPointClickHandler instance
+     */
     @Override
     public FLAClickHandler<P, T> select() {
         this.mouseArea.setCursor(Cursor.CROSSHAIR);
@@ -39,6 +56,9 @@ public class FLAPointClickHandler<P extends Pane, T extends Group> extends FLACl
         return this;
     }
     
+    /**
+     * Removes the mouse press event handler and sets the cursor to DEFAULT.
+     */
     @Override
     public void deselect() {
         this.mouseArea.setOnMousePressed(null);
