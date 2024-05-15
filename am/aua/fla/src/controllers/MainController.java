@@ -1,6 +1,5 @@
 package controllers;
 
-
 import java.io.File;
 
 import core.ImageLoader;
@@ -31,9 +30,11 @@ import javafx.scene.input.ScrollEvent;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
+/**
+ * The MainController class is responsible for controlling the main functionality of the application.
+ */
 public class MainController {
 
-    
     @FXML private BorderPane root;
     @FXML private ImageView imageView;
     @FXML private StackPane frameArea;
@@ -54,6 +55,9 @@ public class MainController {
     
     private VideoLoader videoLoader = new VideoLoader();
 
+    /**
+     * Initializes the controller.
+     */
     @FXML
     void initialize() {
         // runLater is used to ensure that the layout is already rendered
@@ -85,12 +89,19 @@ public class MainController {
         chooseLayerClass.setOnAction(this::onChooseLayerClassAction);
     }
     
+    /**
+     * Handles the action when a layer class is chosen from the choice box.
+     * @param e The action event.
+     */
     private void onChooseLayerClassAction(ActionEvent e){
         int newVal = chooseLayerClass.getSelectionModel().getSelectedIndex();
         if (newVal == -1) return;
         ToolBarController.setCurrentLabel(Global.labelList.get(newVal));
     }
 
+    /**
+     * Opens the class edit menu.
+     */
     @FXML
     private void openClassEditMenu(){
         if (!Global.classMenu.isShowing()){
@@ -101,6 +112,11 @@ public class MainController {
             Global.classMenu.show();
         }
     }
+
+    /**
+     * Handles the action when the select tool button is clicked.
+     * @param e The action event.
+     */
     private void btnSelectToolOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
@@ -112,6 +128,11 @@ public class MainController {
             source.setSelected(true);
         }
     }
+
+    /**
+     * Handles the action when the draw point button is clicked.
+     * @param e The action event.
+     */
     private void btnDrawPointOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
@@ -122,6 +143,11 @@ public class MainController {
             source.setSelected(true);
         }
     }
+
+    /**
+     * Handles the action when the draw rectangle button is clicked.
+     * @param e The action event.
+     */
     private void btnDrawRectangleOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
@@ -132,6 +158,11 @@ public class MainController {
             source.setSelected(true);
         }
     }
+
+    /**
+     * Handles the action when the draw polygon button is clicked.
+     * @param e The action event.
+     */
     private void btnDrawPolygonOnAction(ActionEvent e){
         ToggleButton source = (ToggleButton) e.getSource();
         if (source.isSelected()){
@@ -142,6 +173,11 @@ public class MainController {
             source.setSelected(true);
         }
     }
+
+    /**
+     * Deselects all other tools except the specified button.
+     * @param btn The button to keep selected.
+     */
     private void deselectOtherTools(ToggleButton btn){
         for (ToggleButton tool : tools) {
             if (tool != btn) {
@@ -150,6 +186,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Handles the scroll event on the frame area.
+     * @param e The scroll event.
+     */
     @FXML
     void frameAreaOnScroll(ScrollEvent e) {
         if (!e.isControlDown()) {
@@ -164,11 +204,19 @@ public class MainController {
 
     }
 
+    /**
+     * Handles the mouse pressed event on the frame area.
+     * @param e The mouse event.
+     */
     @FXML
     void frameAreaOnMousePressed(MouseEvent e){
         FrameGroupController.mouseDown.set(new Point2D((e.getX()), (e.getY())));
     }
 
+    /**
+     * Handles the mouse dragged event on the frame area.
+     * @param e The mouse event.
+     */
     @FXML
     void frameAreaOnMouseDragged(MouseEvent e){
         if (e.isMiddleButtonDown()) {
@@ -177,17 +225,23 @@ public class MainController {
             FrameGroupController.mouseDown.set(dragPoint);
         }
         else if (e.isPrimaryButtonDown()){
-            // this.selectArea.setWidth(e.getX()-FrameGroupController.mouseDown.get().getX());
-            // this.selectArea.setHeight(e.getY()-FrameGroupController.mouseDown.get().getY());
+            /* Selection Area */
         }
     }
     
+    /**
+     * Handles the action when the reset view button is clicked.
+     * @param e The mouse event.
+     */
     @FXML
     void btnResetViewOnMouseClicked(MouseEvent e){
         FrameGroupController.resetView();
-        // reset(imageView, imageView.getImage().getWidth(), imageView.getImage().getHeight());
     }
 
+    /**
+     * Handles the key pressed event on the frame area.
+     * @param e The key event.
+     */
     @FXML
     void frameAreaOnKeyPressed(KeyEvent e) {
         KeyCode key = e.getCode();
@@ -196,6 +250,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Opens the image file dialog and loads the selected image.
+     */
     @FXML
     public void openImageFileDialog(){
         ImageLoader imageLoader = new ImageLoader();
@@ -209,6 +266,10 @@ public class MainController {
 
     private int frameNumber = 1;
 
+    /**
+     * Opens the video file dialog and loads the selected video.
+     * @throws FrameGrabber.Exception If an error occurs while loading the video.
+     */
     public void openVideoDialog() throws FrameGrabber.Exception {
         videoLoader = new VideoLoader(); // Assign to the member variable
         videoLoader.chooseVideoFile();
@@ -224,6 +285,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Handles the action when the next button is clicked.
+     * @param event The action event.
+     */
     @FXML
     public void btnNextOnAction(ActionEvent event) {
         try {
@@ -235,6 +300,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Handles the action when the previous button is clicked.
+     * @param event The action event.
+     */
     @FXML
     public void btnPreviousOnAction(ActionEvent event){
         try {

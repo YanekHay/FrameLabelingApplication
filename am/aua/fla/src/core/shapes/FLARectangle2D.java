@@ -10,7 +10,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
+/**
+ * A class representing a rectangle in 2D space.
+ */
 public class FLARectangle2D extends FLAShape2D {
     private FLAPoint2D topLeft;
     private FLAPoint2D topRight;
@@ -21,6 +23,13 @@ public class FLARectangle2D extends FLAShape2D {
     private FLALine2D[] lines = new FLALine2D[4];
     private Rectangle rectangle = new Rectangle();
     
+    /**
+     * Creates a rectangle with the given coordinates.
+     * @param xMin The x-coordinate of the top-left corner.
+     * @param yMin The y-coordinate of the top-left corner.
+     * @param xMax The x-coordinate of the bottom-right corner.
+     * @param yMax The y-coordinate of the bottom-right corner.
+     */
     public FLARectangle2D(double xMin, double yMin, double xMax, double yMax) {
         this.topLeft = new FLAPoint2D(xMin, yMin);
         this.topRight = new FLAPoint2D(xMax, yMin);
@@ -39,16 +48,27 @@ public class FLARectangle2D extends FLAShape2D {
 
     }
 
+    /**
+     * Creates a rectangle with the given top-left corner.
+     * @param topleft The top-left corner of the rectangle.
+     */
     public FLARectangle2D(Point2D topleft) {
         this(topleft.getX(), topleft.getY(), topleft.getX(), topleft.getY());
     }
 
 
-
+    /**
+     * Creates a rectangle with the given top-left and bottom-right corners.
+     * @param topleft The top-left corner of the rectangle.
+     * @param bottomRight The bottom-right corner of the rectangle.
+     */
     public FLARectangle2D(Point2D topleft, Point2D bottomRight) {
         this(topleft.getX(), topleft.getY(), bottomRight.getX(), bottomRight.getY());
     }
 
+    /**
+     * Adds the lines of the rectangle to the lines array.
+     */
     private void addLines(){
         for(int i=0; i<this.points.length; i++){
             this.lines[i] = new FLALine2D(this.points[i], this.points[(i+1)%4]);
@@ -60,17 +80,26 @@ public class FLARectangle2D extends FLAShape2D {
         this.lines[3].makeVertical();
     }
 
+    /**
+     * Updates the rectangle's position when the top-left or bottom-right corner changes.
+     */
     private void onPointXPropChange(){
         this.rectangle.setX(Math.min(this.topLeft.getX(), this.topRight.getX()));
         this.rectangle.setWidth(Math.abs(this.topRight.getX() - this.topLeft.getX()));
 
     }
 
+    /**
+     * Updates the rectangle's position when the top-left or bottom-right corner changes.
+     */
     private void onPointYPropChange(){
         this.rectangle.setY(Math.min(this.topLeft.getY(), this.bottomLeft.getY()));
         this.rectangle.setHeight(Math.abs(this.bottomLeft.getY() - this.topLeft.getY()));
     }
 
+    /**
+     * Binds the points of the rectangle to the rectangle's properties.
+     */
     private void bindRectanglePoints(){
         this.bottomRight.xProperty().bindBidirectional(this.topRight.xProperty());
         this.bottomRight.yProperty().bindBidirectional(this.bottomLeft.yProperty());
@@ -90,23 +119,45 @@ public class FLARectangle2D extends FLAShape2D {
         this.bottomLeft.yProperty().addListener((obs, oldVal, newVal) -> onPointYPropChange());
     }
 
+    /**
+     * Returns the top-left corner of the rectangle.
+     * @return
+     */
     public FLAPoint2D getStartPoint() {
         return this.topLeft;
     }
 
+    /**
+     * Returns the bottom-right corner of the rectangle.
+     * @return
+     */
     public FLAPoint2D getEndPoint() {
         return this.bottomRight;
     }
 
+    /**
+     * Moves the top-left corner of the rectangle to the given point.
+     * @param point The point to move the top-left corner to.
+     */
     public void moveBottomRightTo(Point2D point){
         this.bottomRight.drag(point);
     }
+        
+    /**
+     * Get width of the rectangle
+     */
     public double getWidth() {
         return this.rectangle.getWidth();
     }
+    /**
+     * Get height of the rectangle
+     */
     public double getHeight() {
         return this.rectangle.getHeight();
     }
+    /**
+     * Get area of the rectangle
+     */
     public double getArea() {
         return getWidth() * getHeight();
     }

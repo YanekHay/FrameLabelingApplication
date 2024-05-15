@@ -37,7 +37,6 @@ public class ClassMenuController implements Initializable{
     }
 
     public int getClassCount() {
-        System.out.println(this.classListContainer.getChildren().size());
         return this.classListContainer.getChildren().size()-1; // -1 because the last child is the HBox for titles
 
     }

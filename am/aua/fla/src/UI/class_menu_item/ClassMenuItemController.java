@@ -87,7 +87,6 @@ public class ClassMenuItemController implements Initializable{
 
     public FLALabel getLabel() {
         FLAStyle style = new FLAStyle(this.colorPickerNode.valueProperty());
-        System.out.println(this.classNumberNode.textProperty().get());
         return new FLALabel(this.classNumberNode.textProperty(), this.classNameNode.textProperty(), style);
     }
 }

@@ -5,16 +5,23 @@ import core.styled.FLAStyle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
+/**
+ * Represents a 2D line shape in the Frame Labeling Application.
+ */
 public class FLALine2D extends FLAShape2D {
     protected Line line;
     protected FLAPoint2D startPoint;
     protected FLAPoint2D endPoint;
     
+    /**
+     * Constructs a FLALine2D object with the given start and end points.
+     * 
+     * @param stP The start point of the line.
+     * @param endP The end point of the line.
+     */
     public FLALine2D(FLAPoint2D stP, FLAPoint2D endP) {
         super();
         line = new Line(stP.getX(), stP.getY(), endP.getX(), endP.getY());
@@ -26,12 +33,22 @@ public class FLALine2D extends FLAShape2D {
         this.line.setOnMousePressed(this::onMousePressed);
     }
 
+    /**
+     * Sets the start point of the line.
+     * 
+     * @param startPoint The start point of the line.
+     */
     public void setStartPoint(FLAPoint2D startPoint) {
         this.startPoint = startPoint;
         this.line.startXProperty().bind(this.startPoint.xProperty());
         this.line.startYProperty().bind(this.startPoint.yProperty());
     }
 
+    /**
+     * Sets the end point of the line.
+     * 
+     * @param endPoint The end point of the line.
+     */
     public void setEndPoint(FLAPoint2D endPoint) {
         this.endPoint = endPoint;
         this.line.endXProperty().bind(this.endPoint.xProperty());
@@ -102,6 +119,9 @@ public class FLALine2D extends FLAShape2D {
         throw new UnsupportedOperationException("Unimplemented method 'toString'");
     }
 
+    /**
+     * Makes the line horizontal.
+     */
     protected void makeHorizontal(){
         this.endPoint.yProperty().set(this.startPoint.getY());
         this.endPoint.yProperty().unbind();
@@ -110,6 +130,11 @@ public class FLALine2D extends FLAShape2D {
         this.line.setCursor(Cursor.V_RESIZE);
     }
 
+    /**
+     * Handles the dragging of the line when it is horizontal.
+     * 
+     * @param e The mouse event.
+     */
     private void onHorizontalDragged(MouseEvent e) {
         e.consume();
         Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
@@ -119,6 +144,9 @@ public class FLALine2D extends FLAShape2D {
         this.mouseDown.set(mousePos);
     }
 
+    /**
+     * Makes the line vertical.
+     */
     protected void makeVertical(){
         this.endPoint.xProperty().set(this.startPoint.getX());
         this.endPoint.xProperty().unbind();
@@ -127,6 +155,11 @@ public class FLALine2D extends FLAShape2D {
         this.line.setCursor(Cursor.H_RESIZE);
     }
 
+    /**
+     * Handles the dragging of the line when it is vertical.
+     * 
+     * @param e The mouse event.
+     */
     private void onVerticalDragged(MouseEvent e) {
         e.consume();
         Point2D mousePos = Global.pointOnCanvas(e.getSceneX(), e.getSceneY());
@@ -136,6 +169,7 @@ public class FLALine2D extends FLAShape2D {
         this.mouseDown.set(mousePos);
     }
 
+    
     @Override
     public void bindComponentStylesTo(FLAStyle style) {
         this.startPoint.bindComponentStylesTo(style);

@@ -10,6 +10,9 @@ import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import org.bytedeco.javacv.*;
 
+/**
+ * A class that loads a video file and extracts frames from it.
+ */
 public class VideoLoader {
 
   private File path;

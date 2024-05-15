@@ -22,6 +22,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import utils.Configs;
 
+/**
+ * The Global class contains global variables and methods used throughout the Frame Labeling Application.
+ */
 public final class Global {
     public static final DoubleProperty worldScaleMultiplier = new SimpleDoubleProperty(1.0);
     public static final DoubleProperty worldScale = new SimpleDoubleProperty(1.0);

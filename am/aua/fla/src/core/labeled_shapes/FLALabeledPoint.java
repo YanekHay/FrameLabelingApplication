@@ -4,20 +4,30 @@ import core.shapes.FLAPoint2D;
 import core.styled.FLAStyle;
 import core.styled.IStyled;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
+/**
+ * Represents a labeled point in a 2D space.
+ */
 public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cloneable{
     private FLALabel label;
 
+    /**
+     * Constructs a new FLALabeledPoint object with the specified coordinates and label.
+     * @param x The x-coordinate of the point.
+     * @param y The y-coordinate of the point.
+     * @param label The label associated with the point.
+     */
     public FLALabeledPoint(double x, double y, FLALabel label){
         super(x, y);
         this.setLabel(label);
     }
 
+    /**
+     * Sets the style of the labeled point.
+     * @param style The style to be set.
+     */
     public void setStyle(FLAStyle style) {
         this.label.setStyle(style);
         this.bindComponentStylesTo(style);
@@ -59,7 +69,10 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
         return this.label.classNumberProperty();
     }
 
-
+    /**
+     * Gets the label associated with the labeled point.
+     * @return The label associated with the labeled point.
+     */
     public FLALabel getLabel() {
         return this.label;
     }
@@ -85,7 +98,4 @@ public class FLALabeledPoint extends FLAPoint2D implements ILabeled, IStyled, Cl
     public void setFillColor(Color color) {
         this.label.setFillColor(color);
     }
-
-
-
 }
